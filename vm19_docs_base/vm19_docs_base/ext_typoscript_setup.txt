@@ -1,0 +1,37 @@
+
+plugin.tx_vm19docsbase_pi1 {
+
+	keyWordMarket=market,beneficia,prestati
+	# code de la langue non affichée
+	langCodeND=1
+	ImgMaxWidth=250
+	extCurDir=typo3conf/ext/vm19_docs_base/
+	iconDir =typo3conf/ext/vm19_docs_base/fileicons
+	altIconDir=t3lib/gfx/fileicons
+  	defaultIcon =typo3conf/ext/vm19_docs_base/fileicons/default.gif
+
+
+	allowCaching = 1
+	
+	CMD =
+	pidList =
+	recursive =
+}
+plugin.tx_vm19docsbase_pi1.listView {
+	results_at_a_time = 10
+	maxPages = 10
+	imgHeight=25
+}
+  # Example of default set CSS styles (these go into the document header):
+#plugin.tx_vm19docsbase_pi1._CSS_DEFAULT_STYLE (
+#  .tx-vm19docsbase-pi1 H2 { margin-top: 0px; margin-bottom: 0px; }
+#  .tx-vm19docsbase-pi1 H1 { margin-top: 0px; margin-bottom: 0px; }
+#) il est plus sympa de modifier directement la feuille de style principale...
+
+  # Example of how to overrule LOCAL_LANG values for the plugin:
+#plugin.tx_vm19docsbase_pi1._LOCAL_LANG.default {
+#  pi_list_searchBox_search = Search!
+#}
+
+  # Example of how to set default values from TS in the incoming array, $this->piVars of the plugin:
+plugin.tx_vm19docsbase_pi1._DEFAULT_PI_VARS.test = test
