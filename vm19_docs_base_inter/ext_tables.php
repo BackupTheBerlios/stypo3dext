@@ -81,6 +81,8 @@ $TCA["tx_vm19docsbase_lang"] = Array (
 	)
 );
 
+t3lib_extMgm::allowTableOnStandardPages("tx_vm19docsbase_docs");
+
 $TCA["tx_vm19docsbase_docs"] = Array (
 	"ctrl" => Array (
 		"title" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs",		
