@@ -207,11 +207,11 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 			"exclude" => 1,	
 			"label" => "Date de creation",
 			"config" => Array (
-				"type" => "input",
+				"type" => "none",
 				"size" => "8",
 				"max" => "20",
 				"eval" => "date",
-				"default" => mktime(),
+				"default" => date("d-m-y"),
 			)
 		),		
 		"hidden" => Array (		
@@ -266,6 +266,7 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 		),
 		"internal_code" => Array (		
 			"exclude" => 0,		
+			'label_alt' => 'breuillasse y dit qui fo pas l\'enlever',
 			"label" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs.internal_code",		
 			"config" => Array (
 				"type" => "input",	
@@ -293,8 +294,9 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 				"foreign_table" => "tx_vm19docsbase_topics",	
 				"foreign_table_where" => "ORDER BY tx_vm19docsbase_topics.uid",	
 				"size" => 15,	
-				"minitems" => 0,
+				"minitems" => 1,
 				"maxitems" => 5,	
+				/* vire les acces pour éditer la liste
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -327,17 +329,19 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 						"icon" => "edit2.gif",
 						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
 					),
-				),
+				), */
 			)
 		),
 		"int_author" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs.int_author",		
 			"config" => Array (
-				"type" => "group",	
+				"type" => "none",	
+				"default" => "désactivé pour l`instant",				
+//				"type" => "group",	
 				"internal_type" => "db",	
 				"allowed" => "fe_users",	
-				"size" => 5,	
+				"size" => 15,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
@@ -349,7 +353,7 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 				"type" => "input",	
 				"size" => "48",	
 				"max" => "50",	
-				"checkbox" => "",	
+//				"checkbox" => "",	
 				"eval" => "trim",
 			)
 		),
@@ -357,15 +361,17 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 			"exclude" => 0,		
 			"label" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs.support",		
 			"config" => Array (
-				"type" => "select",	
+				"type" => "select",
+				/* on dirait que c'est le defaut
 				"items" => Array (
 					Array("",0),
-				),
+				),*/
 				"foreign_table" => "tx_vm19docsbase_support",	
 				"foreign_table_where" => "ORDER BY tx_vm19docsbase_support.uid",	
-				"size" => 10,	
-				"minitems" => 0,
+				"size" => 7,	
+				"minitems" => 1,
 				"maxitems" => 1,	
+				/*
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -398,19 +404,19 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 						"icon" => "edit2.gif",
 						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
 					),
-				),
+				), */
 			)
 		),
 		"nature" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs.nature",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_vm19docsbase_nature",	
-				"size" => 10,	
-				"minitems" => 0,
-				"maxitems" => 1,
+				"type" => "select",	
+				"foreign_table" => "tx_vm19docsbase_nature",	
+				"foreign_table_where" => "ORDER BY tx_vm19docsbase_nature.uid",	
+				"size" => 15,	
+				"minitems" => 1,
+				"maxitems" => 1,	
 			)
 		),
 		"lang" => Array (		
@@ -421,9 +427,9 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 				"foreign_table" => "tx_vm19docsbase_lang",	
 				"foreign_table_where" => "ORDER BY tx_vm19docsbase_lang.uid",	
 				"size" => 10,	
-				"minitems" => 0,
+				"minitems" => 1,
 				"maxitems" => 1,	
-				"wizards" => Array(
+				/*"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
 					"add" => Array(
@@ -455,9 +461,20 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 						"icon" => "edit2.gif",
 						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
 					),
-				),
+				),*/
 			)
 		),
+		"source" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs.source",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"max" => "50",	
+				//"eval" => "required",
+			)
+		),
+
 		"isbn" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:vm19_docs_base/locallang_db.php:tx_vm19docsbase_docs.isbn",		
@@ -539,7 +556,7 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 		),
 	),
 	"types" => Array (
-		"0" => Array("showitem" => "crdate,hidden;;1;;1-1-1, internal_code, title;;;;2-2-2, topics;;;;3-3-3, int_author, ext_author, support, nature, lang, isbn, keywords, abstract;;;richtext[cut|copy|paste|formatblock|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image|line|chMode]:rte_transform[mode=ts], imagette, workflow_state, document")
+		"0" => Array("showitem" => "crdate,hidden;;1;;1-1-1, internal_code, title;;;;2-2-2, topics;;;;3-3-3, int_author, ext_author, support, nature, lang, source, isbn, keywords, abstract;;;richtext[cut|copy|paste|formatblock|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image|line|chMode]:rte_transform[mode=ts], imagette, workflow_state, document")
 	),
 	"palettes" => Array (
 		"1" => Array("showitem" => "starttime, endtime, fe_group")

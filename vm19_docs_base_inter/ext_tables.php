@@ -102,7 +102,7 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_vm19docsbase_docs.gif",
 	),
 	"feInterface" => Array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, internal_code, title, topics, int_author, ext_author, support, nature, lang, isbn, keywords, abstract, imagette, workflow_state, document",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, internal_code, title, topics, int_author, ext_author, support, nature, lang, source, isbn, keywords, abstract, imagette, workflow_state, document",
 	)
 );
 

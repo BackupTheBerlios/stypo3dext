@@ -104,6 +104,7 @@ CREATE TABLE tx_vm19docsbase_docs (
 	ext_author varchar(50) DEFAULT '' NOT NULL,
 	support int(11) unsigned DEFAULT '0' NOT NULL,
 	nature blob NOT NULL,
+	source varchar(50) DEFAULT '' NOT NULL,
 	lang int(11) unsigned DEFAULT '0' NOT NULL,
 	isbn varchar(15) DEFAULT '' NOT NULL,
 	keywords tinytext NOT NULL,

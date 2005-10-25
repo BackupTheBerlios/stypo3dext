@@ -198,6 +198,7 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 				$this->getFieldLine("support").
 				$this->getFieldLine("isbn").
 				$this->getFieldLine("topics").
+				$this->getFieldLine("source").
 				$this->getFieldLine("keywords").
 				$this->getFieldLine("document").
 				$this->getFieldLine("abstract").
