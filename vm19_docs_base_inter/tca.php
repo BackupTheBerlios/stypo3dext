@@ -471,6 +471,7 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 				"type" => "input",	
 				"size" => "30",	
 				"max" => "50",	
+				"default" => "LES HARAS NATIONAUX",
 				//"eval" => "required",
 			)
 		),
