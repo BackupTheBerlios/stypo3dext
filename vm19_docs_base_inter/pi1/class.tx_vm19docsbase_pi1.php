@@ -67,7 +67,7 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 			break;
 			default:
 				if (strstr($this->cObj->currentRecord,"tt_content"))	{
-					$conf["pidList"] = $this->cObj->data["pages"];
+					$conf["pidList"] = ($this->cObj->data["pages"]!="" ? $this->cObj->data["pages"] : $this->cObj->data["pid"]);
 					$conf["recursive"] = $this->cObj->data["recursive"];
 				}
 				return $this->pi_wrapInBaseClass($this->listView($content,$conf));
@@ -413,7 +413,9 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 		// on récupere le nom du dossier systeme$
 		// s'il contient market ou beneficia ou prestati, met l'autre icône
 	function RetEntete($title="") {
-		$DStitle=txRecupLib("pages","uid","title",$this->conf['pidList']);
+		
+		$DStitle=$this->cObj->data["header"] ; // pas comme sur intranet, ici on prend le titre
+		//$DStitle=txRecupLib("pages","uid","title",$this->conf['pidList']);
 
 		if ($this->marketTitle($DStitle)) {
 			$entete='<H2><img src="'.$this->conf["extCurDir"].'picto_fiches.gif" align="middle">&nbsp;&nbsp;'.($title=="" ? $DStitle : $title).'</H2>';
