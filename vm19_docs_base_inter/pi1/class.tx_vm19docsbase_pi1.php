@@ -134,7 +134,7 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 			if (mysql_error())	debug(array(mysql_error(),$query));
 
 
-			$fullTable=$this->RetEntete();
+			//$fullTable=$this->RetEntete();
 			list($this->internal["res_count"]) = mysql_fetch_row($res);
 			if ($this->internal["res_count"]>0) {
 					// Make listing query, pass query to MySQL:
