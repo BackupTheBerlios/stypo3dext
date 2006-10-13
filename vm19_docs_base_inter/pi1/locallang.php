@@ -4,7 +4,7 @@
  *
  * This file is detected by the translation tool.
  */
-$ChemImg="fileadmin/templates/IMAGES/";
+$ChemImg="fileadmin/templates/images/elts_reccurents/";
 
 $LOCAL_LANG = Array (
 	"default" => Array (
@@ -20,7 +20,6 @@ $LOCAL_LANG = Array (
 		"listFieldHeader_lang" => "lang",
 		"listFieldHeader_isbn" => "ISBN number",
 		"listFieldHeader_keywords" => "key words",
-		"listFieldHeader_source" => "source",
 		"listFieldHeader_abstract" => "abstract",
 		"listFieldHeader_imagette" => "imagette",
 		"listFieldHeader_workflow_state" => "workflow_state",
@@ -45,28 +44,28 @@ $LOCAL_LANG = Array (
 	"fr" => Array (
 		"listFieldHeader_internal_code" => "code interne",
 		"listFieldHeader_tstamp" => "date",
+		"listFieldHeader_crdate" => "date",
 		"listFieldHeader_endtime" => "date de fin de parution",
 		"listFieldHeader_title" => "titre",
 		"listFieldHeader_topics" => "thème(s)",
-		"listFieldHeader_int_author" => "auteur (interne)",
-		"listFieldHeader_ext_author" => "auteur (externe)",
+		"listFieldHeader_int_author" => "auteur",
+		"listFieldHeader_ext_author" => "auteur",
 		"listFieldHeader_support" => "support",
 		"listFieldHeader_nature" => "nature",
 		"listFieldHeader_lang" => "langue",
-		"listFieldHeader_source" => "source",
 		"listFieldHeader_isbn" => "n° ISBN",
 		"listFieldHeader_keywords" => "mots clés",
 		"listFieldHeader_abstract" => "résumé",
 		"listFieldHeader_imagette" => "imagette",
 		"listFieldHeader_workflow_state" => "état de validation",
 		"listFieldHeader_document" => "document",
-		"go_back" => "<img src=\"".$ChemImg."bout_retour.gif\" border=0 alt=\"Retour en mode liste\">",
+		"go_back" => "<img class=\"picto\" src=\"".$ChemImg."preced.gif\" alt=\"Retour en mode liste\"> Retour en mode liste",
 		"list_mode_1" => "Mode 1",
 		"list_mode_2" => "Mode 2",
 		"list_mode_3" => "Mode 3",
-		"pi_list_browseresults_prev" => "< Précédent",
-		"pi_list_browseresults_page" => "Page",
-		"pi_list_browseresults_next" => "Suivant >",
+		"pi_list_browseresults_prev" => '< Précéd. ',
+		"pi_list_browseresults_page" => "P.",
+		"pi_list_browseresults_next" => " Suiv. >",
 		"pi_list_browseresults_displays" => "Affichage document(s) ###SPAN_BEGIN###%s à %s</span> sur ###SPAN_BEGIN###%s</span>",
 		"pi_list_searchBox_search" => "Chercher",
 		"order_records" => "Trier les enregistrements par ",

@@ -37,9 +37,10 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 	var $scriptRelPath = "pi1/class.tx_vm19docsbase_pi1.php";	// Path to this script relative to the extension dir.
 	var $extKey = "vm19_docs_base";	// The extension key.
 	var $upload_doc_folder="uploads/tx_vm19docsbase";
+	var $mod_vignette=false; // affichage en mode vignette
 	
 	/**
-	 * le plugin a été modifié de façon à permettre d'être inséré plusieurs fois dans une même page et que le passage en singleview de l'un n'influence pas les autres
+	 * le plugin a ï¿½ï¿½modifiï¿½de faï¿½n ï¿½permettre d'ï¿½re insï¿½ï¿½plusieurs fois dans une mï¿½e page et que le passage en singleview de l'un n'influence pas les autres
 
 	 */
 	function main($content,$conf)	{
@@ -49,6 +50,7 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 		$this->uid = substr(strstr($GLOBALS[GLOBALS][TSFE]->currentRecord,":"),1);
 		$this->conf=$conf;		// Setting the TypoScript passed to this function in $this->conf
 		$this->pi_setPiVarDefaults();
+		//debug($GLOBALS);
 
         // *************************************
 		// *** doing the things...:
@@ -67,8 +69,9 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 			break;
 			default:
 				if (strstr($this->cObj->currentRecord,"tt_content"))	{
-					$conf["pidList"] = ($this->cObj->data["pages"]!="" ? $this->cObj->data["pages"] : $this->cObj->data["pid"]);
+					$conf["pidList"] = $this->cObj->data["pages"];
 					$conf["recursive"] = $this->cObj->data["recursive"];
+					//debug($this->cObj->data);
 				}
 				return $this->pi_wrapInBaseClass($this->listView($content,$conf));
 			break;
@@ -80,11 +83,13 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 	 * [Put your description here]
 	 */
 	function listView($content,$conf)	{
-
+		
+		if ($this->cObj->data['layout']>=1) $this->mod_vignette=true;
+		
 		$this->uid = substr(strstr($GLOBALS[GLOBALS][TSFE]->currentRecord,":"),1);
 
 		//debug($this->uid);
-		// $this->uid correspond à l'uid du tt_content contenant le plugin
+		// $this->uid correspond ï¿½l'uid du tt_content contenant le plugin
 
 		$this->conf=$conf;		// Setting the TypoScript passed to this function in $this->conf
 		$this->pi_setPiVarDefaults();
@@ -92,10 +97,10 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 		$lConf = $this->conf["listView."];	// Local settings for the listView function
 
 		/* !-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-
-		  modif: on ne se met et en mode singleView que si showUid!=" ET SURTOUT que si l'uid tt_content passé correspond
+		  modif: on ne se met et en mode singleView que si showUid!=" ET SURTOUT que si l'uid tt_content passï¿½ correspond
 		// au courant
 		// voir aussi utilisation du dernier argument optionel de la la fonction
-		pi_list_linkSingle qui permet de passer un tableau de hachage contenant autant d'arguments supplémentaires que l'on veut
+		pi_list_linkSingle qui permet de passer un tableau de hachage contenant autant d'arguments supplï¿½entaires que l'on veut
  		!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-
 		*/
 		if ($this->piVars["showUid"] && $this->piVars["ttc_uid"]==$this->uid)	{	// If a single element should be displayed:
@@ -116,29 +121,29 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 
 				// Initializing the query parameters:
 			list($this->internal["orderBy"],$this->internal["descFlag"]) = explode(":",$this->piVars["sort"]);
-			// si aucun classement specifie, par défaut on classe par date décroissante
+			// si aucun classement specifie, par dï¿½aut on classe par date dï¿½roissante
 			if ($this->internal["orderBy"]=="") {
-				$this->internal["orderBy"]="tstamp";
-				$this->internal["descFlag"]=1;
+				$this->internal["orderBy"]=($this->mod_vignette ? "title" : "crdate");
+				$this->internal["descFlag"]=($this->mod_vignette ? "" : "1");
 				}
 			//debug ($this->piVars["sort"]);
-			$this->internal["results_at_a_time"]=t3lib_div::intInRange($lConf["results_at_a_time"],0,1000,3);		// Number of results to show in a listing.
-			$this->internal["maxPages"]=t3lib_div::intInRange($lConf["maxPages"],0,1000,2);;		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
+			$this->internal["results_at_a_time"]=t3lib_div::intInRange(($this->mod_vignette ? $lConf["results_atat_vignette"] : $lConf["results_at_a_time"]),0,1000,3);		// Number of results to show in a listing.
+			$this->internal["maxPages"]=t3lib_div::intInRange($lConf["maxPages"],0,1000,2);		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
 			$this->internal["searchFieldList"]="internal_code,title,ext_author,isbn,keywords,abstract,workflow_state,document";
-			$this->internal["orderByList"]="title,tstamp";
+			$this->internal["orderByList"]="title,crdate";
 
 
 			$query = $this->pi_list_query("tx_vm19docsbase_docs",1);
 
 			$res = mysql(TYPO3_db,$query);
 			if (mysql_error())	debug(array(mysql_error(),$query));
-
-
-			//$fullTable=$this->RetEntete();
+			
+			//debug ($this->cObj->data);
+			//$fullTable=$this->RetEntete($this->cObj->data["header"]);
 			list($this->internal["res_count"]) = mysql_fetch_row($res);
 			if ($this->internal["res_count"]>0) {
 					// Make listing query, pass query to MySQL:
-				//$query = $this->pi_list_query("tx_vm19docsbase_docs",0,"","","","ORDER BY tstamp DESC, title ASC");
+				//$query = $this->pi_list_query("tx_vm19docsbase_docs",0,"","","","ORDER BY crdate DESC, title ASC");
 				$query = $this->pi_list_query("tx_vm19docsbase_docs");
 				$res = mysql(TYPO3_db,$query);
 				if (mysql_error())	debug(array(mysql_error(),$query));
@@ -150,17 +155,21 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 
 					// Adds the mode selector: on le vire
 				//$fullTable.=$this->pi_list_modeSelector($items);
-
 					// Adds the whole list table
-				$fullTable.=$this->pi_list_makelist($res);
+				
+				if ($this->mod_vignette) { // mode vignette
+					$fullTable.=$this->viewVignettes($res);
+				} else {
+					$fullTable.=$this->pi_list_makelist($res);
+				}
 
 					// Adds the search box:
 					// Elle est Moche alors on la vire
 				//$fullTable.=$this->pi_list_searchBox();
 
-					// Adds the result browser, seulement s'il y a assez de résultats
+					// Adds the result browser, seulement s'il y a assez de rï¿½ultats
 				if ($this->internal["res_count"]>$this->internal["results_at_a_time"]) $fullTable.=$this->pi_list_browseresults();
-			} // fin si il y a des résultats
+			} // fin si il y a des rï¿½ultats
 			else $fullTable.=$this->pi_getLL("no_docs","[no_docs]");
 
 
@@ -169,7 +178,52 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 		}
 	}
 	/**
-	 * [Put your description here]
+	 * mode vue unique (1 seul doc)
+	 */
+	function viewVignettes($res)	{
+		$i=0;
+		$content.='<DIV class="txvm19docs_vignette">';
+		$content.='<table border="0">';
+		while ($rw=mysql_fetch_array($res)) {
+			$i++;
+			if ($i==1 || $i==4 || $i==7) $content.="<tr>";
+			$content.='<td><DIV class="docVignette">';
+			$content.='<span class="docVtitle">'.$rw['title'].'</span>';
+			$content.='<a name="Anc'.$rw['uid'].'"></a>';
+			$loupe='<img src="'.$this->conf["extCurDir"].'loupe_plus.gif" title="'.$this->pi_getLL("details","[details]").'" class="picto">';
+
+		/*
+		la fonction pi_list_linkSingle possï¿½e u dernier argument aoptionel qui permet de passer un tableau de hachage contenant autant d'arguments supplï¿½entaires que l'on veut !
+		ici on y passe l'uid du tt_content contenant le plugin de faï¿½n ï¿½les diffï¿½encier
+ 		!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-
+		*/
+
+			$Margt['ttc_uid']=$this->uid;
+			// petites corrections: on passe aussi le pointer, qui indique la position dans les enregistrements, sinon il est perdu
+			$Margt['pointer']=$this->piVars["pointer"];
+			
+		
+			$CfN=$this->upload_doc_folder.'/'.$rw['document'];
+		
+			$content.=$this->pi_list_linkSingle($this->retImagette($rw['imagette'],$rw['document'],true,"ImgDocVig"),$rw["uid"],1,$Margt);
+			$content.='<span class="docinfosvig">'.getDateF($rw['crdate']);
+			$content.=DFSIL($CfN);
+			// asctuce pour rajouter une ancre à la fin du lien
+			$mylink=$this->pi_list_linkSingle("salut_blaireau",$rw["uid"],1,$Margt);
+			$mylink=str_replace('">salut_blaireau',"#Anc".$rw["uid"].'">salut_blaireau',$mylink);
+			
+			$content.='&nbsp;&nbsp;'.str_replace("salut_blaireau",$loupe,$mylink).'&nbsp;';
+			//$content.='&nbsp;&nbsp;'.$this->pi_list_linkSingle($loupe,$rw["uid"],1,$Margt).'&nbsp;';
+			$content.='&nbsp;<a href="'.$CfN.'" target="_blank"><img src="'.$this->conf["extCurDir"].'telecharger.gif" class="picto" title="'.$this->pi_getLL("download","[download]").'"></a></span>';
+			$content.='</DIV><td>';
+			if ($i==3 || $i==6 || $i==9) $content.="</tr>";
+		}
+		$content.="</table></DIV>";
+		return($content);
+	}
+
+	/**
+	 * mode vue unique (1 seul doc)
 	 */
 	function singleView($content,$conf)	{
 		$this->conf=$conf;
@@ -182,23 +236,22 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 
 
 
-// exemple d'appel de style spécifique à chaque champ:
+// exemple d'appel de style spï¿½ifique ï¿½chaque champ:
 // allourdit inultilement...
 //<P'.$this->pi_classParam("singleViewField-internal-code").'><strong>'.$this->getFieldHeader("internal_code").':</strong> '.$this->getFieldContent("internal_code").'</P>
-
-		$content.='<DIV'.$this->pi_classParam("singleView").'>';
+		$content.='<A name="Anc'.$this->getFieldContent("uid").'></A>';
+		$content.='<DIV class="txvm19docs_single">';
 		$content.=$this->RetEntete($this->internal["currentRow"]["title"]);
 		//	<H2><img src="'.$this->conf["extCurDir"].'picto_documents.gif" align="middle">&nbsp;&nbsp;'.$this->internal["currentRow"]["title"].'</H2>
 		$content.=$this->getFieldLine("imagette").
 				$this->getFieldLine("internal_code").
-				$this->getFieldLine("tstamp").
+				$this->getFieldLine("crdate").
 				$this->getFieldLine("endtime").
 				$this->getFieldLine("author").
 				$this->getFieldLine("lang").
 				$this->getFieldLine("support").
 				$this->getFieldLine("isbn").
 				$this->getFieldLine("topics").
-				$this->getFieldLine("source").
 				$this->getFieldLine("keywords").
 				$this->getFieldLine("document").
 				$this->getFieldLine("abstract").
@@ -206,39 +259,41 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 
 				//<P'.$this->pi_classParam("singleViewField-document").'><strong>'.$this->getFieldHeader("document").':</strong> '.$this->getFieldContent("document").'</P>';
 
-		$content.='<P>'.$this->pi_list_linkSingle($this->pi_getLL("go_back","[go_back]"),0).'</P></DIV>'.
+		$content.='<p align="center"><span class="picto">'.str_replace('"><img',"#Anc".$this->getFieldContent("uid").'"><img',$this->pi_list_linkSingle($this->pi_getLL("go_back","[go_back]"),0)).'</span></p></DIV>'.
 		$this->pi_getEditPanel();
+// // la magouille avec le str_replace ('"><img', xx sert Ã  rajouter au cul de l'url un lien vers l'ancre (#Anc) pour qu'au retour on retombe au mÃªme endroit dans la page
+	
 
 		return $content;
 	}
-// fonction qui retourne une ligne complète, si le champ n'est pas vide, avec titre du champ et valeur avec traitemenst éventuels
+// fonction qui retourne une ligne complï¿½e, si le champ n'est pas vide, avec titre du champ et valeur avec traitemenst ï¿½entuels
 	function getFieldLine($fN) {
 		// n'affiche que si le champ est non vide et <>0
 		$valret="";
 
-		if ($fN=="author" || ($this->internal["currentRow"][$fN]!="" && $this->internal["currentRow"][$fN]!="0")) { //&& $this->getFieldContent($fN)!="0"
+		if ($fN=="author" || ($this->internal["currentRow"][$fN]!="" && $this->internal["currentRow"][$fN]!="0") || $fN=="imagette") { //&& $this->getFieldContent($fN)!="0"
 			switch ($fN) {
 				case "imagette":
-					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent($fN))) {
-						//$size=getimagesize($this->upload_doc_folder.'/'.$this->getFieldContent($fN));
-						$ConfI["file"] = $this->upload_doc_folder.'/'.$this->getFieldContent($fN);
-						$ConfI["file."]["maxW"] = $this->conf["ImgMaxWidth"];
-						$valret= str_replace(">",' align="left">',$this->cObj->IMAGE($ConfI));
-						//$valret= '<img src="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" align="left" border="0">';
-					}
+					$imgsrc=$this->retImagette($this->getFieldContent('imagette'),$this->getFieldContent('document'),false);
+					
+					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent("document"))) {
+						$valret.='<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent("document").'" target="_blank">'.$imgsrc.'</a>';
+						}
+					else $valret.=$imgsrc;
+
 				break;
 
 				case "lang":
-					if ($this->conf["langCodeND"]!=$this->internal["currentRow"][$fN]) $valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'</P>';
+					if ($this->conf["langCodeND"]!=$this->internal["currentRow"][$fN]) $valret= '<P><span class="descDoc">'.$this->getFieldHeader($fN).':</span> '.$this->getFieldContent($fN).'</P>';
 					break;
 
 				case "document":
 					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent($fN))) {
-						$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'&nbsp;<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" target="_blank"><img src="'.$this->conf["extCurDir"].'b_oeil.gif" border="0" title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($this->upload_doc_folder.'/'.$this->getFieldContent($fN)).'</P>';
+						$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'&nbsp;<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" target="_blank"><img src="'.$this->conf["extCurDir"].'telecharger.gif" class="picto"  title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($this->upload_doc_folder.'/'.$this->getFieldContent($fN)).'</P>';
 					}
 				break;
 				
-				case "author": // renvoie l'auteur et son mail avec une petite enveloppe derrière
+				case "author": // renvoie l'auteur et son mail avec une petite enveloppe derriï¿½e
 					if ($this->internal["currentRow"]["int_author"]!="") {
 						$fN="int_author";
 						$valret='<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN);
@@ -278,20 +333,25 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 		$loupe='<img src="'.$this->conf["extCurDir"].'loupe_plus.gif" border="0" title="'.$this->pi_getLL("details","[details]").'">';
 
 		/*
-		la fonction pi_list_linkSingle possède u dernier argument aoptionel qui permet de passer un tableau de hachage contenant autant d'arguments supplémentaires que l'on veut !
-		ici on y passe l'uid du tt_content contenant le plugin de façon à les différencier
+		la fonction pi_list_linkSingle possï¿½e u dernier argument aoptionel qui permet de passer un tableau de hachage contenant autant d'arguments supplï¿½entaires que l'on veut !
+		ici on y passe l'uid du tt_content contenant le plugin de faï¿½n ï¿½les diffï¿½encier
  		!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-
 		*/
 
 		$Margt['ttc_uid']=$this->uid;
 		// petites corrections: on passe aussi le pointer, qui indique la position dans les enregistrements, sinon il est perdu
 		$Margt['pointer']=$this->piVars["pointer"];
-		// ainsi que le classement qui n'était pas mémorisé si on passait en singleview
+		// ainsi que le classement qui n'ï¿½ait pas mï¿½orisï¿½si on passait en singleview
 		$Margt['sort']=$this->piVars["sort"];
 		
-		$loupe=$this->pi_list_linkSingle($loupe,$this->internal["currentRow"]["uid"],1,$Margt).'&nbsp;';	// The "1" means that the display of single items is CACHED! Set to zero to disable caching.
+		// asctuce pour rajouter une ancre à la fin du lien
+		$mylink=$this->pi_list_linkSingle("salut_blaireau",$this->internal["currentRow"]["uid"],1,$Margt);
+		$mylink=str_replace('">salut_blaireau',"#Anc".$this->internal["currentRow"]["uid"].'">salut_blaireau',$mylink);
+		$loupe='&nbsp;&nbsp;'.str_replace("salut_blaireau",$loupe,$mylink).'&nbsp;';
+	
+		//$loupe=$this->pi_list_linkSingle($loupe,$this->internal["currentRow"]["uid"],1,$Margt).'&nbsp;';	// The "1" means that the display of single items is CACHED! Set to zero to disable caching.
 
-		// la puce par défaut, c'est tux
+		// la puce par dï¿½aut, c'est tux
 		$puce='<img src="'.$this->conf["extCurDir"].'tux.gif" border="0" title="'.$this->pi_getLL("other_doc","[other_doc]").'">';
 		$file_name=$this->getFieldContent("document");
 		$CfN=$this->upload_doc_folder.'/'.$file_name;
@@ -300,14 +360,14 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 				//$CDocN=$this->getFileIconHTML($file_name,$file_name).' <a href="'.$CfN.'" target="_blank">'.$file_name.'</a>'.DFSIL($CfN);}
 				// Plus que l'icone
 				$puce=$this->getFileIconHTML($file_name,$file_name);
-				$CDocN='&nbsp;<a href="'.$CfN.'" target="_blank"><img src="'.$this->conf["extCurDir"].'b_oeil.gif" border="0" title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($CfN);
+				$CDocN='&nbsp;<a href="'.$CfN.'" target="_blank"><img src="'.$this->conf["extCurDir"].'telecharger.gif" border="0" title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($CfN);
 				}
-
-		return '<tr"'.($c%2 ? ' class="rowodd"' : "").'>
-				<td align="center">'.$puce.'</td>
-				<td valign="center">'.$this->getFieldContent("title").'</td>
-				<td valign="center">'.$this->getFieldContent("tstamp").'</td>
-				<td valign="center">'.$loupe.$CDocN.'</td>
+	// l'ancre sert a ce qu'au retiur d'une loupe on puisse repointer au mÃªme endroit..
+		return '<a name="Anc'.$this->getFieldContent("uid").'"></a><tr class="'.($c%2 ? 'doclist_rowodd' : 'doclist_roweven').'">
+				<td>'.$puce.'</td>
+				<td style="text-align:left">'.$this->getFieldContent("title").'</td>
+				<td>'.$this->getFieldContent("crdate").'</td>
+				<td style="text-align:left">'.$loupe.$CDocN.'</td>
 				'.$editPanel.'
 			</tr>';
 	}
@@ -316,12 +376,12 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 
 	 */
 	function pi_list_header()	{
-		return '<thead'.$this->pi_classParam("listrow-header").'>
-		 		<th width="50">&nbsp;</th>
-				<th width="200" align="left">'.$this->getFieldHeader_sortLink("title").'</th>
-				<th align="left">'.$this->getFieldHeader_sortLink("tstamp").'</th>
-				<th>&nbsp;</th>
-			</thead>';
+		return '<tr class="docTableHead">
+		 		<td width="50">&nbsp;</td>
+				<td width="200" align="left">'.$this->getFieldHeader_sortLink("title").'</td>
+				<td align="left">'.$this->getFieldHeader_sortLink("crdate").'</td>
+				<td>&nbsp;</td>
+			</tr>';
 	}
 	/**
 	 * [Put your description here]
@@ -329,9 +389,9 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 	function getFieldContent($fN,$mode="L")	{
 		switch($fN) {
 			case "uid":
-				return $this->pi_list_linkSingle($this->internal["currentRow"][$fN],$this->internal["currentRow"]["uid"],1);	// The "1" means that the display of single items is CACHED! Set to zero to disable caching.
+				return $this->internal["currentRow"]["uid"];	// The "1" means that the display of single items is CACHED! Set to zero to disable caching.
 			break;
-			// plus de lien vers la fiche détaillée sur le nom: il est fait sur la loupe
+			// plus de lien vers la fiche dï¿½aillï¿½ sur le nom: il est fait sur la loupe
 			/*
 			case "title":
 				// This will wrap the title in a link: to Single if in List (default), back
@@ -351,6 +411,7 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 				return txRecupLib("fe_users","uid","name",$this->internal["currentRow"][$fN]);
 			break;
 			case "tstamp":
+			case "crdate":
 			case "endtime":
 				return getDateF($this->internal["currentRow"][$fN]);
 			break;
@@ -358,10 +419,10 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 			case "abstract":
 			//return $this->pi_RTEcssText($this->internal["currentRow"][$fN]);
 				/*
-				modifications apportées au traitements de la méthode getFieldContent($fN)
-				la ligne d'origine ci-dessus est générée automatiquement, mais dans ce cas, les liens (entres autres) insérés avec le RTE
-				ne sont pas affichés dans le FE correctement bien qu'ils soient enregistrés.
-				Pour que le changement ci-dessous fonctionne, il faut l'associer à la directive placée dans le gabarit principal suivante:
+				modifications apportï¿½s au traitements de la mï¿½hode getFieldContent($fN)
+				la ligne d'origine ci-dessus est gï¿½ï¿½ï¿½ automatiquement, mais dans ce cas, les liens (entres autres) insï¿½ï¿½ avec le RTE
+				ne sont pas affichï¿½ dans le FE correctement bien qu'ils soient enregistrï¿½.
+				Pour que le changement ci-dessous fonctionne, il faut l'associer ï¿½la directive placï¿½ dans le gabarit principal suivante:
 				plugin.tx_macledextensionsansunderscores_pi1.RTEcontent_stdWrap.parseFunc < tt_content.text.20.parseFunc */
 				return $this->cObj->stdWrap( $this->pi_RTEcssText($this->internal["currentRow"][$fN]), $this->conf['RTEcontent_stdWrap.']);
 			break;
@@ -382,18 +443,50 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
 	 * [Put your description here]
 	 */
 	function getFieldHeader_sortLink($fN)	{
-	    // on n'affiche plus le nom du champ en lien mais une icône de classement
-		// pour les tris, attention que le champ de tri soit listé dans la prorpriéié déclarée ci-dessus
+	    // on n'affiche plus le nom du champ en lien mais une icï¿½e de classement
+		// pour les tris, attention que le champ de tri soit listï¿½dans la prorpriï¿½ï¿½dï¿½larï¿½ ci-dessus
 		//			$this->internal["orderByList"]="title,tstamp";
 
 		//return $this->pi_linkTP_keepPIvars($this->getFieldHeader($fN),array("sort"=>$fN.":".($this->internal["descFlag"]?0:1)));
 		return $this->getFieldHeader($fN).'&nbsp;&nbsp;'.$this->pi_linkTP_keepPIvars('<img src="'.$this->conf["extCurDir"].'b_updown.gif" align="middle" border="0" title="'.$this->pi_getLL("order_records","[order_records]").$this->getFieldHeader($fN).'">',array("sort"=>$fN.":".($this->internal["descFlag"]?0:1)));
 	}
 
+/** affiche imagette ou apercu pdf ... ou rien/image prï¿½ï¿½inie **/
 
-    /**
-	 * Returns the fileicon
-	 */
+    	function retImagette($imagette="",$doc="",$disp_imggen=false,$classImg="imgDoc") {
+		if ($imagette!="" && file_exists($this->upload_doc_folder.'/'.$imagette)) {
+			//$size=getimagesize($this->upload_doc_folder.'/'.$this->getFieldContent($fN));
+			$ConfI["file"] = $this->upload_doc_folder.'/'.$imagette;
+			$ConfI["file."]["maxW"] = $this->conf["ImgMaxWidth"];
+			
+			$valret.= str_replace(">",' class="'.$classImg.'">',$this->cObj->IMAGE($ConfI));
+			//$valret= '<img src="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" align="left" border="0">';
+		} else {
+			if ($doc!="" && file_exists($this->upload_doc_folder.'/'.$doc)) {
+				$fI=t3lib_div::split_fileref($this->upload_doc_folder."/".$doc);
+				if (strstr("pdf jpeg gif png jpg tiff",strtolower($fI["fileext"]))) { 
+					$img = t3lib_div::makeInstance('t3lib_stdGraphic');
+					//$img->mayScaleUp = 1;
+				
+					$img->init(); // renvoie 1... donc OK
+					
+					// mettre les images Ã  la bonne largeur cad $this->conf["ImgMaxWidth"]
+					$imgInfo = $img->imageMagickConvert($this->upload_doc_folder.'/'.$doc,'jpg',$this->conf["ImgMaxWidth"],'',"","",'',1);
+					
+					//debug ($imgInfo); // vide
+					if ($imgInfo[3]) $valret='<img src="'.$imgInfo[3].'" class="'.$classImg.'">';
+				} elseif ($disp_imggen) {
+					$valret='<img src="'.$this->conf['imggen'].'" class="'.$classImg.'">';
+				}
+			}	
+			
+		}
+	
+		return($valret);	
+	}
+	
+	/*** retourne l'icone d'un fichier **/
+	
     function getFileIconHTML($file,$altText) {
 //ancienne synatxe: $iconDir = "t3lib/gfx/fileicons"; //
 // ces valeurs sont maintenant renseignÃ©es dans le fichier ext_typoscript_setup.txt
@@ -410,24 +503,20 @@ class tx_vm19docsbase_pi1 extends tslib_pibase {
         return '<IMG src="'.$img.'" border="0" title="'.$altText.'">';
     }
 
-		// on récupere le nom du dossier systeme$
-		// s'il contient market ou beneficia ou prestati, met l'autre icône
-	function RetEntete($title="") {
+	
+	function RetEntete($title="Document") {
 		
-		$DStitle=$this->cObj->data["header"] ; // pas comme sur intranet, ici on prend le titre
-		//$DStitle=txRecupLib("pages","uid","title",$this->conf['pidList']);
-
-		if ($this->marketTitle($DStitle)) {
-			$entete='<H2><img src="'.$this->conf["extCurDir"].'picto_fiches.gif" align="middle">&nbsp;&nbsp;'.($title=="" ? $DStitle : $title).'</H2>';
-			}
-		else {
-   			$entete='<H2><img src="'.$this->conf["extCurDir"].'picto_documents.gif" align="middle">&nbsp;&nbsp;'.($title=="" ? $DStitle : $title).'</H2>';
-			}
+		// SUR INTRANET ON PRENAIT LE NOM DU DOSSIER SYSTEME, Plus sur Internet
+		$DStitle=txRecupLib("pages","uid","title",$this->conf['pidList']);
+		
+		
+		$entete='<H2 class="titreDossier"><img src="'.$this->conf["extCurDir"].'picto_documents.gif" class="picto">&nbsp;&nbsp;'.$title.'</H2>';
+			
 		return($entete);
 	}
 
-// fonction qui renvoie true si l'argument contient un des mots separés par des virgules
-// situés dans la var de conf keyWordMarket situé dans le fichier ext_typoscript_setup.txt
+// fonction qui renvoie true si l'argument contient un des mots separï¿½ par des virgules
+// situï¿½ dans la var de conf keyWordMarket situï¿½dans le fichier ext_typoscript_setup.txt
 	function marketTitle($arg) {
 		$mtr=false;
 		$tval=explode(',',$this->conf["keyWordMarket"]);

@@ -2,13 +2,14 @@
 plugin.tx_vm19docsbase_pi1 {
 
 	keyWordMarket=market,beneficia,prestati
-	# code de la langue non affichée
+	# code de la langue non affichï¿½
 	langCodeND=1
-	ImgMaxWidth=250
+	ImgMaxWidth=200
 	extCurDir=typo3conf/ext/vm19_docs_base/
 	iconDir =typo3conf/ext/vm19_docs_base/fileicons
 	altIconDir=t3lib/gfx/fileicons
   	defaultIcon =typo3conf/ext/vm19_docs_base/fileicons/default.gif
+  	imggen=typo3conf/ext/vm19_docs_base/no_preview.jpg
 
 
 	allowCaching = 1
@@ -19,7 +20,8 @@ plugin.tx_vm19docsbase_pi1 {
 }
 plugin.tx_vm19docsbase_pi1.listView {
 	results_at_a_time = 10
-	maxPages = 10
+	results_atat_vignette=9
+	maxPages = 6
 	imgHeight=25
 }
   # Example of default set CSS styles (these go into the document header):

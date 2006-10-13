@@ -102,14 +102,14 @@ $TCA["tx_vm19docsbase_docs"] = Array (
 		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_vm19docsbase_docs.gif",
 	),
 	"feInterface" => Array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, internal_code, title, topics, int_author, ext_author, support, nature, lang, source, isbn, keywords, abstract, imagette, workflow_state, document",
+		"fe_admin_fieldList" => "hidden, crdate, starttime, endtime, fe_group, internal_code, title, topics, int_author, ext_author, support, nature, lang, isbn, keywords, abstract, imagette, workflow_state, document",
 	)
 );
 
 
 t3lib_div::loadTCA("tt_content");
 //$TCA["tt_content"]["types"]["list"]["subtypes_excludelist"][$_EXTKEY."_pi1"]="layout,select_key";
-$TCA["tt_content"]["types"]["list"]["subtypes_excludelist"][$_EXTKEY."_pi1"]="layout";
+$TCA["tt_content"]["types"]["list"]["subtypes_excludelist"][$_EXTKEY."_pi1"]="select_key";
 
 t3lib_extMgm::addToInsertRecords("tx_vm19docsbase_docs");
 
