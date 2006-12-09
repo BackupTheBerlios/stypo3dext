@@ -1,0 +1,66 @@
+<?php
+/**
+ * Language labels for database tables/fields belonging to extension "vm19_hn_reglementation"
+ * 
+ * This file is detected by the translation tool.
+ */
+
+$LOCAL_LANG = Array (
+	"default" => Array (
+		"tx_vm19hnreglementation_nature" => "Text natures",	
+		"tx_vm19hnreglementation_nature.title" => "title",	
+		"tx_vm19hnreglementation_nature.level" => "level",	
+		"tx_vm19hnreglementation_nature.code" => "code",	
+		"tx_vm19hnreglementation_textes" => "texts",	
+		"tx_vm19hnreglementation_textes.url" => "url",	
+		"tx_vm19hnreglementation_textes.title" => "title",	
+		"tx_vm19hnreglementation_textes.nature" => "nature",	
+		"tx_vm19hnreglementation_textes.dat_approb" => "approb date",	
+		"tx_vm19hnreglementation_textes.number" => "number",	
+		"tx_vm19hnreglementation_textes.publication" => "publication",	
+		"tx_vm19hnreglementation_textes.desc_2bf7363fc2" => "description",	
+		"tx_vm19hnreglementation_textes.fich_joint" => "joined file",	
+		"tx_vm19hnreglementation_textes.kwords" => "key words",	
+		"tx_vm19hnreglementation_textes.orig" => "origin",	
+		"tx_vm19hnreglementation_textes.other_pages" => "other attached rubriques",	
+		"tx_vm19hnreglementation_textes.parent_text" => "attached text",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.none" => "none",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.0" => "modify",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.1" => "abroge",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.2" => "replace",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.3" => "cancel",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.4" => "transpose",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.5" => "apply",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type" => "attachement type",	
+		"tt_content.list_type_pi1" => "reglementation",	
+	),
+	"fr" => Array (
+		"tx_vm19hnreglementation_nature" => "Nature des textes",	
+		"tx_vm19hnreglementation_nature.title" => "titre",	
+		"tx_vm19hnreglementation_nature.level" => "niveau",	
+		"tx_vm19hnreglementation_nature.code" => "code",	
+		"tx_vm19hnreglementation_textes" => "textes",	
+		"tx_vm19hnreglementation_textes.url" => "url",	
+		"tx_vm19hnreglementation_textes.title" => "titre",	
+		"tx_vm19hnreglementation_textes.nature" => "nature",	
+		"tx_vm19hnreglementation_textes.dat_approb" => "date d\'approbation",	
+		"tx_vm19hnreglementation_textes.number" => "numero",	
+		"tx_vm19hnreglementation_textes.publication" => "publication",	
+		"tx_vm19hnreglementation_textes.desc_2bf7363fc2" => "description",	
+		"tx_vm19hnreglementation_textes.fich_joint" => "fichier joint",	
+		"tx_vm19hnreglementation_textes.kwords" => "mots cl�",	
+		"tx_vm19hnreglementation_textes.orig" => "origine",	
+		"tx_vm19hnreglementation_textes.other_pages" => "autre(s) rubriques de rattachement",	
+		"tx_vm19hnreglementation_textes.parent_text" => "textes de rattachement (parents)",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.none" => "aucun",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.0" => "modifie",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.1" => "abroge",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.2" => "remplace",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.3" => "annule",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.4" => "transpose",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type.I.5" => "applique",	
+		"tx_vm19hnreglementation_textes.rtt_attach_type" => "type de rattachement au texte parent",	
+		"tt_content.list_type_pi1" => "reglementation",	
+	),
+);
+?>
