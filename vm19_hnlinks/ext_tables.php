@@ -26,7 +26,9 @@ $TCA["tx_vm19hnlinks_urls"] = Array (
 
 
 t3lib_div::loadTCA("tt_content");
-$TCA["tt_content"]["types"]["list"]["subtypes_excludelist"][$_EXTKEY."_pi1"]="layout,select_key";
+$TCA["tt_content"]["types"]["list"]["subtypes_excludelist"][$_EXTKEY."_pi1"]="layout,recursive";
+// Add CODE field to plugin : en fait il suffit de ne PAS l'enlever ci-dessus
+//$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='select_key';
 
 
 t3lib_extMgm::addPlugin(Array("LLL:EXT:vm19_hnlinks/locallang_db.php:tt_content.list_type_pi1", $_EXTKEY."_pi1"),"list_type");

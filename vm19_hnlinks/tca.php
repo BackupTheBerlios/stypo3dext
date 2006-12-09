@@ -103,12 +103,16 @@ $TCA["tx_vm19hnlinks_urls"] = Array (
 			"exclude" => 0,		
 			"label" => "LLL:EXT:vm19_hnlinks/locallang_db.php:tx_vm19hnlinks_urls.url_othercateg",		
 			"config" => Array (
-				"type" => "select",	
+				/*"type" => "select",	
 				"foreign_table" => "pages",	
-				"foreign_table_where" => "AND pages.pid=###CURRENT_PID### ORDER BY pages.uid",	
-				"size" => 1,	
+				"foreign_table_where" => "AND pages.pid=###CURRENT_PID### ORDER BY pages.uid",	*/
+				"type" => "group",
+				"internal_type" => "db",
+				"allowed" => "pages",
+				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 5,	
+				"maxitems" => 10,	
+				/*
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -131,7 +135,7 @@ $TCA["tx_vm19hnlinks_urls"] = Array (
 						"icon" => "edit2.gif",
 						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
 					),
-				),
+				),*/
 			)
 		),
 		"url_datev" => Array (		
