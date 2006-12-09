@@ -1,0 +1,110 @@
+8
+
+dir
+37
+http://www.dlcube.com/svn/HarasNationaux/portail/trunk/dlcube_hn_01
+http://www.dlcube.com/svn
+
+
+
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b179c575-9a1b-0410-9a90-bffca191bbee
+
+class.GeoHelper.php
+file
+
+
+
+
+2006-12-01T16:54:07.000000Z
+171d1a9b6444e5c17ab9d1a6db573114
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+
+class.WebservicesAccess.php
+file
+
+
+
+
+2006-12-01T16:54:07.000000Z
+74172ceaa21afb300f226593caaee752
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+
+class.WebservicesCompte.php
+file
+
+
+
+
+2006-12-01T16:58:41.000000Z
+e2a106422ec7cb1e90605b91b4e335cc
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+
+data
+dir
+
+doc
+dir
+
+ext_emconf.php
+file
+
+
+
+
+2006-12-01T16:54:07.000000Z
+f52fd80070ef5c2ea26adf7980ad6e04
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+
+ext_icon.gif
+file
+
+
+
+
+2006-12-01T16:54:07.000000Z
+1bdcc7af1f61a5434e4cac6f2cb36c2d
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+has-props
+
+index.html
+file
+
+
+
+
+2006-12-01T16:54:07.000000Z
+6383ef1e7f2e8e7396a72566c9c4b163
+2006-12-01T17:56:51.751000Z
+37
+gtessier
+
+php_inc
+dir
+
