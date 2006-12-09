@@ -1,0 +1,5 @@
+# nombre de news affiché
+# peut-être modifié-écrasé par une ligne semblable dans le setup d'un gabarit
+plugin.tx_vm19watsniou_pi1 {
+	NiousNumber=20
+}

@@ -1,0 +1,18 @@
+
+Extension user_links
+--------------------
+Remplir d'abord tt_links, et tt_links_cat avec au moins 1 catégorie
+
+Le plugin FE pour que le user choisisse ses liens préférés s'installe normalement
+comme un contenu plugin dans une page; le dossier spécifié va etre celui ou vont etre 
+stockés les liens de l'utilisateur
+
+Pour afficher les liens en permanence quelque part dans un template balisé par ###LIENS_UTIL###,
+le code TS à mettre daans le TS_Setup du gabarit est :
+
+# pas USER, sinon c'est mis en cache et ça déconne grave 
+subparts.LIENS_UTIL=USER_INT
+subparts.LIENS_UTIL.userFunc=user_liens->display
+# ci-dessous les id des cat affichees en permanence
+subparts.LIENS_UTIL.liens.fixedLinksCats=1
+

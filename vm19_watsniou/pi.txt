@@ -1,0 +1,311 @@
+phpinfo()
+PHP Version => 4.3.9
+
+System => Linux www 2.4.20-8 #1 Thu Mar 13 17:54:28 EST 2003 i686
+Build Date => Jan 13 2005 16:35:09
+Configure Command =>  './configure' '--with-apxs=/usr/local/apache/bin/apxs' '--with-oci8=/home/oracle/OraHome1'
+Server API => Command Line Interface
+Virtual Directory Support => disabled
+Configuration File (php.ini) Path => /usr/local/lib
+PHP API => 20020918
+PHP Extension => 20020429
+Zend Extension => 20021010
+Debug Build => no
+Thread Safety => disabled
+Registered PHP Streams => php, http, ftp  
+
+
+This program makes use of the Zend Scripting Language Engine:
+Zend Engine v1.3.0, Copyright (c) 1998-2004 Zend Technologies
+
+
+ _______________________________________________________________________
+
+
+Configuration
+
+PHP Core
+
+Directive => Local Value => Master Value
+allow_call_time_pass_reference => On => On
+allow_url_fopen => On => On
+always_populate_raw_post_data => Off => Off
+arg_separator.input => & => &
+arg_separator.output => & => &
+asp_tags => Off => Off
+auto_append_file => no value => no value
+auto_prepend_file => no value => no value
+browscap => no value => no value
+default_charset => no value => no value
+default_mimetype => text/html => text/html
+define_syslog_variables => Off => Off
+disable_classes => no value => no value
+disable_functions => no value => no value
+display_errors => On => On
+display_startup_errors => Off => Off
+doc_root => no value => no value
+docref_ext => no value => no value
+docref_root => no value => no value
+enable_dl => On => On
+error_append_string => no value => no value
+error_log => no value => no value
+error_prepend_string => no value => no value
+error_reporting => no value => no value
+expose_php => On => On
+extension_dir => /usr/local/lib/php/extensions/no-debug-non-zts-20020429 => /usr/local/lib/php/extensions/no-debug-non-zts-20020429
+file_uploads => On => On
+gpc_order => GPC => GPC
+highlight.bg => #FFFFFF => #FFFFFF
+highlight.comment => #FF8000 => #FF8000
+highlight.default => #0000BB => #0000BB
+highlight.html => #000000 => #000000
+highlight.keyword => #007700 => #007700
+highlight.string => #DD0000 => #DD0000
+html_errors => Off => On
+ignore_repeated_errors => Off => Off
+ignore_repeated_source => Off => Off
+ignore_user_abort => Off => Off
+implicit_flush => On => Off
+include_path => .:/usr/local/lib/php => .:/usr/local/lib/php
+log_errors => Off => Off
+log_errors_max_len => 1024 => 1024
+magic_quotes_gpc => On => On
+magic_quotes_runtime => Off => Off
+magic_quotes_sybase => Off => Off
+max_execution_time => 0 => 30
+max_input_time => -1 => -1
+open_basedir => no value => no value
+output_buffering => 0 => 0
+output_handler => no value => no value
+post_max_size => 8M => 8M
+precision => 14 => 14
+register_argc_argv => On => On
+register_globals => Off => Off
+report_memleaks => On => On
+safe_mode => Off => Off
+safe_mode_exec_dir => /usr/local/php/bin => /usr/local/php/bin
+safe_mode_gid => Off => Off
+safe_mode_include_dir => no value => no value
+sendmail_from => no value => no value
+sendmail_path => /usr/sbin/sendmail -t -i  => /usr/sbin/sendmail -t -i 
+serialize_precision => 100 => 100
+short_open_tag => On => On
+SMTP => localhost => localhost
+smtp_port => 25 => 25
+sql.safe_mode => Off => Off
+track_errors => Off => Off
+unserialize_callback_func => no value => no value
+upload_max_filesize => 2M => 2M
+upload_tmp_dir => no value => no value
+user_dir => no value => no value
+variables_order => no value => no value
+xmlrpc_error_number => 0 => 0
+xmlrpc_errors => Off => Off
+y2k_compliance => On => On
+
+ctype
+
+ctype functions => enabled
+
+mysql
+
+MySQL Support => enabled
+Active Persistent Links => 0
+Active Links => 0
+Client API version => 3.23.49
+MYSQL_MODULE_TYPE => builtin
+MYSQL_SOCKET => /tmp/mysql.sock
+MYSQL_INCLUDE =>  
+MYSQL_LIBS =>  
+
+Directive => Local Value => Master Value
+mysql.allow_persistent => On => On
+mysql.connect_timeout => 60 => 60
+mysql.default_host => no value => no value
+mysql.default_password => no value => no value
+mysql.default_port => no value => no value
+mysql.default_socket => no value => no value
+mysql.default_user => no value => no value
+mysql.max_links => Unlimited => Unlimited
+mysql.max_persistent => Unlimited => Unlimited
+mysql.trace_mode => Off => Off
+
+oci8
+
+OCI8 Support => enabled
+Revision => $Revision: 1.1 $
+Oracle Version => 9.2
+Compile-time ORACLE_HOME => /home/oracle/OraHome1
+Libraries Used =>  
+
+overload
+
+User-Space Object Overloading Support => enabled
+
+pcre
+
+PCRE (Perl Compatible Regular Expressions) Support => enabled
+PCRE Library Version => 4.5 01-December-2003
+
+posix
+
+Revision => $Revision: 1.1 $
+
+session
+
+Session Support => enabled
+Registered save handlers => files user 
+
+Directive => Local Value => Master Value
+session.auto_start => Off => Off
+session.bug_compat_42 => On => On
+session.bug_compat_warn => On => On
+session.cache_expire => 180 => 180
+session.cache_limiter => nocache => nocache
+session.cookie_domain => no value => no value
+session.cookie_lifetime => 0 => 0
+session.cookie_path => / => /
+session.cookie_secure => Off => Off
+session.entropy_file => no value => no value
+session.entropy_length => 0 => 0
+session.gc_divisor => 100 => 100
+session.gc_maxlifetime => 1440 => 1440
+session.gc_probability => 1 => 1
+session.name => PHPSESSID => PHPSESSID
+session.referer_check => no value => no value
+session.save_handler => files => files
+session.save_path => /tmp => /tmp
+session.serialize_handler => php => php
+session.use_cookies => On => On
+session.use_only_cookies => Off => Off
+session.use_trans_sid => Off => Off
+
+standard
+
+Regex Library => Bundled library enabled
+Dynamic Library Support => enabled
+Path to sendmail => /usr/sbin/sendmail -t -i 
+
+Directive => Local Value => Master Value
+assert.active => 1 => 1
+assert.bail => 0 => 0
+assert.callback => no value => no value
+assert.quiet_eval => 0 => 0
+assert.warning => 1 => 1
+auto_detect_line_endings => 0 => 0
+default_socket_timeout => 60 => 60
+safe_mode_allowed_env_vars => PHP_ => PHP_
+safe_mode_protected_env_vars => LD_LIBRARY_PATH => LD_LIBRARY_PATH
+url_rewriter.tags => a=href,area=href,frame=src,form=,fieldset= => a=href,area=href,frame=src,form=,fieldset=
+user_agent => no value => no value
+
+tokenizer
+
+Tokenizer Support => enabled
+
+xml
+
+XML Support => active
+XML Namespace Support => active
+EXPAT Version => 1.95.6
+
+Additional Modules
+
+Module Name
+
+Environment
+
+Variable => Value
+HOSTNAME => www
+SHELL => /bin/bash
+TERM => xterm
+HISTSIZE => 1000
+SSH_CLIENT => 213.41.151.27 61746 22
+SSH_TTY => /dev/pts/0
+USER => webmaster
+LS_COLORS => no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:
+PATH => /usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin
+MAIL => /var/spool/mail/webmaster
+PWD => /var/www/html/hng_test/typo3conf/ext/vm19_watsniou
+INPUTRC => /etc/inputrc
+LANG => fr_FR.UTF-8
+SSH_ASKPASS => /usr/libexec/openssh/gnome-ssh-askpass
+HOME => /root
+SHLVL => 2
+LOGNAME => webmaster
+SSH_CONNECTION => 213.41.151.27 61746 80.124.158.232 22
+LESSOPEN => |/usr/bin/lesspipe.sh %s
+G_BROKEN_FILENAMES => 1
+_ => /usr/local/bin/php
+OLDPWD => /var/www/html
+
+PHP Variables
+
+Variable => Value
+_SERVER["HOSTNAME"] => www
+_SERVER["SHELL"] => /bin/bash
+_SERVER["TERM"] => xterm
+_SERVER["HISTSIZE"] => 1000
+_SERVER["SSH_CLIENT"] => 213.41.151.27 61746 22
+_SERVER["SSH_TTY"] => /dev/pts/0
+_SERVER["USER"] => webmaster
+_SERVER["LS_COLORS"] => no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:
+_SERVER["PATH"] => /usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin
+_SERVER["MAIL"] => /var/spool/mail/webmaster
+_SERVER["PWD"] => /var/www/html/hng_test/typo3conf/ext/vm19_watsniou
+_SERVER["INPUTRC"] => /etc/inputrc
+_SERVER["LANG"] => fr_FR.UTF-8
+_SERVER["SSH_ASKPASS"] => /usr/libexec/openssh/gnome-ssh-askpass
+_SERVER["HOME"] => /root
+_SERVER["SHLVL"] => 2
+_SERVER["LOGNAME"] => webmaster
+_SERVER["SSH_CONNECTION"] => 213.41.151.27 61746 80.124.158.232 22
+_SERVER["LESSOPEN"] => |/usr/bin/lesspipe.sh %s
+_SERVER["G_BROKEN_FILENAMES"] => 1
+_SERVER["_"] => /usr/local/bin/php
+_SERVER["OLDPWD"] => /var/www/html
+_SERVER["PHP_SELF"] => ./pi.php
+_SERVER["SCRIPT_NAME"] => ./pi.php
+_SERVER["SCRIPT_FILENAME"] => ./pi.php
+_SERVER["PATH_TRANSLATED"] => ./pi.php
+_SERVER["DOCUMENT_ROOT"] => 
+_SERVER["argv"] => Array
+(
+    [0] => ./pi.php
+)
+
+_SERVER["argc"] => 1
+_ENV["HOSTNAME"] => www
+_ENV["SHELL"] => /bin/bash
+_ENV["TERM"] => xterm
+_ENV["HISTSIZE"] => 1000
+_ENV["SSH_CLIENT"] => 213.41.151.27 61746 22
+_ENV["SSH_TTY"] => /dev/pts/0
+_ENV["USER"] => webmaster
+_ENV["LS_COLORS"] => no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:
+_ENV["PATH"] => /usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin
+_ENV["MAIL"] => /var/spool/mail/webmaster
+_ENV["PWD"] => /var/www/html/hng_test/typo3conf/ext/vm19_watsniou
+_ENV["INPUTRC"] => /etc/inputrc
+_ENV["LANG"] => fr_FR.UTF-8
+_ENV["SSH_ASKPASS"] => /usr/libexec/openssh/gnome-ssh-askpass
+_ENV["HOME"] => /root
+_ENV["SHLVL"] => 2
+_ENV["LOGNAME"] => webmaster
+_ENV["SSH_CONNECTION"] => 213.41.151.27 61746 80.124.158.232 22
+_ENV["LESSOPEN"] => |/usr/bin/lesspipe.sh %s
+_ENV["G_BROKEN_FILENAMES"] => 1
+_ENV["_"] => /usr/local/bin/php
+_ENV["OLDPWD"] => /var/www/html
+
+PHP License
+This program is free software; you can redistribute it and/or modify
+it under the terms of the PHP License as published by the PHP Group
+and included in the distribution in the file:  LICENSE
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+If you did not receive a copy of the PHP license, or have any
+questions about PHP licensing, please contact license@php.net.

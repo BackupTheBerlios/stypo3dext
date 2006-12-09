@@ -1,0 +1,7 @@
+# permet l'utilisation de la classe directement en TS dans les templates
+includeLibs.liens_class=EXT:vm19_userlinks/pi1/class.user_liens.php
+
+# peut-être modifié-écrasé par une ligne semblable dans le setup d'un gabarit
+# paramètre qui donne les catégories de liens affichés en fixe (tt le temps)
+# donc non sélectionnables par l'utilisateur
+plugin.tx_vm19userlinks_pi1.fixedLinksCats=1,4

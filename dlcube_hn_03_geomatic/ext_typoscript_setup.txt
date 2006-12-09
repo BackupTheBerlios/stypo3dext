@@ -1,0 +1,2 @@
+# permet l'utilisation de la classe directement en TS dans les templates
+includeLibs.GoogleMapsTool_class=typo3conf/ext/vm19_news/pi1/class.GooMapsTool.php

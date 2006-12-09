@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'dlcube_hn_03_geomatic'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_dlcubehn03geomatic_points">points</label>
+			<label index="tx_dlcubehn03geomatic_points.name">name</label>
+			<label index="tx_dlcubehn03geomatic_points.number">number</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.0">Technical Center</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.1">Pole</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.2">Regional direction</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.3">Other</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.4">Centrage region</label>
+			<label index="tx_dlcubehn03geomatic_points.type">type</label>
+			<label index="tx_dlcubehn03geomatic_points.type_det">type details</label>
+			<label index="tx_dlcubehn03geomatic_points.geo_pos">Geo infos (zoom, etc)</label>
+			<label index="tx_dlcubehn03geomatic_points.geo_lat">Lattitude</label>
+			<label index="tx_dlcubehn03geomatic_points.geo_long">Longitude</label>
+			<label index="tx_dlcubehn03geomatic_points.label">label</label>
+			<label index="tx_dlcubehn03geomatic_points.adresse1">Adress 1</label>
+			<label index="tx_dlcubehn03geomatic_points.adresse2">Address 2</label>
+			<label index="tx_dlcubehn03geomatic_points.cdpst">ZIP code</label>
+			<label index="tx_dlcubehn03geomatic_points.ville">city</label>
+			<label index="tx_dlcubehn03geomatic_points.region">Region</label>
+			<label index="tx_dlcubehn03geomatic_points.tel">telephone</label>
+			<label index="tx_dlcubehn03geomatic_points.cell">cell telephone</label>
+			<label index="tx_dlcubehn03geomatic_points.fax">fax</label>
+			<label index="tx_dlcubehn03geomatic_points.mail">mail</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="tx_dlcubehn03geomatic_points.name">Nom</label>
+			<label index="tx_dlcubehn03geomatic_points.number">No (personne dans Sire2)</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.0">Centre technique</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.1">Pole</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.2">Direction regionale</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.3">Autre</label>
+			<label index="tx_dlcubehn03geomatic_points.type.I.4">Centrage region</label>
+			<label index="tx_dlcubehn03geomatic_points.type">Type</label>
+			<label index="tx_dlcubehn03geomatic_points.type_det">Details type</label>
+			<label index="tx_dlcubehn03geomatic_points.geo_pos">Geo infos (zoom...)</label>
+			<label index="tx_dlcubehn03geomatic_points.geo_lat">Lattitude</label>
+			<label index="tx_dlcubehn03geomatic_points.geo_long">Longitude</label>
+			<label index="tx_dlcubehn03geomatic_points.label">libelle</label>
+			<label index="tx_dlcubehn03geomatic_points.adresse1">Adresse</label>
+			<label index="tx_dlcubehn03geomatic_points.adresse2">Complement adresse</label>
+			<label index="tx_dlcubehn03geomatic_points.cdpst">Code Postal</label>
+			<label index="tx_dlcubehn03geomatic_points.ville">Ville</label>
+			<label index="tx_dlcubehn03geomatic_points.region">Region</label>
+			<label index="tx_dlcubehn03geomatic_points.tel">telephone</label>
+			<label index="tx_dlcubehn03geomatic_points.cell">telephone portable</label>
+			<label index="tx_dlcubehn03geomatic_points.fax">fax</label>
+			<label index="tx_dlcubehn03geomatic_points.mail">courriel</label>
+		</languageKey>
+	</data>
+</T3locallang>

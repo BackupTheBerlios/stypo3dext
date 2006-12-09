@@ -1,0 +1,23 @@
+# permet l'utilisation de la classe directement en TS dans les templates
+# le chemin avec la syntaxe ci-dessous d?conne....
+#includeLibs.actuspa_class=EXT:vm19_news/pi1/class.user_actuspa.php
+includeLibs.actuspa_class=typo3conf/ext/vm19_news/pi1/class.user_actuspa.php
+
+plugin.tx_vm19news_pi1 {
+	extCurDir=typo3conf/ext/vm19_news/
+	small_imgMaxWidth = 80
+	big_imgMaxWidth = 250
+	small_imgAlign = left 
+	CMD = 
+	pidList = 
+	recursive = 
+	results_at_a_time = 5
+	maxPages = 6
+}
+
+# Example of how to overrule LOCAL_LANG values for the plugin:
+#plugin.tx_vm19news_pi1._LOCAL_LANG.default {
+#  pi_list_searchBox_search = Search!
+#}
+  # Example of how to set default values from TS in the incoming array, $this->piVars of the plugin:
+# plugin.tx_vm19news_pi1._DEFAULT_PI_VARS.test = test
