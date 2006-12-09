@@ -1,0 +1,8 @@
+# cat=basic; type=string; label=Racine: You have to protect the path with a .htaccess file! (deny from all)
+# nom du répertoire se trouvant à la racine du site est devant contenir les ressources
+# default = 0
+racine = 0
+
+# cat=basic; type=string; label=Profondeur: You have to protect the path with a .htaccess file! (deny from all)
+# default = 999
+profondeur = 999
