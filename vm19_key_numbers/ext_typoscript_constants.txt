@@ -1,0 +1,2 @@
+
+#ici mes constantes TS
