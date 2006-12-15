@@ -1,0 +1,348 @@
+<!--###TEMPLATE###-->
+<!-- ###ENTETE_FAIBLE###-->
+<p>
+	<ul>
+		<li>
+			###TXT_NIVEAU_IDENT_FAIBLE### <a href="###URL_PASSAGE_IDENT_FORT###">###LABEL_CLIC_A###</a>.
+		</li>
+		<li>
+			###TXT_CHGT_PASSWD###, <a href="###URL_CHGT_PASSWD###">###LABEL_CLIC_B###</a>.
+		</li>
+	</ul>
+</p>
+<!--###ENTETE_FAIBLE###-->
+
+<!--###ENTETE_FORT###-->
+<p>
+	<ul>
+		<li>
+			###TXT_CHGT_PASSWD###, <a href="###URL_CHGT_PASSWD###">###LABEL_CLIC_ICI###</a>.
+		</li>
+	</ul>
+</p>
+<!--###ENTETE_FORT###-->
+<!--###SEPARATEUR###-->
+<div style="position:relative;width:100%;height:20px;margin-top:10px;margin-bottom:10px;float:left;">
+<hr>
+</div>
+<!--###SEPARATEUR###-->
+
+<!--###VOTRE_COMPTE###-->
+<div id="votre_compte">
+	<fieldset>
+		<legend>Votre compte</legend>
+		<div id="contenuBox">
+			<p>
+			###TITRE### ###PRENOM### ###NOM### <br/>
+			###ADRESSE### <BR/>
+			###COMPLEMENT_ADRESSE###
+			###CP### ###VILLE### <br/>
+			###EMAIL###<br/>
+			</p>
+		</div>
+
+		<a id="boutonURL" style="color:white;text-decoration:none" href="###URL_MODIF_COMPTE###">###LABEL_MODIFIER###</a>
+	</fieldset>
+</div>
+<!--###VOTRE_COMPTE###-->
+<!--###VOTRE_COMPTE_NO_MODIF###-->
+<div id="votre_compte">
+	<fieldset>
+		<legend>Votre compte</legend>
+		<div id="contenuBox">
+			<p>
+			###TITRE### ###PRENOM### ###NOM### <br/>
+			###ADRESSE### <BR/>
+			###COMPLEMENT_ADRESSE###
+			###CP### ###VILLE### <br/>
+			###EMAIL###<br/>
+			</p>
+		</div>
+	</fieldset>
+</div>
+<!--###VOTRE_COMPTE_NO_MODIF###-->
+<!--###VOTRE_COMPTE_PERSONNEL_HN###-->
+<div id="votre_compte">
+	<fieldset>
+		<legend>Votre compte</legend>
+		<div id="contenuBox">
+			<p>
+			###TITRE### ###PRENOM### ###NOM### <br/>
+			###ADRESSE### <BR/>
+			###COMPLEMENT_ADRESSE###
+			###CP### ###VILLE### <br/>
+			###EMAIL### <br/>
+			</p>
+		</div>
+	</fieldset>
+</div>
+<!--###VOTRE_COMPTE_PERSONNEL_HN###-->
+<!--###CREDIT_POINT###-->
+<div id="credit_points">
+	<fieldset>
+		<legend>Votre cr&eacute;dit de points</legend>
+		<div id="contenuBox">
+			<p>Actuellement, ###INFO_POINTS###
+		</div>
+		<a id="boutonURL" style="color:white;text-decoration:none" href="###URL_ACHAT_POINT###'.$this->urlAchatPoint.'">Acheter</a>
+	</fieldset>
+</div>
+<!--###CREDIT_POINT###-->
+<!--###PREF_PORTAIL###-->
+<div id="pref_portail">
+	<fieldset>
+		<legend>Vos pr&eacute;f&eacute;rences portail</legend>
+		<div id="contenuBox" style="height:64px;">
+			<p>###CONTENT###</p>
+		</div>
+		<a id="boutonURL" style="color:white;text-decoration:none;" href="javascript:document.tx_fabformmail_pi1fname.submit();">Modifier</a>
+	</fieldset>
+</div>
+<!--###PREF_PORTAIL###-->
+<!--###FACTURES###-->
+<div id="factures">
+	<fieldset>
+		<legend>Vos factures</legend>
+		<div id="contenuBox">
+		<p>
+		###CONTENT###
+		</p>
+		</div>
+		<a id="boutonURL" style="color:white;text-decoration:none" target="_blank" href="###URL_GESTION_FACTURES###">Consulter-G&eacute;rer</a>
+	</fieldset>
+</div>
+<!--###FACTURES###-->
+<!--###NAISSANCES###-->
+<div id="naissances">
+	<fieldset>
+		<legend>Vos naissances</legend>
+		<div id="contenuBox">
+			<p>###CONTENT###</p>
+			<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none" href="###URL_DECLA_NOUVELLE_NAISSANCE###" target="_blank">Consulter - G&eacute;rer vos naissances</a>
+			<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none" href="###URL_DECLA_RESULT_NEGATIF###" target="_blank">D&eacute;clarer un r&eacute;sultat n&eacute;gatif</a>
+			<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none" href="###URL_CONSULT_DOSSIER###">Consulter un dossier d'&eacute;levage</a>
+		</div>
+	</fieldset>
+</div>
+<!--###NAISSANCES###-->
+<!--###SAILLIES###-->
+<div id="saillies">
+	<fieldset>
+		<legend>Vos saillies</legend>
+		<div id="contenuBox">
+			<p>###CONTENT###</p>
+			<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none" href="###URL_GERER_SAILLIES###" target="_blank">Consulter - G&eacute;rer vos saillies</a>
+			<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none" href="###URL_EDITER_ATTESTATIONS_CERTIFICATS###" target="_blank">Editer attestations et certificats</a>
+			<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none;width:150px;" href="###URL_SUIVI_SANITAIRE###">Suivi sanitaire</a>
+		</div>
+	</fieldset>
+</div>
+<!--###SAILLIES###-->
+<!--###LIEUX_DETENTION###-->
+<div id="lieux_detention">
+	<fieldset>
+		<legend>Vos lieux de d&eacute;tention</legend>
+		<div id="contenuBox">
+			<p>###CONTENT###</p>
+		</div>
+		<a id="boutonURL" style="float:right;color:white;text-decoration:none" href="###URL_GESTION_LIEUX_DETENTION###">Consulter - G&eacute;rer</a>
+	</fieldset>
+</div>
+<!--###LIEUX_DETENTION###-->
+<!--###CHEVAUX###-->
+<div id="chevaux">
+	<fieldset>
+		<legend>Vos chevaux</legend>
+			<div style="float:left;width:330px">
+				<p>Vous &ecirc;tes propri&eacute;taire de <strong>###NOMBRE_CHEVAUX###</strong> ###CHEVAL_ACCORD###
+				<div style="float:right;margin:2px;">
+					<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none" href="###URL_GERER_CONSULTER_CHEVAL###">Consulter - G&eacute;rer vos chevaux</a>
+					<a id="boutonURL" style="margin:3px;float:right;color:white;text-decoration:none" href="###URL_DECLARER_CHEVAL###">D&eacute;clarer un achat</a>
+				</div>
+				</p>
+			</div>
+			<div style="float:right;width:330px">
+				<p>Annonces S.O.S poulain.
+				<div style="float:right;margin:2px;">
+					<a id="boutonURL" style="margin:3px;color:white;text-decoration:none" href="###URL_AJOUT_SOS_POULAIN###">Ajouter</a>
+					<a id="boutonURL" style="margin:3px;color:white;text-decoration:none" href="###URL_MODIF_SOS_POULAIN###">Modifier</a>
+				</div>
+				</p>
+			</div>
+			<div style="float:left;width:330px;margin-top:0px">
+				&nbsp;
+			</div>
+			<div style="float:right;width:330px;margin-top:0px">
+				<p>Vos annonces chevaux &agrave; vendre.
+				<div style="float:right;margin:2px;">
+					<a id="boutonURL" style="margin:3px;color:white;text-decoration:none" href="###URL_GERER_CHEVAUX_VENDRE###">Modifier</a>
+					<a id="boutonURL" style="margin:3px;color:white;text-decoration:none" href="###URL_DECLARER_CHEVAL_VENDRE###">Ajouter</a>
+				</div>
+				</p>
+			</div>
+	</fieldset>
+</div>
+<!--###CHEVAUX###-->
+<!--###CENTRE_TECHNIQUE###-->
+<div id="centre_technique">
+	<fieldset>
+		<legend>Votre interlocuteur des Haras nationaux le plus proche</legend>
+			###NOM###<br/>
+			###TEXT###
+			<span id='adresseCT'>###ADRESSE###</span>
+			<span id='adresseCT'>###ADRESSE2###</span>
+			<span id='codepostalCT'>###CP###</span>
+			<span id='communeCT'>###VILLE###</span>
+			<br/>
+			###TEL### ###FAX### ###PORT### ###MAIL###
+	</fieldset>
+</div>
+<!--###CENTRE_TECHNIQUE###-->
+<!--###SERVICES_VETO_IDENT###-->
+<div id="services_veto_ident">
+	<fieldset>
+		<legend>Services accessibles sur internet</legend>
+		<div id="contenuBox">
+			<p>&nbsp;</p>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_TRANSPONDEUR###" target="_blank">   Transpondeur / Signalement codifi&eacute;   </a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_CONTROLE###" target="_blank">   Contr&ocirc;le d'identit&eacute;   </a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_COMMANDER###">   Commander des formulaires   </a>
+		</div>
+	</fieldset>
+</div>
+<!--###SERVICES_VETO_IDENT###-->
+<!--###SERVICES_INTERNET_MINIMUM###-->
+<div id="services_internet_mini">
+	<fieldset>
+		<legend>Services accessibles sur internet</legend>
+		<div id="contenuBox">
+			<p>&nbsp;</p>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_CONTROLE###" target="_blank">Contr&ocirc;le d'identit&eacute;</a>
+		</div>
+	</fieldset>
+</div>
+<!--###SERVICES_INTERNET_MINIMUM###-->
+<!--###SERVICES_PERSONNEL_HN###-->
+<div id="services_personnel_hn">
+	<fieldset>
+		<legend>Services accessibles sur internet</legend>
+		<div id="contenuBox">
+			<p>&nbsp;</p>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_WEBMAIL###" target="_blank">Webmail</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_AGENDA###" target="_blank">Votre agenda</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_GDP###">Gestion de projets</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_INFO_CHEVAL###">Informations d'un cheval</a>
+		</div>
+	</fieldset>
+</div>
+<!--###SERVICES_PERSONNEL_HN###-->
+<!--###SERVICES_PERSONNEL_HN_PLUS###-->
+<div id="services_personnel_hn">
+	<fieldset>
+		<legend>Services accessibles sur internet</legend>
+		<div id="contenuBox">
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_WEBMAIL###" target="_blank">Webmail</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_AGENDA###" target="_blank">Votre agenda</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_GDP###">Gestion de projets</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_INFO_CHEVAL###">Informations d'un cheval</a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_TRANSPONDEUR###" target="_blank">   Transpondeur / Signalement codifi&eacute;   </a>
+			<a id="boutonURL" style="margin-top:3px;margin-bottom:3px;margin-right:3px;margin-left:30px;float:right;color:white;text-decoration:none;display:run-in;" href="###URL_CONTROLE###" target="_blank">   Contr&ocirc;le d'identit&eacute;   </a>
+		</div>
+	</fieldset>
+</div>
+<!--###SERVICES_PERSONNEL_HN_PLUS###-->
+
+		<hr STYLE="margin-top:20px;margin-bottom:10px;width:685px;float:left;">
+		<div id="ligneC">
+
+			<!--
+			<div id="right">
+				<fieldset>
+					<legend>Vos lieux de d�tention</legend>
+					<div id="contenuBox">';
+					if($this->nbreLieudetention["getNbrLieuDetentionReturn"]=="" || $this->nbreLieudetention["getNbrLieuDetentionReturn"]=="0"){
+						$content .= '<p>Vous n\'avez pas de lieu de d�tention en gestion</p>';
+					} else{
+						$content .= '<p>Vous g�rez <strong>'.(($this->nbreLieudetention["getNbrLieuDetentionReturn"]=="")?0:$this->nbreLieudetention["getNbrLieuDetentionReturn"]).'</strong> lieux de d�tention d\'�quid�s.</p>';
+					}
+					$content .='
+					</div>
+					<div id="boutonBoitePosition"><a id="lienFonctionPetit" style="float:right;color:white;text-decoration:none" href="#">Consulter - G�rer</a></div>
+				</fieldset>
+			</div>
+			-->
+		</div>
+		<div id="ligneD">
+
+		</div>
+		<!-- END -->';
+		}
+		//////////////////////////////////////////////////////////////
+		else if($this->personne["findPersonneByLoginReturn"]["niveauIdentification"]=="FAIBLE"){
+			$content .='
+		<div id="ligneD">
+			<div id="large">
+				<fieldset>
+					<legend>Vos chevaux</legend>
+						<div style="float:left;width:330px;">
+							<p>Vos annonces chevaux � vendre.
+							<div style="float:right;margin:2px;">
+								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlGererConsulterCheval.'">Modifier</a>
+								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlDeclarerCheval.'"">Ajouter</a>
+							</div>
+							</p>
+						</div>
+						<div style="float:right;width:330px;">
+							<p>Vos annonces S.O.S poulain.
+							<div style="float:right;margin:2px;">
+								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlAjoutSosPoulain.'">Modifier</a>
+								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlModifSosPoulain.'">Ajouter</a>
+							</div>
+							</p>
+						</div>
+				</fieldset>
+			</div>
+		</div>
+		<!-- END -->';
+		} else {
+			$content .='</div>';
+		}
+		$content .='
+		<hr STYLE="margin-top:20px;margin-bottom:10px;width:685px;float:left;">';
+		if($this->ct != null){
+		$content .='
+		<div id="ligneD">
+			<div id="large">
+				<fieldset>
+					<legend>Centre technique le plus proche</legend><p>
+					'.$this->ct["nom"].'<br/>';
+					//$this->pi_linkToPage($this->ct["nom"],2973,'',array("numPerso"=>$this->ct["numPerso"],"action"=>"liste","no_cache"=>1)).'<br/>';
+					$txt = null;
+					if($this->ct["actCtmp"]=="O")
+						$txt =($txt == null)?"Centre de mise en place":$txt." et Centre de mise en place";
+					if($this->ct["actCtpr"]=="O")
+						$txt =($txt == null)?"Centre de production":$txt." et Centre de production";
+					if($this->ct["actCttre"]=="O")
+						$txt =($txt == null)?"Centre de transfert":$txt." et centre de transfert embryonnaire";
+					if($txt != null) $content .=$txt."<br />";
+					$content .="<span id='adresseCT'>".$this->ct["adresse1"]."</span> <span id='adresseCT'>".$this->ct["adresse2"]."</span> <span id='codepostalCT'>".$this->ct["codePostal"]."</span> <span id='communeCT'>".$this->ct["libelleCommune"]."</span><br/>";
+					if($this->ct["telephone"] != "")
+					$content .=$this->pi_getLL("libelle_telephone")." : ".$this->ct["telephone"];
+					if($this->ct["telecopie"] != ""){
+						$content .=" ".$this->ct["telecopie"];
+					}
+					if($this->ct["telPortable"]){
+						$content .=" ".$this->pi_getLL("libelle_telport")." : ".$this->ct["telPortable"];
+					}
+					if($this->ct["mail"]){
+						$content .=" ".$this->pi_getLL("libelle_mail")." : ".$this->ct["mail"];
+					}
+					$content.='
+				</fieldset>
+			</div>
+		</div>
+		<hr STYLE="margin-top:20px;margin-bottom:10px;width:685px;float:left;">';
+		}
+		//$content .="</div>";
+
+<!--###TEMPLATE###-->

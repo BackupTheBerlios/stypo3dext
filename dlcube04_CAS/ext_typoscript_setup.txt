@@ -1,0 +1,198 @@
+# Example of default set CSS styles (these go into the document header):
+plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
+  .tx-dlcube04CAS-pi5 {
+  	height:600px;
+  }
+
+  .tx-dlcube04CAS-pi5 fieldset {
+    margin:0px;
+    padding:2px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#votre_compte{
+    width: 347px;
+    height:115px;
+    float:left;
+    margin-bottom:10px;
+    margin-right:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#credit_points{
+    width: 347px;
+    height:115px;
+    float:right;
+    margin-bottom:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#pref_portail{
+  	margin-bottom:10px;
+	float:left;
+    width:347px;
+    height:115px;
+    margin-right:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#factures{
+  	margin-bottom:10px;
+	float:right;
+    width: 347px;
+    height:115px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#naissances{
+  	margin-bottom:10px;
+	float:left;
+    width: 347px;
+    height:115px;
+    margin-right:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#saillies{
+  	margin-bottom:10px;
+	float:right;
+    width: 347px;
+    height:115px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#lieux_detention{
+  	margin-bottom:10px;
+	float:right;
+    width: 347px;
+    height:115px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#chevaux{
+ 	position:relative;
+ 	margin-top:5px;
+ 	margin-bottom:5px;
+ 	top:15px;
+    width:707px;
+    left:1px;
+    height:120px;
+    float: left;
+  }
+
+  .tx-dlcube04CAS-pi5 div#centre_technique{
+ 	position:relative;
+ 	margin-top:5px;
+ 	margin-bottom:5px;
+ 	top:15px;
+    width:707px;
+    left:1px;
+    height:120px;
+    float: left;
+  }
+
+  .tx-dlcube04CAS-pi5 div#services_veto_ident{
+	margin-bottom:10px;
+	float:left;
+    width:347px;
+    height:115px;
+    margin-right:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#services_internet_mini{
+	margin-bottom:10px;
+	float:left;
+    width:347px;
+    height:115px;
+    margin-right:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#services_personnel_hn{
+	margin-bottom:10px;
+	float:left;
+    width:347px;
+    height:115px;
+    margin-right:10px;
+  }
+
+  .tx-dlcube04CAS-pi5 div fieldset {
+    width: 99%;
+    height:100%;
+  }
+
+  .tx-dlcube04CAS-pi5 div#contenuBox {
+    height:77px;
+  }
+
+  .tx-dlcube04CAS-pi5 legend {
+    color: #3C3C3C;
+    background: #FFFFFF;
+    border: none;
+    padding: 2px 6px;
+    font-weight: bold;
+  }
+
+  .tx-dlcube04CAS-pi5 div fieldset #boutonURL {
+    position:relative;
+    float:right;
+    right:1px;
+    top:1px;
+
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+
+    background-color: #C1131E;
+    font-weight: bold;
+    color: white;
+    font-size: 10px;
+  }
+
+/* Position des boutons
+  .tx-dlcube04CAS-pi5 div#boutonBoitePosition {
+    float:right;
+    display:block;
+    margin:2px;
+    padding:0px;
+  }
+
+
+
+  .tx-dlcube04CAS-pi5 #lienFonctionPetit:hover {
+    color: #3C3C3C;
+    background-color: #F18C13;
+  }
+
+
+
+
+  .tx-dlcube04CAS-pi5 fieldset div#contenuBox {
+    display:block;
+    height:80px;
+    margin:0px;
+    padding:0px;
+  }
+
+
+  .tx-dlcube04CAS-pi5 div#ligneA {
+    display:block;
+  }
+
+  .tx-dlcube04CAS-pi5 div#ligneA fieldset div#contenuBox {
+    height:80px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#ligneB {
+    display:block;
+  }
+
+  .tx-dlcube04CAS-pi5 div#ligneB fieldset div#contenuBox {
+    height:50px;
+  }
+
+  .tx-dlcube04CAS-pi5 div#ligneC {
+    display:block;
+  }
+
+  .tx-dlcube04CAS-pi5 div#ligneC fieldset div#contenuBox {
+    height:40px;
+  }*/
+
+)
+
+
+# Example of how to set default values from TS in the incoming array, $this->piVars of the plugin:
+plugin.tx_dlcube04CAS_pi5._DEFAULT_PI_VARS.test = test

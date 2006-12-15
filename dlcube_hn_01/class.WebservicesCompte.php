@@ -63,7 +63,7 @@ class WebservicesCompte {
 		$this->wsdlIdent = "http://".$url."/aih-services/services/IdentificationServicesImpl?wsdl";
 		$this->wsdlCid = "http://".$url."/cid-services/services/InformationsDeclarantServicesImpl?wsdl";
 		$this->wsdlPsi = "http://".$url."/psi/services/WsPsi?wsdl";
-
+		$this->wsdlDPS = "http://".$url."/DPS_PRIVEES/services/WSNbEtalon?wsdl";
 	}
 
 	function connectServices(){
@@ -95,6 +95,15 @@ class WebservicesCompte {
 
 	function connectCid(){
 		$this->client = new soapclient_nusoap($this->wsdlCid, 'wsdl');
+		if( !$this->client->getError())
+			return true;
+		$this->errorMessage = $this->client->getError();
+		$this->client = null;
+		return false;
+	}
+
+	function connectDPS(){
+		$this->client = new soapclient_nusoap($this->wsdlDPS, 'wsdl');
 		if( !$this->client->getError())
 			return true;
 		$this->errorMessage = $this->client->getError();
@@ -188,7 +197,7 @@ class WebservicesCompte {
 	}
 
 	/**
-	 * Function qui retourne le nombre de lieux de d�tention du proprietaire
+	 * Function qui retourne le nombre de lieux de detention du proprietaire
 	 *-------------------------------------------------------------------
 	 * Exemple:
 	 * $param[] = array("p1"=>"val1");
@@ -263,6 +272,34 @@ class WebservicesCompte {
 	function getMontantFactureARegler4User($parametres){
 		if($this->client != null){
 			$result = $this->client->call('getMontantFactureARegler', $parametres);
+			if( !$this->client->getError() ){
+				return $result;
+			}
+		}
+		$this->errorMessage = $this->client->getError();
+		return false;
+	}
+
+	/**
+	 * Function qui retourne le nombre d'étalons d'un étalonnier sur place
+	 */
+	function getNbrSurPlace($parametres){
+		if($this->client != null){
+			$result = $this->client->call('getNbSurPlace', $parametres);
+			if( !$this->client->getError() ){
+				return $result;
+			}
+		}
+		$this->errorMessage = $this->client->getError();
+		return false;
+	}
+
+	/**
+	 * Function qui retourne le nombre d'étalons d'un étalonnier en IA
+	 */
+	function getNbrIA($parametres){
+		if($this->client != null){
+			$result = $this->client->call('getNbIA', $parametres);
 			if( !$this->client->getError() ){
 				return $result;
 			}
