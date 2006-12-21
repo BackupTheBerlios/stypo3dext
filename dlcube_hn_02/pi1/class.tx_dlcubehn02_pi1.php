@@ -39,6 +39,7 @@ class tx_dlcubehn02_pi1 extends tslib_pibase {
 	var $geoHelper;
 	var $afficheRegion = false;
 	var $searchConfig="GoogleMapDL3Ext"; // "WSDatastore" pour revenir a la config originale
+	//var $searchConfig="WSDatastore"; 
 	
 	/**
 	 * [Put your description here]
@@ -259,7 +260,7 @@ class tx_dlcubehn02_pi1 extends tslib_pibase {
 			$pidgeo=$tbtp[1];
 			//print_r($tbtp);
 		}
-				
+						
 		$content .= "<H4>".count($result)." centre(s) technique(s) trouv&eacute;s)</H4><br>";
 		
 		// si région choisie, centre directement sur elle
@@ -275,8 +276,6 @@ class tx_dlcubehn02_pi1 extends tslib_pibase {
 		foreach($result as $ce){
 			if ($ce['dist']>0) $dist=" (".$ce['dist']." km)";
 			$content .='<p style="height:20px;padding-bottom:5px";><strong><a href="'.$this->pi_getPageLink(2973,'',array("numPerso"=>$ce["numPerso"],"action"=>"liste","no_cache"=>1)).'" title="voir la liste des &eacute;talons pr&eacute;sents" style="height:40px;padding-bottom:20px;padding-left:25px;background-repeat: no-repeat;background-image:url(fileadmin/templates/images/elts_reccurents/cheval.gif);">'.$ce["nom"].'</a></strong> '.$dist.'<br></p>';
-
-			
 			
 			if ($SpcModInsert) { // mode insertion/maj des points dans la table
 				
@@ -287,6 +286,7 @@ class tx_dlcubehn02_pi1 extends tslib_pibase {
 				if ($ce['actCttre']=="O") $type_det.="_tre_";
 				$set.=", type_det='$type_det'";
 				//print_r($ce);
+				//echo $set;
 				$rep=msq("SELECT * FROM tx_dlcubehn03geomatic_points WHERE number=".$ce["numPerso"]);
 				if (mysql_num_rows($rep)>0) {
 					msq("UPDATE tx_dlcubehn03geomatic_points $set WHERE number=".$ce["numPerso"]);
@@ -307,7 +307,7 @@ class tx_dlcubehn02_pi1 extends tslib_pibase {
 			
 			// affiche le point sur la carte, qu'en mode webservice datastore
 			// sinon c'est fait dans le calcul du result
-			if (!$this->searchConfig=="WSDatastore") {
+			if ($this->searchConfig=="WSDatastore") {
 				$this->GoogleMapsTool->IconImageFile="http://www.haras-nationaux.fr/portail/fileadmin/templates/images/elts_reccurents/cheval.gif";
 				$this->GoogleMapsTool->PointInfo=$txIconImageFilet.'<br/>'.$ce["adresse1"]."<br/>".$ce["adresse2"]."<br/>".$ce["codePostal"]." ".$ce["libelleCommune"];
 				$this->GoogleMapsTool->DataScript.=$this->GoogleMapsTool->displayPointbyNumber($ce["numPerso"],!$recentrg);

@@ -27,7 +27,6 @@
  *
  * @author Guillaume Tessier<gtessier@dlcube.com> 
  */
-error_reporting(0);
 //error_reporting (E_ALL); // par défaut
 
 require_once(PATH_tslib."class.tslib_pibase.php");
