@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'dlcube_hn_shop'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_dlcubehnshop_articles">Shop item</label>
+			<label index="tx_dlcubehnshop_articles.ref">Reference</label>
+			<label index="tx_dlcubehnshop_articles.ref2">Reference 2 (fournisseur)</label>
+			<label index="tx_dlcubehnshop_articles.title">Title</label>
+			<label index="tx_dlcubehnshop_articles.auteur">Author</label>
+			<label index="tx_dlcubehnshop_articles.editor">Editor</label>
+			<label index="tx_dlcubehnshop_articles.support">Support</label>
+			<label index="tx_dlcubehnshop_articles.designation">Designation</label>
+			<label index="tx_dlcubehnshop_articles.descdetail">Detailed description</label>
+			<label index="tx_dlcubehnshop_articles.parut">Parution</label>
+			<label index="tx_dlcubehnshop_articles.price">price</label>
+			<label index="tx_dlcubehnshop_articles.tva">VAT rate</label>
+			<label index="tx_dlcubehnshop_articles.isbn">isbn</label>
+			<label index="tx_dlcubehnshop_articles.weight">Weight</label>
+			<label index="tx_dlcubehnshop_articles.nbpages">Pages number</label>
+			<label index="tx_dlcubehnshop_articles.archive">archive</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree.I.0">1</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree.I.1">2</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree.I.2">3</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree">Technical Degree</label>
+			<label index="tx_dlcubehnshop_articles.img1">Image  (list mode)</label>
+			<label index="tx_dlcubehnshop_articles.img2">Image (detail mode)</label>
+			<label index="tx_dlcubehnshop_articles.file">File</label>
+			<label index="tx_dlcubehnshop_editors">Editors</label>
+			<label index="tx_dlcubehnshop_editors.name">Name</label>
+			<label index="tx_dlcubehnshop_editors.infos">infos</label>
+			<label index="tx_dlcubehnshop_supports">supports</label>
+			<label index="tx_dlcubehnshop_supports.name">Name</label>
+		</languageKey>
+		<languageKey index="default" type="array">
+			<label index="tx_dlcubehnshop_articles">Article de la boutique</label>
+			<label index="tx_dlcubehnshop_articles.ref">Reference</label>
+			<label index="tx_dlcubehnshop_articles.ref2">Reference 2 (fournisseur)</label>
+			<label index="tx_dlcubehnshop_articles.title">Titre</label>
+			<label index="tx_dlcubehnshop_articles.auteur">Auteur</label>
+			<label index="tx_dlcubehnshop_articles.editor">Editeur</label>
+			<label index="tx_dlcubehnshop_articles.support">Support</label>
+			<label index="tx_dlcubehnshop_articles.designation">Designation</label>
+			<label index="tx_dlcubehnshop_articles.descdetail">Description détaillée</label>
+			<label index="tx_dlcubehnshop_articles.parut">Parution</label>
+			<label index="tx_dlcubehnshop_articles.price">Prix</label>
+			<label index="tx_dlcubehnshop_articles.tva">Taux de TVA</label>
+			<label index="tx_dlcubehnshop_articles.isbn">N° isbn</label>
+			<label index="tx_dlcubehnshop_articles.weight">Poids</label>
+			<label index="tx_dlcubehnshop_articles.nbpages">Nbre de pages</label>
+			<label index="tx_dlcubehnshop_articles.archive">Archive</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree.I.0">1</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree.I.1">2</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree.I.2">3</label>
+			<label index="tx_dlcubehnshop_articles.technicaldegree">Degré de technicité</label>
+			<label index="tx_dlcubehnshop_articles.img1">Image  (list mode)</label>
+			<label index="tx_dlcubehnshop_articles.img2">Image (detail mode)</label>
+			<label index="tx_dlcubehnshop_articles.file">Fichier</label>
+			<label index="tx_dlcubehnshop_editors">Editeurs</label>
+			<label index="tx_dlcubehnshop_editors.name">Nom</label>
+			<label index="tx_dlcubehnshop_editors.infos">Infos</label>
+			<label index="tx_dlcubehnshop_supports">Supports</label>
+			<label index="tx_dlcubehnshop_supports.name">Nom du support</label>
+		</languageKey>
+	</data>
+</T3locallang>
