@@ -97,24 +97,30 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 			"exclude" => 0,		
 			"label" => "LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_articles.editor",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_dlcubehnboutik_editors",	
-				"size" => 1,	
+				"type" => "select",	
+				"items" => Array (
+					Array("",0),
+				),
+				"foreign_table" => "tx_dlcubehnshop_editors",	
+				"foreign_table_where" => "ORDER BY tx_dlcubehnshop_editors.name",	
+				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 1,
+				"maxitems" => 1,	
 			)
 		),
 		"support" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_articles.support",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_dlcubehnboutik_supports",	
-				"size" => 1,	
+				"type" => "select",	
+				"items" => Array (
+					Array("",0),
+				),
+				"foreign_table" => "tx_dlcubehnshop_supports",	
+				"foreign_table_where" => "ORDER BY tx_dlcubehnshop_supports.name",	
+				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 1,
+				"maxitems" => 1,	
 			)
 		),
 		"designation" => Array (		
