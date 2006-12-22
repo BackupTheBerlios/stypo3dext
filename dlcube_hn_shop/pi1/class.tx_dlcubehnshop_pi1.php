@@ -27,13 +27,14 @@
  * @author	Vincent MAURY <vmauy@dlcube.com>
  */
 require_once(PATH_tslib."class.tslib_pibase.php");
+require_once("typo3conf/ext/vm19_toolbox/functions.php");
 
 class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	var $prefixId = "tx_dlcubehnshop_pi1";		// Same as class name
 	var $scriptRelPath = "pi1/class.tx_dlcubehnshop_pi1.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube_hn_shop";	// The extension key.
 	var $upload_doc_folder="uploads/tx_dlcubehnshop";
-	
+	var $ImgMwidth=100;
 	//var $searchConfig="WSDatastore"; 
 	
 	/**
@@ -43,9 +44,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		
-		$content="Salut ducon";
-		
+	
 		$this->uid = substr(strstr($GLOBALS[GLOBALS][TSFE]->currentRecord,":"),1);
 
 		switch((string)$conf["CMD"])	{
@@ -142,23 +141,23 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 			// This sets the title of the page for use in indexed search results:
 		if ($this->internal["currentRow"]["title"])	$GLOBALS["TSFE"]->indexedDocTitle=$this->internal["currentRow"]["title"];
+		
+		$this->ImgMwidth=$this->conf["Img2MaxWidth"];
 
 		$content.='<A name="Anc'.$this->getFieldContent("uid").'></A>';
 		$content.='<DIV class="txvm19docs_single">';
 		$content.=$this->RetEntete($this->internal["currentRow"]["title"]);
 		//	<H2><img src="'.$this->conf["extCurDir"].'picto_documents.gif" align="middle">&nbsp;&nbsp;'.$this->internal["currentRow"]["title"].'</H2>
-		$content.=$this->getFieldLine("imagette").
-				$this->getFieldLine("internal_code").
-				$this->getFieldLine("crdate").
-				$this->getFieldLine("endtime").
-				$this->getFieldLine("author").
-				$this->getFieldLine("lang").
+		$content.=$this->getFieldLine("img2").
+				$this->getFieldLine("descdetail").
+				'<br/><div style="align:center;border:1px solid; width:300px">'.
+				$this->getFieldLine("ref").
+				$this->getFieldLine("price").
+				$this->getFieldLine("auteur").
+				$this->getFieldLine("parut").
 				$this->getFieldLine("support").
-				$this->getFieldLine("isbn").
-				$this->getFieldLine("topics").
-				$this->getFieldLine("keywords").
-				$this->getFieldLine("document").
-				$this->getFieldLine("abstract").
+				$this->getFieldLine("nbpages").
+				'</div>'.
 				'<br/><br/>';
 
 				//<P'.$this->pi_classParam("singleViewField-document").'><strong>'.$this->getFieldHeader("document").':</strong> '.$this->getFieldContent("document").'</P>';
@@ -177,45 +176,31 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 		if ($fN=="author" || ($this->internal["currentRow"][$fN]!="" && $this->internal["currentRow"][$fN]!="0") || $fN=="imagette") { //&& $this->getFieldContent($fN)!="0"
 			switch ($fN) {
-				case "imagette":
-					$imgsrc=$this->retImagette($this->getFieldContent('imagette'),$this->getFieldContent('document'),false);
+				case "img2":
+				case "img1":
+					$imgsrc=$this->retImagette($this->getFieldContent($fN),$this->getFieldContent('file'),false);
 					
-					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent("document"))) {
-						$valret.='<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent("document").'" target="_blank">'.$imgsrc.'</a>';
+					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent("file"))) {
+						$valret.='<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent("file").'" target="_blank">'.$imgsrc.'</a>';
 						}
 					else $valret.=$imgsrc;
 
+				break;
+				
+				case "descdetail":
+					$valret= '<P>'.$this->getFieldContent($fN).'</P>';
 				break;
 
 				case "lang":
 					if ($this->conf["langCodeND"]!=$this->internal["currentRow"][$fN]) $valret= '<P><span class="descDoc">'.$this->getFieldHeader($fN).':</span> '.$this->getFieldContent($fN).'</P>';
 					break;
 
-				case "document":
+				case "file":
 					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent($fN))) {
 						$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'&nbsp;<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" target="_blank"><img src="'.$this->conf["extCurDir"].'telecharger.gif" class="picto"  title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($this->upload_doc_folder.'/'.$this->getFieldContent($fN)).'</P>';
 					}
 				break;
 				
-				case "author": // renvoie l'auteur et son mail avec une petite enveloppe derri�e
-					if ($this->internal["currentRow"]["int_author"]!="") {
-						$fN="int_author";
-						$valret='<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN);
-						$mail=txRecupLib("fe_users","uid","email",$this->internal["currentRow"]["int_author"]);
-						$valret.='&nbsp;&nbsp;'.txMefMail($mail);
-						$valret.='</P>';
-						}
-					elseif ($this->internal["currentRow"]["ext_author"]!="") {
-						 $fN="ext_author";
-						$valret='<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'</P>';
-						 }
-					else {
-						$valret='<P><b>'.$this->getFieldHeader("int_author").':</b> '.txRecupLib("be_users","uid","realName",$this->internal["currentRow"]["cruser_id"]);
-						$mail=txRecupLib("be_users","uid","email",$this->internal["currentRow"]["cruser_id"]);
-						$valret.='&nbsp;&nbsp;'.txMefMail($mail);
-						$valret.='</P>';
-						}
-				break;
 	
 				default:
 					$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'</P>';
@@ -226,7 +211,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * [FONCTIONS MODE LISTE]
+	 * Affichage d'une ligne
 	 */
 	function pi_list_row($c)	{
 		$editPanel = $this->pi_getEditPanel();
@@ -257,34 +242,40 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 		// la puce par d�aut, c'est tux
 		$puce='<img src="'.$this->conf["extCurDir"].'tux.gif" border="0" title="'.$this->pi_getLL("other_doc","[other_doc]").'">';
-		$file_name=$this->getFieldContent("document");
+		$this->ImgMwidth=$this->conf["Img1MaxWidth"];
+		$puce=$this->retImagette($this->getFieldContent('img1'),$this->getFieldContent('file'),false);
+		$file_name=$this->getFieldContent("file");
 		$CfN=$this->upload_doc_folder.'/'.$file_name;
 		// test existance document
 		if (file_exists($CfN) && $file_name!="" ) {
-				//$CDocN=$this->getFileIconHTML($file_name,$file_name).' <a href="'.$CfN.'" target="_blank">'.$file_name.'</a>'.DFSIL($CfN);}
 				// Plus que l'icone
 				$puce=$this->getFileIconHTML($file_name,$file_name);
 				$CDocN='&nbsp;<a href="'.$CfN.'" target="_blank"><img src="'.$this->conf["extCurDir"].'telecharger.gif" border="0" title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($CfN);
 				}
-	// l'ancre sert a ce qu'au retiur d'une loupe on puisse repointer au même endroit..
+	// l'ancre sert a ce qu'au retour d'une loupe on puisse repointer au même endroit..
 		return '<a name="Anc'.$this->getFieldContent("uid").'"></a><tr class="'.($c%2 ? 'doclist_rowodd' : 'doclist_roweven').'">
 				<td>'.$puce.'</td>
-				<td style="text-align:left">'.$this->getFieldContent("title").'</td>
-				<td>'.$this->getFieldContent("crdate").'</td>
-				<td style="text-align:left">'.$loupe.$CDocN.'</td>
-				'.$editPanel.'
+				<td style="text-align:left">'.$this->getFieldContent("support").'<br/>'.$this->getFieldContent("nbpages").'</td>
+				<td style="text-align:left">'.str_replace("salut_blaireau",$this->getFieldContent("title"),$mylink).'</td>
+				<td style="text-align:left">'.$this->getFieldContent("designation")." (".str_replace("salut_blaireau",$this->pi_getLL("lire_suite","[lire_suite]"),$mylink).')</td>
+				<td style="text-align:center">'.$this->getFieldContent("technicaldegree").'</td>
+				<td style="text-align:center">'.$this->getFieldContent("parut").'</td>
+				<td style="text-align:left">'.$this->getFieldContent("price").'</td>
 			</tr>';
 	}
 	/**
-	 * [Put your description here]
+	 * Generer l'entête du tableau
 
 	 */
 	function pi_list_header()	{
 		return '<tr class="docTableHead">
-		 		<td width="50">&nbsp;</td>
+		 		<td>&nbsp;</td>
+				<td width="100" align="left">'.$this->getFieldHeader_sortLink("support").'</td>
 				<td width="200" align="left">'.$this->getFieldHeader_sortLink("title").'</td>
-				<td align="left">'.$this->getFieldHeader_sortLink("crdate").'</td>
-				<td>&nbsp;</td>
+				<td width="200" align="left">'.$this->getFieldHeader("designation").'</td>
+				<td align="center">'.$this->getFieldHeader_sortLink("technicaldegree").'</td>
+				<td align="left">'.$this->getFieldHeader("parut").'</td>
+				<td align="left">'.$this->getFieldHeader_sortLink("price").'</td>
 			</tr>';
 	}
 	/**
@@ -293,34 +284,38 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	function getFieldContent($fN,$mode="L")	{
 		switch($fN) {
 			case "uid":
-				return $this->internal["currentRow"]["uid"];	// The "1" means that the display of single items is CACHED! Set to zero to disable caching.
+				return $this->internal["currentRow"]["uid"];	
 			break;
-			// plus de lien vers la fiche d�aill� sur le nom: il est fait sur la loupe
-			/*
-			case "title":
-				// This will wrap the title in a link: to Single if in List (default), back
-
-				if($mode!="S") {
-					return $this->pi_list_linkSingle($this->internal["currentRow"]["title"],$this->internal["currentRow"]["uid"],1);
-					}
-				else return $this->internal["currentRow"][$fN]; */
-			case "nature":
+			
+			case "editor":
 			case "support":
-			case "lang":
-			case "topics":
-				return txRecupLib("tx_vm19docsbase_".$fN,"uid","title",$this->internal["currentRow"][$fN]);
+				return txRecupLib("tx_dlcubehnshop_".$fN."s","uid","name",$this->internal["currentRow"][$fN]);
 			break;
-			case "int_author":
-//				return "toto: ".$this->internal["currentRow"][$fN];
-				return txRecupLib("fe_users","uid","name",$this->internal["currentRow"][$fN]);
+			
+			case "price":
+				return $this->internal["currentRow"][$fN]."&nbsp;&#8364;";
 			break;
+			
+			case "tva":
+				return $this->internal["currentRow"][$fN]."&nbsp;&#037;";
+			break;
+			
+			case "weight":
+				return $this->internal["currentRow"][$fN]." g";
+			break;
+			
+			case "nbpages":
+				return ($this->internal["currentRow"][$fN]>0 ? $this->internal["currentRow"][$fN]."&nbsp;pages" : "");
+			break;
+			
 			case "tstamp":
 			case "crdate":
 			case "endtime":
 				return getDateF($this->internal["currentRow"][$fN]);
 			break;
 			
-			case "abstract":
+			case "designation":
+			case "descdetail":
 			//return $this->pi_RTEcssText($this->internal["currentRow"][$fN]);
 				/*
 				modifications apport�s au traitements de la m�hode getFieldContent($fN)
@@ -360,10 +355,21 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
     	function retImagette($imagette="",$doc="",$disp_imggen=false,$classImg="imgDoc") {
 		if ($imagette!="" && file_exists($this->upload_doc_folder.'/'.$imagette)) {
 			//$size=getimagesize($this->upload_doc_folder.'/'.$this->getFieldContent($fN));
-			$ConfI["file"] = $this->upload_doc_folder.'/'.$imagette;
-			$ConfI["file."]["maxW"] = $this->conf["ImgMaxWidth"];
+			$img = t3lib_div::makeInstance('t3lib_stdGraphic');
+			//$img->mayScaleUp = 1;
+			$img->init(); // renvoie 1... donc OK
 			
-			$valret.= str_replace(">",' class="'.$classImg.'">',$this->cObj->IMAGE($ConfI));
+			// mettre les images à la bonne largeur cad $this->conf["ImgMaxWidth"]
+			$imgInfo = $img->imageMagickConvert($this->upload_doc_folder.'/'.$imagette,'jpg',$this->ImgMwidth,'',"","",'',1);
+			
+			//debug ($imgInfo); // vide
+			if ($imgInfo[3]) $valret.='<img src="'.$imgInfo[3].'" class="'.$classImg.'">';
+
+/*			$ConfI["file"] = $this->upload_doc_folder.'/'.$imagette;
+			$ConfI["file."]["maxW"] = $this->ImgMwidth;
+					echo "coucou";
+			
+			$valret.= str_replace(">",' class="'.$classImg.'">',$this->cObj->IMAGE($ConfI));*/
 			//$valret= '<img src="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" align="left" border="0">';
 		} else {
 			if ($doc!="" && file_exists($this->upload_doc_folder.'/'.$doc)) {
@@ -371,14 +377,14 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				if (strstr("pdf jpeg gif png jpg tiff",strtolower($fI["fileext"]))) { 
 					$img = t3lib_div::makeInstance('t3lib_stdGraphic');
 					//$img->mayScaleUp = 1;
-				
 					$img->init(); // renvoie 1... donc OK
 					
 					// mettre les images à la bonne largeur cad $this->conf["ImgMaxWidth"]
-					$imgInfo = $img->imageMagickConvert($this->upload_doc_folder.'/'.$doc,'jpg',$this->conf["ImgMaxWidth"],'',"","",'',1);
+					$imgInfo = $img->imageMagickConvert($this->upload_doc_folder.'/'.$doc,'jpg',$this->ImgMwidth,'',"","",'',1);
 					
 					//debug ($imgInfo); // vide
-					if ($imgInfo[3]) $valret='<img src="'.$imgInfo[3].'" class="'.$classImg.'">';
+					if ($imgInfo[3]) $valret.='<img src="'.$imgInfo[3].'" class="'.$classImg.'">';
+				
 				} elseif ($disp_imggen) {
 					$valret='<img src="'.$this->conf['imggen'].'" class="'.$classImg.'">';
 				}
