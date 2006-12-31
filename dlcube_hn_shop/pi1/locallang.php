@@ -70,6 +70,8 @@ $LOCAL_LANG = Array (
 		"listFieldHeader_img2" => "image",
 		"listFieldHeader_file" => "document",
 		
+		"art_prec" => "Fiche Précédente",
+		"art_suiv" => "Fiche suivante",
 		"go_back" => "<img class=\"picto\" src=\"".$ChemImg."preced.gif\" alt=\"Retour en mode liste\"> Retour en mode liste",
 		"pi_list_browseresults_prev" => '< Précéd. ',
 		"pi_list_browseresults_page" => "P.",

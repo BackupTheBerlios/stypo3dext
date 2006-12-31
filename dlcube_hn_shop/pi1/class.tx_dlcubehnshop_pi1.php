@@ -122,6 +122,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				$res = mysql(TYPO3_db,$query);
 				if (mysql_error())	debug(array(mysql_error(),$query));
 				$this->internal["currentTable"] = "tx_dlcubehnshop_articles";
+				unset ($_SESSION['art_table']);
 				$fullTable.=$this->pi_list_makelist($res);
 
 				// Adds the result browser, seulement s'il y a assez de r�ultats
@@ -141,7 +142,11 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 			// This sets the title of the page for use in indexed search results:
 		if ($this->internal["currentRow"]["title"])	$GLOBALS["TSFE"]->indexedDocTitle=$this->internal["currentRow"]["title"];
-		
+		//print_r($_SESSION['art_table']);
+		foreach($_SESSION['art_table'] as $i=>$v) {
+			if ($v==$this->getFieldContent("uid")) $ci=$i;
+		}
+		//echo $ci;
 		$this->ImgMwidth=$this->conf["Img2MaxWidth"];
 
 		$content.='<A name="Anc'.$this->getFieldContent("uid").'></A>';
@@ -159,6 +164,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				$this->getFieldLine("nbpages").
 				'</div>'.
 				'<br/><br/>';
+				if ($_SESSION['art_table'][$ci +1] !="") 
+					$content.=$this->pi_list_linkSingle($this->pi_getLL("art_suiv","[art_suiv]"),$_SESSION['art_table'][$ci +1]);
+				if ($_SESSION['art_table'][$ci -1] !="") 
+					$content.=$this->pi_list_linkSingle($this->pi_getLL("art_prec","[art_prec]"),$_SESSION['art_table'][$ci -1]);	
 
 				//<P'.$this->pi_classParam("singleViewField-document").'><strong>'.$this->getFieldHeader("document").':</strong> '.$this->getFieldContent("document").'</P>';
 
@@ -216,6 +225,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	function pi_list_row($c)	{
 		$editPanel = $this->pi_getEditPanel();
 		if ($editPanel)	$editPanel="<TD>".$editPanel."</TD>";
+		$_SESSION['art_table'][]=$this->internal["currentRow"]["uid"];
 
 		$lConf = $this->conf["listView."];
 
