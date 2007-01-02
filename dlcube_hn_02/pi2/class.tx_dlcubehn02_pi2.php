@@ -2,19 +2,19 @@
 <?php
 /***************************************************************
 *  Copyright notice
-*  
+*
 *  (c) 2004 Vincent (admin, celui �la pioche) (webtech@haras-nationaux.fr)
 *  All rights reserved
 *
-*  This script is part of the TYPO3 project. The TYPO3 project is 
+*  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
-* 
+*
 *  The GNU General Public License can be found at
 *  http://www.gnu.org/copyleft/gpl.html.
-* 
+*
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,10 +22,15 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/** 
- * Plugin 'etalons' for the 'dlcube_hn_02' extension.
+/**
+ * Plugin 'etalons-étalothèque' for the 'dlcube_hn_02' extension.
+ * Cette extension contient les fonctionnalités suivantes.
+ * 1 - Formulaire de recherches des étalons
+ * 2 - Liste des étalons
+ * 3 - Fiche étalons
+ * 4 - comparatif d'étalons'
  *
- * @author Guillaume Tessier<gtessier@dlcube.com> 
+ * @author Guillaume Tessier<gtessier@dlcube.com>
  */
 //error_reporting (E_ALL); // par défaut
 
@@ -56,16 +61,16 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		$this->urlINRA = "uploads/tx_dlcubehn02/pdf/NOTE_EXPLICATIVE_INRA.pdf";
 		$this->fiches_folder="uploads/tx_dlcubehn02/fichesen/";
 		$this->photos_folder="uploads/tx_dlcubehn02/fichesen/photos/";
-		
+
 		$this->geoHelper = new GeoHelper();
 		$this->chevalHelper = new WebservicesAccess();
 		session_start();
-		
-		
+
+
 		if(isset($this->piVars["action"])){
 			if($this->piVars["action"] == "liste" || $this->piVars["action"] == "newListe"){
 				$content=$this->getListeResult();
-			}	
+			}
 		}
 		else if(isset($_GET["action"]) && ($_GET["action"]=="liste" || $_GET["action"]=="newListe"))
 			$content=$this->getListeResult();
@@ -77,18 +82,18 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		}
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
 	function getFormulaireVide(){
 		//print_r($GLOBALS["TSFE"]);
 		$filter[] = new ObjectTransfertWS("i18n","FR");
-		
+
 		$content='
 			<div><h2>'.htmlspecialchars($this->pi_getLL("titre_formulaire")).'</h2></div><BR>'.htmlspecialchars($this->pi_getLL("desc_formulaire")).'
 			';
 		if(isset($this->error)){
 			$content.='<div style="color:red;font-size:13px;text-align:center">'.$this->error.'</div>';
 		}
-		
+
 			$content.='<table>
 			<form action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'" method="POST">
 				<input type="hidden" name="no_cache" value="1">
@@ -157,7 +162,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 						foreach($listDepartements as $departement){
 							$content.="<option value='".$departement['codeDepartement']."'>".$departement['libelle']."</option>";
 						}
-						
+
 				$content.='
 					</select>
 				</td>
@@ -191,7 +196,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		';
 		return $content;
 	}
-	
+
 	/**
 	 * Methode de gestion de la fiche du cheval
 	 * @return String
@@ -202,17 +207,17 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		$objTransfert = new ObjectTransfertWS();
 		$objTransfert->setKey("codeCheval");
 		$objTransfert->setValue($this->piVars["showUid"]);
-		
+
 		$filtres[] = $objTransfert;
 		$etalon = $ws->getEtalon($filtres);
-		
+
 		if($etalon){
 			//Header
 			$content .='<div style="float: left;">';
 			$content .='<div style="float:left;width:330px;display:block;border: solid 1px #BFBFBF;">
 				<p>&nbsp;</p>
 				<p><h3 style="margin-left:20px"><strong>'. $etalon["nomCheval"].'</strong></h3></p>
-				
+
 				<p>'. $etalon["raceLibelle"];
 				if($etalon["pourcentageSangArabe"]>0 && ($etalon["codeGroupeRace"]=="AA" || $etalon["codeGroupeRace"]=="PFS" || $etalon["codeGroupeRace"]=="AB")){
 					$content .=' - ('. $etalon["pourcentageSangArabe"].'% arabe)';
@@ -230,18 +235,18 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				if($etalon["proprietaire"] != ""){
 					$content .=htmlspecialchars($this->pi_getLL("libelle_proprietaire")).' : '.$etalon["proprietaire"].' <br>';
 				}
-			
+
 				$content .='<div style="float: left;"><ul><li style="display: list-item;list-style-image : url(fileadmin/templates/images/elts_reccurents/detail.gif);list-style-position: outside;"><a href="'.$this->fiches_folder.$etalon["codeCheval"].'.php" target="_blank">'.$this->pi_getLL("libelle_fiche").'</a></li></ul></div><br>';
-				
+
 				if($etalon["urlVideo"] != "" ){
 					$content .='<div style="float: left;">
 					<ul><li style="display: list-item;list-style-image : url(fileadmin/templates/images/elts_reccurents/video.gif);list-style-position: outside;">
 					<a href="'.$etalon["urlVideo"].'" target="_blank" style="color:#F18C13">'.htmlspecialchars($this->pi_getLL("libelle_video")).'</a></strong></ul></li></div><br/>';
 				}
 				$content .='</p>';
-				
-				if($etalon["iso"] != null || $etalon["icc"] != null || $etalon["idr"] != null || $etalon["itr"] != null ||	
-					$etalon["iaa"] != null || $etalon["bso"] != null || $etalon["bcc"] != null || $etalon["bdr"] != null || 
+
+				if($etalon["iso"] != null || $etalon["icc"] != null || $etalon["idr"] != null || $etalon["itr"] != null ||
+					$etalon["iaa"] != null || $etalon["bso"] != null || $etalon["bcc"] != null || $etalon["bdr"] != null ||
 					$etalon["btr"] != null){
 					//print_r($etalon);
 					if($etalon["codeRace"]=="TF"){
@@ -267,7 +272,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				}
 			$content .='</div>';
 			//Remplacer l'url par une ressource local au deploiement
-			
+
 			if(file_exists($this->photos_folder.$etalon["codeCheval"].".jpg")){
 				$content .='<span style="float:right;display:block;margin-right:1px;font-size:8px>
 					<img src="'.$this->photos_folder.$etalon["codeCheval"].'.jpg">
@@ -333,7 +338,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					$afficheParagraphe=true;
 				}
 			}
-			
+
 			if($afficheParagraphe){
 				$content .='<div style="float: left;width:730px;">
 				<a name="test"></a>
@@ -344,7 +349,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					}
 				}
 				$content .="<br>".$this->pi_getLL("phrase_compare_inra").'<a target="_blank" href="'.$this->urlINRA.'">'.$this->pi_getLL("labelle_cliquez_ici").'</a>';
-				
+
 				$content .='</div>';
 			}
 			$content .='<div style="float: left;">';
@@ -360,24 +365,24 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		} else {
 			$content .=$ws->getErrorMessage();
 		}
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Methode de recherche qui retourne une liste de r�onses.
 	 * 1. Si la liste est dans la session alors le syst�e retourne une plage de la liste
-	 * 2. Si la liste ne se trouve pas dans la session, le syst�e fait appel au webservice et calcul la liste	
+	 * 2. Si la liste ne se trouve pas dans la session, le syst�e fait appel au webservice et calcul la liste
 	 * @return String
 	 */
 	function getListeResult(){
 		$result = null;
 		$content='<div><h2>'.htmlspecialchars($this->pi_getLL("titre_list")).'</h2></div><BR>';
 		$param = array();
-		
+
 		if( (isset($this->piVars["action"]) && $this->piVars["action"]=="newListe") || (isset($_GET["action"]) && $_GET["action"]=="liste"))
 			unset($_SESSION["RESULT_ETALON"]);
-		
+
 		if(!isset($_SESSION["RESULT_ETALON"])){
 			if(isset($this->piVars["nomcheval"]) && $this->piVars["nomcheval"] != ""){
 				$nomCheval = str_replace("%","",$this->piVars["nomcheval"]);
@@ -385,7 +390,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					$this->error = "Le nombre de lettres composant le nom du cheval doit �re sup�ieur ou �al �deux.";
 					return $this->getFormulaireVide();
 				}
-				
+
 				$objTransfert = new ObjectTransfertWS();
 				$objTransfert->setKey("nomCheval");
 				$objTransfert->setValue($this->piVars["nomcheval"]);
@@ -420,7 +425,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				$objTransfert->setKey("iac");
 				$objTransfert->setValue("true");
 				$param[count($param)] = $objTransfert;
-				
+
 			}
 			if(isset($this->piVars["qualif_loisir"]) && $this->piVars["qualif_loisir"] == "O"){
 				$objTransfert = new ObjectTransfertWS();
@@ -440,7 +445,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				$objTransfert->setValue($this->piVars["code_gen"]);
 				$param[count($param)] = $objTransfert;
 			}
-			
+
 			$ws = new WebservicesAccess();
 			if(!$ws->connect()) return "erreur a la connexion:".$ws->getErrorMessage();
 			$result = $ws->getEtalons($param);
@@ -462,9 +467,9 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				$content .=$this->pi_linkToPage(htmlspecialchars($this->pi_getLL("libelle_nouvelle_recherche")),$GLOBALS["TSFE"]->id);
 			return $content;
 		}
-		
+
 		$content .= "<h4>".count($result)." ".$this->pi_getLL("libelle_compteur")."</h4><br>";
-		
+
 		foreach($result as $etalon){
 			$content .="<p><strong>".$this->pi_list_linkSingle($etalon["nomCheval"],$etalon["codeCheval"],1)."</strong>, ".$etalon["raceLibelle"];
 			if($etalon["pourcentageSangArabe"] > 0 && ($etalon["codeGroupeRace"]=="AA" || $etalon["codeGroupeRace"]=="PFS" || $etalon["codeGroupeRace"]=="AB"))
