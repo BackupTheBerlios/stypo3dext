@@ -3,7 +3,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2004 Vincent (admin, celui �la pioche) (webtech@haras-nationaux.fr)
+*  (c) 2007 Guillaume Tessier <gtessier@dlcube.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
