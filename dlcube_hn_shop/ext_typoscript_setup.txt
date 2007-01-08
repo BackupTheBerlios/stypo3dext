@@ -5,8 +5,8 @@ plugin.tx_dlcubehnshop_pi1 {
 	langCodeND=1
 	Img1MaxWidth=50
 	Img2MaxWidth=200
-	extCurDir=typo3conf/ext/vm19_docs_base/
-	iconDir =typo3conf/ext/vm19_docs_base/fileicons
+	extCurDir=typo3conf/ext/dlcube_hn_shop/
+	iconDir =typo3conf/ext/dlcube_hn_shop/icons/
 	altIconDir=t3lib/gfx/fileicons
   	defaultIcon =typo3conf/ext/vm19_docs_base/fileicons/default.gif
   	imggen=typo3conf/ext/vm19_docs_base/no_preview.jpg
