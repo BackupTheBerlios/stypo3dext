@@ -3,7 +3,7 @@
 *
 *  Copyright notice
 *
-*  (c) 2005 Guillaume Tessier<gtessier@dlcube.com> 
+*  (c) 2005 Guillaume Tessier<gtessier@dlcube.com>
 *  All rights reserved**  This script is part of the Typo3 project. The Typo3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -26,25 +26,25 @@
 
 /**
  * Classe de gestion de webservices
- * @author	Guillaume Tessier<gtessier@dlcube.com> 
+ * @author	Guillaume Tessier<gtessier@dlcube.com>
  */
 
 class GeoHelper {
 	var $wsdl;
 	var $client;
 	var $errorMessage;
-	
+
 	function GeoHelper(){
 		$this->__construct();
 	}
-	
+
 	function __construct(){
-		$this->wsdl = "http://xinf-datastore2:8080/hndto/services/GEOServicesPortail?wsdl";
+		//$this->wsdl = "http://xinf-datastore2:8080/hndto/services/GEOServicesPortail?wsdl";
 		//$this->wsdl = "http://guitessier.dyndns.org:8080/hndto/services/GEOServicesPortail?wsdl";
-		//$this->wsdl = "http://localhost:8080/hndto/services/GEOServicesPortail?wsdl";
+		$this->wsdl = "http://localhost:8080/hndto/services/GEOServicesPortail?wsdl";
 		$this->client = new soapclient_nusoap($this->wsdl, 'wsdl');
 	}
-	
+
 	function getAllDepartements(){
 		if($this->client != null){
 			$result = $this->client->call('getAllDepartements', array());
@@ -55,7 +55,7 @@ class GeoHelper {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
 	/**
 	 * Methode retournant une liste de regions sans les départements
 	 * @return Liste de regions
@@ -70,11 +70,11 @@ class GeoHelper {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
 	function getErrorMessage(){
 		return $this->errorMessage;
 	}
-	
+
 }
 
 if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube_hn_01/class.GeoHelper.php"])	{

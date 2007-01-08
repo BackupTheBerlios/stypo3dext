@@ -5,7 +5,7 @@ include_once("typo3conf/ext/dlcube_hn_01/php_inc/nusoap/nusoap.php");
 *
 *  Copyright notice
 *
-*  (c) 2005 Guillaume Tessier<gtessier@dlcube.com> 
+*  (c) 2005 Guillaume Tessier<gtessier@dlcube.com>
 *  All rights reserved**  This script is part of the Typo3 project. The Typo3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -28,11 +28,11 @@ include_once("typo3conf/ext/dlcube_hn_01/php_inc/nusoap/nusoap.php");
 
 /**
  * Classe de gestion de webservices
- * @author	Guillaume Tessier<gtessier@dlcube.com> 
+ * @author	Guillaume Tessier<gtessier@dlcube.com>
  */
 
  /**
-  * Exemple d'appel 
+  * Exemple d'appel
   * $ws = new WebServicesPortail();
   * if(!$ws->connect())echo $ws->getErrorMessage();
   * $param[] = new ObjectTransfertWS("codeRegion","BRG");
@@ -43,33 +43,33 @@ class WebservicesAccess {
 	var $wsdl;
 	var $client;
 	var $errorMessage;
-	
+
 	function WebservicesAccess(){
 		$this->__construct();
 	}
-	
+
 	function __construct(){
-		$this->wsdl = "http://xinf-datastore2:8080/hndto/services/CTServicesPortail?wsdl";
+		//$this->wsdl = "http://xinf-datastore2:8080/hndto/services/CTServicesPortail?wsdl";
 		//$this->wsdl = "http://guitessier.dyndns.org:8080/hndto/services/CTServicesPortail?wsdl";
-		//$this->wsdl = "http://localhost:8080/hndto/services/CTServicesPortail?wsdl";
+		$this->wsdl = "http://localhost:8080/hndto/services/CTServicesPortail?wsdl";
 		$this->client = new soapclient_nusoap($this->wsdl, 'wsdl');
 	}
-	
+
 	function connect(){
 		$this->client = new soapclient_nusoap($this->wsdl, 'wsdl');
 		if( !$this->client->getError())
 			return true;
-			
+
 		$this->errorMessage = $this->client->getError();
 		$this->client = null;
 		return false;
 	}
-	
+
 	/**
-	 * Function qui retourne les centres techniques avec 
+	 * Function qui retourne les centres techniques avec
 	 * comme filtre de recherche le tableau d'objets passÃ© en paramÃ¨tre
 	 *-------------------------------------------------------------------
-	 * Exemple: 
+	 * Exemple:
 	 * $parametres[] = new ObjectTransfertWS("codeRegion","BRG");
 	 * $parametres[] = new ObjectTransfertWS("codeDepartement","71");
 	 * ------------------------------------------------------------------
@@ -87,12 +87,12 @@ class WebservicesAccess {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
 	/**
-	 * Function qui retourne les etalons avec 
+	 * Function qui retourne les etalons avec
 	 * comme filtre de recherche le tableau d'objets passes en parametre
 	 *-------------------------------------------------------------------
-	 * Exemple: 
+	 * Exemple:
 	 * $filtres[] = new ObjectTransfertWS("codeRegion","BRG");
 	 * $filtres[] = new ObjectTransfertWS("codeDepartement","71");
 	 * ------------------------------------------------------------------
@@ -111,12 +111,12 @@ class WebservicesAccess {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
 	/**
-	 * Function qui retourne les etalons avec 
+	 * Function qui retourne les etalons avec
 	 * comme filtre de recherche le tableau d'objets passes en parametre
 	 *-------------------------------------------------------------------
-	 * Exemple: 
+	 * Exemple:
 	 * $filtres[] = new ObjectTransfertWS("codeRegion","BRG");
 	 * $filtres[] = new ObjectTransfertWS("codeDepartement","71");
 	 * ------------------------------------------------------------------
@@ -135,9 +135,9 @@ class WebservicesAccess {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
 	/**
-	 * Function retournant un etalon par son codeCheval	
+	 * Function retournant un etalon par son codeCheval
 	 * @param $filtres tableau d'objes de ObjectTransfertWS
 	 * @return Object
 	 */
@@ -151,12 +151,12 @@ class WebservicesAccess {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
 	/**
-	 * Function qui retourne la liste des races suivant 
+	 * Function qui retourne la liste des races suivant
 	 * la langue demandée passee dans le tableau de parametres.
 	 * *-------------------------------------------------------------------
-	 * Exemple: 
+	 * Exemple:
 	 * $filtres[] = new ObjectTransfertWS("i18n","EN");
 	 * OU
 	 * $filtres[] = new ObjectTransfertWS("i18n","FR");
@@ -174,7 +174,49 @@ class WebservicesAccess {
 		$this->errorMessage = $this->client->getError();
 		return false;
 	}
-	
+
+	/**
+	 * Function qui retourne la liste des centres techniques faisant partie de la tournee
+	 * liée à la production pour un cheval donné
+	 * *-------------------------------------------------------------------
+	 * Exemple:
+	 * $filtres[] = new ObjectTransfertWS("i18n","EN");
+	 * OU
+	 * $filtres[] = new ObjectTransfertWS("i18n","FR");
+	 * ------------------------------------------------------------------
+	 * @param $filtres[] (FR|EN)
+	 * @return void
+	 */
+	function getAllCT4Etalon($filtres){
+		if($this->client != null){
+			$result = $this->client->call('chercheCentreTechEtalonI18N', array('keyFields'=>$filtres));
+			if( !$this->client->getError() ){
+				return $result;
+			}
+		}
+		$this->errorMessage = $this->client->getError();
+		return false;
+	}
+
+	/**
+	 * Function qui retourne des chevaux pour comparaison
+	 * *-------------------------------------------------------------------
+	 * ------------------------------------------------------------------
+	 * @param $filtres[] (codeCheval*)
+	 * @return void
+	 */
+	function getAllListEtalon2Cmp($filtres){
+		if($this->client != null){
+			$result = $this->client->call('getEtalons2Cmp', array('keyFields'=>$filtres));
+			if( !$this->client->getError() ){
+				return $result;
+			}
+		}
+		$this->errorMessage = $this->client->getError();
+		return false;
+	}
+
+
 	/**
 	 * 	Retourne un message d'eereur en provenance du client SOAP.
 	 * @return String
@@ -182,7 +224,7 @@ class WebservicesAccess {
 	function getErrorMessage(){
 		return $this->errorMessage;
 	}
-	
+
 }
 
 if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube_hn_01/class.WebservicesAccess.php"])	{
