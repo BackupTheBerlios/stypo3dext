@@ -1,36 +1,43 @@
 <?php
 /**
  * Language labels for plugin "tx_dlcubehn02_pi2"
- * 
+ *
  * This file is detected by the translation tool.
  */
 
 $LOCAL_LANG = Array (
 	"default" => Array (
-		"list_mode_1" => "Mode 1",	
-		"list_mode_2" => "Mode 2",	
-		"list_mode_3" => "Mode 3",	
-		"back" => "Back",	
-		"submit_button_label" => "Rechercher",	
+		"list_mode_1" => "Mode 1",
+		"list_mode_2" => "Mode 2",
+		"list_mode_3" => "Mode 3",
+		"back" => "Back",
+		"submit_button_label" => "Rechercher",
 		"titre_formulaire"=>"Recherche d'un étalon national",
 		"titre_list"=>"Liste d'étalons",
 		"titre_fiche"=>"La fiche de l'étalon",
 		"desc_formulaire"=>"Remplissez un ou plusieurs de ces critères.",
-		"titre_form_geo"=>"Localisation physique de l'étalon",
+		"titre_form_geo"=>"Rayon de disponibilité de la semence",
+		"titre_form_prix"=>"Tarif de saillie",
 		"desc_form_geo"=>"Ne remplissez pas ces cases si vous recherchez des étalons en dehors de votre région disponibles en semence transportée ou congelée",
 		"libelle_region"=> "Région",
 		"libelle_departement"=> "Département",
 		"libelle_attente_affectation"=>"En attente d'affectation",
+		"libelle_orientation_production"=>"Orientation de la production",
+		"libelle_type_equide"=>"Type d'équidé",
+		"libelle_poitns_forts"=>"Points forts",
+		"libelle_robe"=>"Robe",
 		"libelle_cheval_nom"=> "Nom du Cheval",
 		"libelle_cheval_race"=> "Race",
-		"libelle_dispo_IAC"=>"Sur toute la France, en semence congelée",
-		"libelle_qualif_loisir"=>"Orientation loisir",
-		"libelle_qualif_dressage"=>"Orientation dressage",
+		"libelle_liste_ct"=> "Centres avec la semance disponible",
+		"libelle_dispo_IAC"=>"Disponible en IAC",
 		"libelle_attach_secteur"=>"rattach&eacute; au secteur",
 		"libelle_compteur"=>"&eacute;talon(s) trouvé(s)",
 		"libelle_repro"=>"Informations reproduction",
 		"libelle_perf"=>"Informations performances",
-		"txt_repro"=>"A la reproduction depuis",
+		"txt_repro"=>"fait la monte au",
+		"libelle_prix_max"=>"prix max",
+		"libelle_prix_min"=>"prix min",
+		"libelle_paiement_naissance"=>"paiement à la naissance",
 		"libelle_par"=>"par",
 		"libelle_et"=>"et",
 		"libelle_neen"=>"né en",
@@ -71,10 +78,10 @@ $LOCAL_LANG = Array (
 		"telecopie"=>"Fax",
 	),
 	"dk" => Array (
-		"list_mode_1" => "Visning 1",	
-		"list_mode_2" => "Visning 2",	
-		"list_mode_3" => "Visning 3",	
-		"back" => "Tilbage",	
+		"list_mode_1" => "Visning 1",
+		"list_mode_2" => "Visning 2",
+		"list_mode_3" => "Visning 3",
+		"back" => "Tilbage",
 	),
 	"de" => Array (
 	),
