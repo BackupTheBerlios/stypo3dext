@@ -1,6 +1,6 @@
 <?php
 header('Pragma: public');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 header('Cache-Control: must-revalidate, pre-check=0, post-check=0, max-age=0');
 
 /***************************************************************
@@ -30,23 +30,22 @@ header('Cache-Control: must-revalidate, pre-check=0, post-check=0, max-age=0');
  *
  * @author	Guillaume Tessier <gui.tessier@wanadoo.fr>
  */
-
-//error_reporting(15);
-require_once(PATH_tslib."class.tslib_pibase.php");
-include_once("typo3conf/ext/dlcube_hn_01/class.WebservicesCompte.php");
-include_once("typo3conf/ext/dlcube_hn_01/class.WebservicesAccess.php");
+require_once (PATH_tslib . "class.tslib_pibase.php");
+include_once ("typo3conf/ext/dlcube_hn_01/class.WebservicesCompte.php");
+include_once ("typo3conf/ext/dlcube_hn_01/class.WebservicesAccess.php");
+error_reporting(0);
 
 class tx_dlcube04CAS_pi5 extends tslib_pibase {
-	var $prefixId = "tx_dlcube04CAS_pi5";		// Same as class name
-	var $scriptRelPath = "pi5/class.tx_dlcube04CAS_pi5.php";	// Path to this script relative to the extension dir.
-	var $extKey = "dlcube04_CAS";	// The extension key.
+	var $prefixId = "tx_dlcube04CAS_pi5"; // Same as class name
+	var $scriptRelPath = "pi5/class.tx_dlcube04CAS_pi5.php"; // Path to this script relative to the extension dir.
+	var $extKey = "dlcube04_CAS"; // The extension key.
 	var $personne = null;
 	var $ct = null;
 	var $isAbonNews = false;
-	var $isAbonAlert= false;
-	var $isAbonMvi=false;
-	var $nbreNaissance=0;
-	var $nbreLieudetention=0;
+	var $isAbonAlert = false;
+	var $isAbonMvi = false;
+	var $nbreNaissance = 0;
+	var $nbreLieudetention = 0;
 	var $nbreFactures = 0;
 	var $montantFactures = 0;
 
@@ -55,73 +54,84 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	var $urlDeclaResultNeg = null;
 	var $urlModifCompte = null;
 	var $urlAchatPoint = null;
-	var $urlGererConsulterCheval =null;
+	var $urlGererConsulterCheval = null;
 	var $urlDeclarerCheval = null;
 	//var $urlGererConsulterCheval = null;//"http://xinf-devlinux:8080/cid-internet-mobile-AV-CI/achatvente/ListeChevauxAction.do?dispatch=initDataBeforeLoad";
 	//var $urlDeclarerCheval = null;//"http://xinf-devlinux:8080/cid-internet-mobile-AV-CI/achatvente/AchatChevalAction.do?dispatch=initDataBeforeLoad";
 	var $urlModifSosPoulain = null;
 	var $urlAjoutSosPoulain = null;
-	var $urlGererSaillies=null;
-	var $urlEditerAttestCertif=null;
-	var	$urlSuiviSanitaire=null;
-	var $urlGestionLieuxDetention=null;
+	var $urlGererSaillies = null;
+	var $urlEditerAttestCertif = null;
+	var $urlSuiviSanitaire = null;
+	var $urlGestionLieuxDetention = null;
 	var $urlTranspondeur = null;
 	var $urlControle = null;
 	var $urlWebMail = null;
 	var $urlInfoCheval = null;
 	var $urlGDP2 = null;
 
-	var $nombreEtalonSaillie=0;
-	var $nombreEtalonSaillieIA=0;
+	var $nombreEtalonSaillie = 0;
+	var $nombreEtalonSaillieIA = 0;
 
 	var $templateLambda = null;
-	var $typeExecution=null;/**dev|dev_ext|prod*/
+	var $userId;
+	var $typeExecution = null; /**dev|dev_ext|prod*/
 
 	/**
 	 * Plug-in pour creation de comptes CAS
 	 */
-	function main($content,$conf)	{
-		$this->conf=$conf;
+	function main($content, $conf) {
+		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
-		$this->pi_USER_INT_obj=1;// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj = 1; // Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_loadLL();
-		$this->templateLambda=$this->cObj->fileResource("EXT:dlcube04_CAS/pi5/espace_perso_lambda.tmpl");
+		$this->templateLambda = $this->cObj->fileResource("EXT:dlcube04_CAS/pi5/espace_perso_lambda.tmpl");
 		session_start();
-		if(!isset($_SESSION["portalId"]) || $_SESSION["portalId"]==""){
-        	header("Location: index.php?id=2822");
-         }
+		if(!isset($_GET["userid"])){
+			if(!isset($_SESSION["portalId"]) || $_SESSION["portalId"]==""){
+				header("Location: index.php?id=2822");
+			}
+		}
+
+		//$this->userId = $_SESSION["portalId"];
+		//$userId ="faible";//pignol";//"etalonnier";//"faible";
+		$this->userId = (isset ($_GET["userid"]))?$_GET["userid"]:$_SESSION["portalId"];
 
 		//$type="dev_ext";//dev";//dev_ext";
-		$this->typeExecution = "dev";
+		$this->typeExecution = "dev_ext";
 		$this->doLoadUrls($this->typeExecution);
 		$this->dolLaodServices();
 
+		$espaceTypeA = array (
+			"1"
+		);
+		$espaceTypeB = array (
+			"2",
+			"3",
+			"4",
+			"5"
+		);
+		$espaceTypeC = array (
+			"8"
+		);
+		$espaceTypeD = array (
+			"7"
+		);
 
-		$espaceTypeA = array("1");
-		$espaceTypeB = array("2","3","4","5");
-		$espaceTypeC = array("8");
-		$espaceTypeD = array("7");
+		//$this->personne->profil->id=(isset($_GET["idProfil"]))?$_GET["idProfil"]:1;
+		//$this->personne->key->numeroPersonne="12333";
+		//print_r($this->personne);
 
-		//$this->personne["findPersonneByLoginReturn"]["profil"]["id"]=(isset($_GET["idProfil"]))?$_GET["idProfil"]:1;
-		//$this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"]="12333";
-		print_r($this->personne);
-
-		if(in_array ($this->personne["findPersonneByLoginReturn"]["profil"]["id"], $espaceTypeA))
-			$content=$this->getEspacePersoTypeA();
-		else if(in_array ($this->personne["findPersonneByLoginReturn"]["profil"]["id"], $espaceTypeB))
-			$content=$this->getEspacePersoTypeB();
-		elseif(in_array ($this->personne["findPersonneByLoginReturn"]["profil"]["id"], $espaceTypeC)){
-			$content=$this->getEspacePersoTypeC();
-		}
-		elseif(in_array ($this->personne["findPersonneByLoginReturn"]["profil"]["id"], $espaceTypeD) || $this->personne["findPersonneByLoginReturn"]["profil"]["id"]>100){
-			$content=$this->getEspacePersoTypeD();
-		}
+		if (in_array($this->personne->profil->id, $espaceTypeA))
+			$content = $this->getEspacePersoTypeA();
+		elseif (in_array($this->personne->profil->id, $espaceTypeB)) $content = $this->getEspacePersoTypeB();
+		elseif (in_array($this->personne->profil->id, $espaceTypeC)) $content = $this->getEspacePersoTypeC();
+		elseif (in_array($this->personne->profil->id, $espaceTypeD) || $this->personne->profil->id > 100) $content = $this->getEspacePersoTypeD();
 		else
-			$content=$this->getEspacePersoTypeE();
+			$content = $this->getEspacePersoTypeE();
 
-		if($_GET["debug"]){
+		if ($_GET["debug"])
 			$this->getDebug();
-		}
 
 		return $this->pi_wrapInBaseClass($content);
 	}
@@ -129,53 +139,69 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	/**
 	 * methode de creation de l'architecture de WebServices
 	 */
-	function dolLaodServices(){
-		$userId = $_SESSION["portalId"];
-		//$userId ="etalonnier";//pignol";//"etalonnier";//"faible";
-
-		$param[] = array(
-		"login"=>$userId,
-		"ctx"=> null);
+	function dolLaodServices() {
+		$param = array (
+			/*"login" => $this->userId,
+			"ctx" => null*/
+			"in0" => $this->userId,
+			"in1" => ""
+		);
 		$ws = new WebservicesCompte($this->typeExecution);
-		if(!$ws->connectIdent()){
-			$content="ERROR:".$ws->getErrorMessage();
+		if (!$ws->connectIdent()) {
+			$content = "ERROR:" . $ws->getErrorMessage();
 			$content = "L'espace priv&eacute; est momentan&eacute;ment indisponible, veuillez nous excuser de ce d&eacute;sagr&eacute;ment.";
 			return $content;
 		}
 
-		$this->personne = $ws->getPersonneByLogin($param);
+		$this->personne = $ws->getPersonneByLogin($param)->out;
+		//print_r($this->personne);
+		if($ws->getErrorMessage() != "") echo "<font color='red'>ERROR RECUPERATION PERSONNE CID (WS:findPersonneByLogin) :".$ws->getErrorMessage()."</font><br/>";
 
+		//exit();
 		/**
 		 * recuperation du nombre de naissance, de lieux de detention
 		 */
-		$paramCid[] = array(
-		"login"=>$_SESSION["portalId"],
-		"ctx"=> null);
+		/*$paramCid = array (
+			"login" => $this->userId,
+			"ctx" => null
+		);*/
+		$paramCid = array (
+			"login" => $this->userId,
+			"ctx" => ""
+		);
 
 		$wsCid = new WebservicesCompte($this->typeExecution);
-		if(!$wsCid->connectCid()){
+		if (!$wsCid->connectCid()) {
 			//$content="ERROR:".$wsCid->getErrorMessage();
 			$content = "L'espace priv&eacute; est momentan&eacute;ment indisponible, veuillez nous excuser de ce d&eacute;sagr&eacute;ment.";
 			return $content;
 		}
-		$this->nbreNaissance = $wsCid->getNbrNaissanceAnneeEnCours4User($paramCid);
-		$this->nbreLieudetention = $wsCid->getNbrLieuDetention4User($paramCid);
-		$this->nbreChevaux = $wsCid->getNbrChevaux4User($paramCid);
+		$this->nbreNaissance = $wsCid->getNbrNaissanceAnneeEnCours4User($paramCid)->getNbrNaissanceAnneeEnCoursReturn;
+		//echo "nbre naissance:";
+		//print_r($this->nbreNaissance);
+		if($wsCid->getErrorMessage() != "") echo "<font color='red'>ERROR RECUPERATION NOMBRE DE NAISSANCE CID (WS:getNbrNaissanceAnneeEnCours):".$wsCid->getErrorMessage()."</font><br/>";
+		$this->nbreLieudetention = $wsCid->getNbrLieuDetention4User($paramCid)->getNbrLieuDetentionReturn;
+		//echo "nbre detention:";
+		//print_r($this->nbreLieudetention);
+		if($wsCid->getErrorMessage() != "") echo "<font color='red'>ERROR RECUPERATION NOMBRE LIEU DE DETENTION CID (WS:getNbrLieuDetention):".$wsCid->getErrorMessage()."</font><br/>";
+		$this->nbreChevaux = $wsCid->getNbrChevaux4User($paramCid)->getNbrChevauxReturn;
+		//echo "nbre chevaux:";
+		//print_r($this->nbreChevaux);
+		if($wsCid->getErrorMessage() != "") echo "<font color='red'>ERROR RECUPERATION NOMBRE DE CHEVAUX CID (WS:getNbrChevaux):".$wsCid->getErrorMessage()."</font><br/>";
 
 		/**
 		 * recuperation du nombre de factures et le montant total
 		 */
 
-		if($this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"] != ""){
-			$paramPsi[] = $this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"];
-			$paramPsi[] = $this->personne["findPersonneByLoginReturn"]["key"]["numeroOrdreAdresse"];
+		if ($this->personne->key->numeroPersonne != "") {
+			$paramPsi[] = $this->personne->key->numeroPersonne;
+			$paramPsi[] = $this->personne->key->numeroOrdreAdresse;
 			$wsPsi = new WebservicesCompte($this->typeExecution);
-			if(!$wsPsi->connectPsi()){
-				 //$content="ERROR:".$wsPsi->getErrorMessage();
+			if (!$wsPsi->connectPsi()) {
+				//$content="ERROR:".$wsPsi->getErrorMessage();
 				$content = "L'espace priv&eacute; est momentan&eacute;ment indisponible, veuillez nous excuser de ce d&eacute;sagr&eacute;ment.";
 				return $content;
-			}
-			else {
+			} else {
 				//Nombre de factures
 				$this->nbreFactures = $wsPsi->getNbrFactureARegler4User($paramPsi);
 				$this->montantFactures = $wsPsi->getMontantFactureARegler4User($paramPsi);
@@ -185,12 +211,12 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		/**
 		 * Recup des centres tech du departement
 		 */
-		if($this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"] != "" && $this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"]>0){
+		if ($this->personne->adresse->commune->codePostal != "" && $this->personne->adresse->commune->codePostal > 0) {
 			$ws = new WebservicesAccess($this->typeExecution);
-			if($ws->connect()){
+			if ($ws->connect()) {
 				$objTransfert = new ObjectTransfertWS();
 				$objTransfert->setKey("codeDepartement");
-				$objTransfert->setValue(substr($this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"],0,2));
+				$objTransfert->setValue(substr($this->personne->adresse->commune->codePostal, 0, 2));
 				$paramCT[] = $objTransfert;
 				$result = $ws->getCentresTEchniques($paramCT);
 				//if(!$result && $ws->getErrorMessage()!="") echo "[error resultat:]".$ws->getErrorMessage();
@@ -198,12 +224,12 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 				 * Calcul du centre le plus proche
 				 */
 				$precTot = 10000000000;
-				foreach($result as $centre){
-					if($centre["codePostal"]>$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"])
-						$result = $centre["codePostal"]-$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"];
+				foreach ($result as $centre) {
+					if ($centre["codePostal"] > $this->personne->adresse->commune->codePostal)
+						$result = $centre["codePostal"] - $this->personne->adresse->commune->codePostal;
 					else
-						$result = $this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"]-$centre["codePostal"];
-					if($result < $precTot){
+						$result = $this->personne->adresse->commune->codePostal - $centre["codePostal"];
+					if ($result < $precTot) {
 						$precTot = $result;
 						$this->ct = $centre;
 					}
@@ -214,48 +240,49 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		/**
 		 * On regarde si l'utilisateur est abonne aux news et alertes
 		 */
-		if($this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"] != ""){
+		if ($this->personne->coordonnees->email != "") {
 
-			$query = "SELECT * FROM tx_fabformmail_abonne where email='".$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"]."'";
-			$res = mysql(TYPO3_db,$query) or die ("req invalide : $query");
+			$query = "SELECT * FROM tx_fabformmail_abonne where email='" . $this->personne->coordonnees->email. "'";
+			$res = mysql(TYPO3_db, $query) or die("req invalide : $query");
 
-			if (mysql_num_rows($res)>0) {
+			if (mysql_num_rows($res) > 0) {
 				$row = mysql_fetch_array($res);
-				if($row['newsletter']=="1")$this->isAbonNews = true;
-				if($row['hidden']=="0")$this->isAbonAlert= true;
+				if ($row['newsletter'] == "1")
+					$this->isAbonNews = true;
+				if ($row['hidden'] == "0")
+					$this->isAbonAlert = true;
 			}
 		}
 
 		/**
 		 * chargement des infos liees a l'etalonnier'
 		 */
-		 if($this->personne["findPersonneByLoginReturn"]["profil"]["id"]==3){
+		if ($this->personne->profil->id == 3) {
 			$wsDPS = new WebservicesCompte($this->typeExecution);
-			if($wsDPS->connectDPS()){
-				$param[] = array();
-				echo "date:".date("Y");
-				if($this->typeExecution=="dev" || $this->typeExecution=="dev_ext"){
-					$param[] = array(
-						"serv"=>"DEV",
-						"nuPerso"=> $this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"],
-						"anMonte"=>"2006"
+			if ($wsDPS->connectDPS()) {
+				$param[] = array ();
+				//echo "date:" . date("Y");
+				if ($this->typeExecution == "dev" || $this->typeExecution == "dev_ext") {
+					$param[] = array (
+						"serv" => "DEV",
+						"nuPerso" => $this->personne->key->numeroPersonne,
+						"anMonte" => date("Y")
 					);
-				}
-				else{
-					$param[] = array(
-						"serv"=>"PROD",
-						"nuPerso"=> $this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"],
-						"anMonte"=>"2006"
+				} else {
+					$param[] = array (
+						"serv" => "PROD",
+						"nuPerso" => $this->personne->key->numeroPersonne,
+						"anMonte" => date("Y")
 					);
 				}
 
-				$return  = $wsDPS->getNbrSurPlace($param);
-				$this->nombreEtalonSaillie= (isset($return["getNbSurPlaceReturn"]) && $return["getNbSurPlaceReturn"] != "")?$return["getNbSurPlaceReturn"]:0;
+				$return = $wsDPS->getNbrSurPlace($param);
+				$this->nombreEtalonSaillie = (isset ($return["getNbSurPlaceReturn"]) && $return["getNbSurPlaceReturn"] != "") ? $return["getNbSurPlaceReturn"] : 0;
 
-				$return=$wsDPS->getNbrIA($param);
-				$this->nombreEtalonSaillieIA=(isset($return["getNbIAReturn"]) && $return["getNbIAReturn"] != "")?$return["getNbIAReturn"]:0;
+				$return = $wsDPS->getNbrIA($param);
+				$this->nombreEtalonSaillieIA = (isset ($return["getNbIAReturn"]) && $return["getNbIAReturn"] != "") ? $return["getNbIAReturn"] : 0;
 			}
-		 }
+		}
 	}
 
 	/**
@@ -263,18 +290,18 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	 * les possibilité sont: prod,dev,dev_ext
 	 * @param String $type
 	 */
-	function doLoadUrls($type){
+	function doLoadUrls($type) {
 		$urlStandard = null;
 
-		if($type=="prod"){
+		if ($type == "prod") {
 			$urlStandard = "www4.haras-nationaux.fr:8080";
 			$urlSir = "www4.haras_nationaux.fr:8080";
 		}
-		else if($type=="dev"){
+		elseif ($type == "dev") {
 			$urlStandard = "xinf-devlinux:8080";
 			$urlSir = "cookie2.haras_nationaux.fr:8080";
 		}
-		else if($type=="dev_ext"){
+		elseif ($type == "dev_ext") {
 			$urlStandard = "80.124.158.237:8080";
 			$urlSir = "cookie2.haras_nationaux.fr:8080";
 		}
@@ -288,153 +315,158 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$this->urlDeclarerCheval = $this->pi_getPageLink("3673");
 		$this->urlModifSosPoulain = $this->pi_getPageLink("3672");
 		$this->urlAjoutSosPoulain = $this->pi_getPageLink("3671");
-		$this->urlModifCompte=$this->pi_getPageLink("3670");
+		$this->urlModifCompte = $this->pi_getPageLink("3670");
 
 		/**
 		 * Declaration des URL pour accéder aux services externes
 		 */
-		$this->urlDeclaNovelleNaissance = "http://".$urlStandard."/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=POS";
-    	$this->urlDeclaResultNeg = "http://".$urlStandard."/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=NEG";
-		$this->urlTranspondeur;"http://".$urlStandard."/cid-internet-mobile-AV-CI/signalTranspondeur/RechercheEquideAction.do?dispatch=initDataBeforeLoad";
-		$this->urlControle;"http://".$urlStandard."/cid-internet-mobile-AV-CI/controleIdentite/RechercheControleIdentiteAction.do?dispatch=initDataBeforeLoad";
-		$this->urlGererConsulterCheval = "http://".$urlStandard."/cid-internet-mobile-AV-CI/achatvente/ListeChevauxAction.do?dispatch=initDataBeforeLoad";
-		$this->urlDeclarerCheval = "http://".$urlStandard."/cid-internet-mobile-AV-CI/achatvente/AchatChevalAction.do?dispatch=initDataBeforeLoad";
+		$this->urlDeclaNovelleNaissance = "http://" . $urlStandard . "/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=POS";
+		$this->urlDeclaResultNeg = "http://" . $urlStandard . "/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=NEG";
+		$this->urlTranspondeur;
+		"http://" . $urlStandard . "/cid-internet-mobile-AV-CI/signalTranspondeur/RechercheEquideAction.do?dispatch=initDataBeforeLoad";
+		$this->urlControle;
+		"http://" . $urlStandard . "/cid-internet-mobile-AV-CI/controleIdentite/RechercheControleIdentiteAction.do?dispatch=initDataBeforeLoad";
+		$this->urlGererConsulterCheval = "http://" . $urlStandard . "/cid-internet-mobile-AV-CI/achatvente/ListeChevauxAction.do?dispatch=initDataBeforeLoad";
+		$this->urlDeclarerCheval = "http://" . $urlStandard . "/cid-internet-mobile-AV-CI/achatvente/AchatChevalAction.do?dispatch=initDataBeforeLoad";
 
-		$this->urlGererSaillies="http://".$urlSir."/DPS_PRIVEES/Etalonnier/Index.jsp?serv=DPS";
-		$this->urlEditerAttestCertif="http://".$urlSir."/DPS_PRIVEES/Etalonnier/Index.jsp?serv=EDT";
-		$this->urlSuiviSanitaire="http://".$urlSir."/DPS_PRIVEES/Etalonnier/Index.jsp?serv=SAN";
+		$this->urlGererSaillies = "http://" . $urlSir . "/DPS_PRIVEES/Etalonnier/Index.jsp?serv=DPS";
+		$this->urlEditerAttestCertif = "http://" . $urlSir . "/DPS_PRIVEES/Etalonnier/Index.jsp?serv=EDT";
+		$this->urlSuiviSanitaire = "http://" . $urlSir . "/DPS_PRIVEES/Etalonnier/Index.jsp?serv=SAN";
 
-		$this->urlWebMail="https://mailsire.haras-nationaux.fr/";
-		$this->urlInfoCheval=$this->pi_getPageLink("2649");
-		$this->urlGDP2="http://www.haras-nationaux.fr/gdp2/";
+		$this->urlWebMail = "https://mailsire.haras-nationaux.fr/";
+		$this->urlInfoCheval = $this->pi_getPageLink("2649");
+		$this->urlGDP2 = "http://www.haras-nationaux.fr/gdp2/";
 
 		$this->urlGestionLieuxDetention = "#";
 	}
 
-	function getDebug(){
+	function getDebug() {
 		debug($this->personne);
 	}
 
 	/**
 	 * Fabrication de l'espace perso pour les profils 1
 	 */
-	function getEspacePersoTypeA(){
+	function getEspacePersoTypeA() {
 		//print_r($this->personne);
 
-		$content ="";
-		$content.=$this->doLoadEntete();
+		$content = "";
+		$content .= $this->doLoadEntete();
 		$subpartSeparateur = $this->cObj->getSubpart($this->templateLambda, "###SEPARATEUR###");
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 
-		$content .=$this->doLoadVotreCompte();
-		$content .=$this->doLoadCreditPoints();
-		$content .=$this->doLoadPrefPortail();
-		$content .=$this->doLoadFacture();
+		$content .= $this->doLoadVotreCompte();
+		$content .= $this->doLoadCreditPoints();
+		$content .= $this->doLoadPrefPortail();
+		$content .= $this->doLoadFacture();
 		$content .= $this->doLoadChevaux();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadCentreTechnique();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		return $content;
 	}
 
 	/**
 	 * Fabrication de l'espace perso pour les profils 2,3,4,5
 	 */
-	function getEspacePersoTypeB(){
-		$content ="";
-		$content.=$this->doLoadEntete();
+	function getEspacePersoTypeB() {
+		$content = "";
+		$content .= $this->doLoadEntete();
 		$subpartSeparateur = $this->cObj->getSubpart($this->templateLambda, "###SEPARATEUR###");
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 
-		$content .=$this->doLoadVotreCompte();
-		$content .=$this->doLoadCreditPoints();
-		$content .=$this->doLoadPrefPortail();
-		$content .=$this->doLoadFacture();
+		$content .= $this->doLoadVotreCompte();
+		$content .= $this->doLoadCreditPoints();
+		$content .= $this->doLoadPrefPortail();
+		$content .= $this->doLoadFacture();
 
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadNaissances();
-		if($this->personne["findPersonneByLoginReturn"]["profil"]["id"]==3)
+		if ($this->personne->profil->id == 3)
 			$content .= $this->doLoadSaillie();
 
 		$content .= $this->doLoadChevaux();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadCentreTechnique();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		return $content;
 	}
 
 	/**
 	 * Fabrication de l'espace perso pour les profils 8
 	 */
-	function getEspacePersoTypeC(){
-		$content ="";
-		$content.=$this->doLoadEntete();
+	function getEspacePersoTypeC() {
+		$content = "";
+		$content .= $this->doLoadEntete();
 		$subpartSeparateur = $this->cObj->getSubpart($this->templateLambda, "###SEPARATEUR###");
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 
-		$content .=$this->doLoadVotreCompte();
-		$content .=$this->doLoadPrefPortail();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->doLoadVotreCompte();
+		$content .= $this->doLoadPrefPortail();
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadServicesInternet();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadCentreTechnique();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		return $content;
 	}
 
-	function getEspacePersoTypeD(){
-		$content ="";
+	function getEspacePersoTypeD() {
+		$content = "";
 		$subpartSeparateur = $this->cObj->getSubpart($this->templateLambda, "###SEPARATEUR###");
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 
-		$content .=$this->doLoadVotreComptePersonnelHn();
-		$content .=$this->doLoadPrefPortail();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
-		if($this->personne["findPersonneByLoginReturn"]["profil"]["id"]==7)
+		$content .= $this->doLoadVotreComptePersonnelHn();
+		$content .= $this->doLoadPrefPortail();
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
+		if ($this->personne->profil->id == 7)
 			$content .= $this->doLoadServicesInternetPersonnelHnPlus();
 		else
 			$content .= $this->doLoadServicesInternetPersonnelHn();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		return $content;
 	}
 
-	function getEspacePersoTypeE(){
-		$content ="";
+	function getEspacePersoTypeE() {
+		$content = "";
 		$subpartSeparateur = $this->cObj->getSubpart($this->templateLambda, "###SEPARATEUR###");
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 
-		$content .=$this->doLoadVotreCompteNoModif();
-		$content .=$this->doLoadPrefPortail();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->doLoadVotreCompteNoModif();
+		$content .= $this->doLoadPrefPortail();
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadServicesInternetMinimum();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadCentreTechnique();
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur,array(),array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		return $content;
 	}
 
-	function doLoadEntete(){
+	function doLoadEntete() {
 		$content = "";
 		//Affichage et gestion pour passer en profil FORT
-		if($this->personne["findPersonneByLoginReturn"]["niveauIdentification"]=="FAIBLE"){
+		if ($this->personne->niveauIdentification == "FAIBLE") {
 			$subpartEnteteFaible = $this->cObj->getSubpart($this->templateLambda, "###ENTETE_FAIBLE###");
-			$markerArray["###TXT_NIVEAU_IDENT_FAIBLE###"]=htmlspecialchars($this->pi_getLL("txt_niveau_ident_faible"));
-			$markerArray["###URL_PASSAGE_IDENT_FORT###"]=$this->urlPassageIdentFort;
-			$markerArray["###LABEL_CLIC_A###"]=htmlspecialchars($this->pi_getLL("label_clic_ici"));
+			$markerArray["###TXT_NIVEAU_IDENT_FAIBLE###"] = htmlspecialchars($this->pi_getLL("txt_niveau_ident_faible"));
+			$markerArray["###URL_PASSAGE_IDENT_FORT###"] = $this->urlPassageIdentFort;
+			$markerArray["###LABEL_CLIC_A###"] = htmlspecialchars($this->pi_getLL("label_clic_ici"));
 
-			$markerArray["###TXT_CHGT_PASSWD###"]=htmlspecialchars($this->pi_getLL("txt_chgt_passwd"));
-			$markerArray["###URL_CHGT_PASSWD###"]=$this->pi_getPageLink("3681","",array("no_cache"=>"1"));
-			$markerArray["###LABEL_CLIC_B###"]=htmlspecialchars($this->pi_getLL("label_clic_ici"));
-			$content .= $this->cObj->substituteMarkerArrayCached($subpartEnteteFaible,$markerArray,array(),array());
-		}
-		else{
+			$markerArray["###TXT_CHGT_PASSWD###"] = htmlspecialchars($this->pi_getLL("txt_chgt_passwd"));
+			$markerArray["###URL_CHGT_PASSWD###"] = $this->pi_getPageLink("3681", "", array (
+				"no_cache" => "1"
+			));
+			$markerArray["###LABEL_CLIC_B###"] = htmlspecialchars($this->pi_getLL("label_clic_ici"));
+			$content .= $this->cObj->substituteMarkerArrayCached($subpartEnteteFaible, $markerArray, array (), array ());
+		} else {
 			//Changement de mot de passe
 			$markerArray = null;
 			$subpartEnteteFort = $this->cObj->getSubpart($this->templateLambda, "###ENTETE_FORT###");
-			$markerArray["###TXT_CHGT_PASSWD###"]=htmlspecialchars($this->pi_getLL("txt_chgt_passwd"));
-			$markerArray["###URL_CHGT_PASSWD###"]=$this->pi_getPageLink("3681","",array("no_cache"=>"1"));
-			$markerArray["###LABEL_CLIC_ICI###"]=htmlspecialchars($this->pi_getLL("label_clic_ici"));
-			$content .= $this->cObj->substituteMarkerArrayCached($subpartEnteteFort,$markerArray,array(),array());
+			$markerArray["###TXT_CHGT_PASSWD###"] = htmlspecialchars($this->pi_getLL("txt_chgt_passwd"));
+			$markerArray["###URL_CHGT_PASSWD###"] = $this->pi_getPageLink("3681", "", array (
+				"no_cache" => "1"
+			));
+			$markerArray["###LABEL_CLIC_ICI###"] = htmlspecialchars($this->pi_getLL("label_clic_ici"));
+			$content .= $this->cObj->substituteMarkerArrayCached($subpartEnteteFort, $markerArray, array (), array ());
 		}
 		return $content;
 	}
@@ -442,563 +474,297 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	/**
 	 * Construction de la boite votre compte
 	 */
-	function doLoadVotreCompte(){
-		$content="";
+	function doLoadVotreCompte() {
+		$content = "";
 		$subpartVotreCompte = $this->cObj->getSubpart($this->templateLambda, "###VOTRE_COMPTE###");
 		$markerArray = null;
-		$markerArray["###TITRE###"]=$this->personne["findPersonneByLoginReturn"]["titre"];
-		$markerArray["###PRENOM###"]=$this->personne["findPersonneByLoginReturn"]["prenom"];
-		$markerArray["###NOM###"]=$this->personne["findPersonneByLoginReturn"]["nom"];
-		$markerArray["###ADRESSE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["adresse"];
+		$markerArray["###TITRE###"] = $this->personne->titre;
+		$markerArray["###PRENOM###"] = $this->personne->prenom;
+		$markerArray["###NOM###"] = $this->personne->nom;
+		$markerArray["###ADRESSE###"] = $this->personne->adresse->adresse;
 
-		if($this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"] != ""){
-			$markerArray["###COMPLEMENT_ADRESSE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"]."<br/>";
-		}
-		else
-			$markerArray["###COMPLEMENT_ADRESSE###"]="";
+		if ($this->personne->adresse->complementAdresse != "") {
+			$markerArray["###COMPLEMENT_ADRESSE###"] = $this->personne->adresse->complementAdresse . "<br/>";
+		} else
+			$markerArray["###COMPLEMENT_ADRESSE###"] = "";
 
-		$markerArray["###CP###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"];
-		$markerArray["###VILLE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["libelle"];
-		$markerArray["###EMAIL###"]=$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"];
-		$markerArray["###URL_MODIF_COMPTE###"]=$this->urlModifCompte;
-		$markerArray["###LABEL_MODIFIER###"]="Modifier";
+		$markerArray["###CP###"] = $this->personne->adresse->commune->codePostal;
+		$markerArray["###VILLE###"] = $this->personne->adresse->commune->libelle;
+		$markerArray["###EMAIL###"] = $this->personne->coordonnees->email;
+		$markerArray["###URL_MODIF_COMPTE###"] = $this->urlModifCompte;
+		$markerArray["###LABEL_MODIFIER###"] = "Modifier";
 
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartVotreCompte,$markerArray,array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartVotreCompte, $markerArray, array (), array ());
 		return $content;
 	}
 
 	/**
 	 * Construction de la boite votre compte
 	 */
-	function doLoadVotreCompteNoModif(){
-		$content="";
+	function doLoadVotreCompteNoModif() {
+		$content = "";
 		$subpartVotreCompte = $this->cObj->getSubpart($this->templateLambda, "###VOTRE_COMPTE_NO_MODIF###");
 		$markerArray = null;
-		$markerArray["###TITRE###"]=$this->personne["findPersonneByLoginReturn"]["titre"];
-		$markerArray["###PRENOM###"]=$this->personne["findPersonneByLoginReturn"]["prenom"];
-		$markerArray["###NOM###"]=$this->personne["findPersonneByLoginReturn"]["nom"];
-		$markerArray["###ADRESSE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["adresse"];
+		$markerArray["###TITRE###"] = $this->personne->titre;
+		$markerArray["###PRENOM###"] = $this->personne->prenom;
+		$markerArray["###NOM###"] = $this->personne->nom;
+		$markerArray["###ADRESSE###"] = $this->personne->adresse->adresse;
 
-		if($this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"] != ""){
-			$markerArray["###COMPLEMENT_ADRESSE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"]."<br/>";
-		}
-		else
-			$markerArray["###COMPLEMENT_ADRESSE###"]="";
+		if ($this->personne->adresse->complementAdresse != "") {
+			$markerArray["###COMPLEMENT_ADRESSE###"] = $this->personne->adresse->complementAdresse . "<br/>";
+		} else
+			$markerArray["###COMPLEMENT_ADRESSE###"] = "";
 
-		$markerArray["###CP###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"];
-		$markerArray["###VILLE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["libelle"];
-		$markerArray["###EMAIL###"]=$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"];
+		$markerArray["###CP###"] = $this->personne->adresse->commune->codePostal;
+		$markerArray["###VILLE###"] = $this->personne->adresse->commune->libelle;
+		$markerArray["###EMAIL###"] = $this->personne->coordonnees->email;
 
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartVotreCompte,$markerArray,array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartVotreCompte, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadVotreComptePersonnelHn(){
-		$content="";
+	function doLoadVotreComptePersonnelHn() {
+		$content = "";
 		$subpartVotreCompte = $this->cObj->getSubpart($this->templateLambda, "###VOTRE_COMPTE_PERSONNEL_HN###");
 		$markerArray = null;
 
-		$markerArray["###EMAIL###"]=$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"];
-		$markerArray["###TITRE###"]=$this->personne["findPersonneByLoginReturn"]["titre"];
-		$markerArray["###PRENOM###"]=$this->personne["findPersonneByLoginReturn"]["prenom"];
-		$markerArray["###NOM###"]=$this->personne["findPersonneByLoginReturn"]["nom"];
-		$markerArray["###ADRESSE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["adresse"];
-		$markerArray["###CP###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"];
-		$markerArray["###VILLE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["libelle"];
+		$markerArray["###EMAIL###"] = $this->personne->coordonnees->email;
+		$markerArray["###TITRE###"] = $this->personne->titre;
+		$markerArray["###PRENOM###"] = $this->personne->prenom;
+		$markerArray["###NOM###"] = $this->personne->nom;
+		$markerArray["###ADRESSE###"] = $this->personne->adresse->adresse;
+		$markerArray["###CP###"] = $this->personne->adresse->commune->codePostal;
+		$markerArray["###VILLE###"] = $this->personne->adresse->commune->libelle;
 
-		if($this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"] != ""){
-				$markerArray["###COMPLEMENT_ADRESSE###"]=$this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"]."<br/>";
-		}
-		else
-			$markerArray["###COMPLEMENT_ADRESSE###"]="";
+		if ($this->personne->adresse->complementAdresse != "") {
+			$markerArray["###COMPLEMENT_ADRESSE###"] = $this->personne->adresse->complementAdresse . "<br/>";
+		} else
+			$markerArray["###COMPLEMENT_ADRESSE###"] = "";
 
-		$content .= $this->cObj->substituteMarkerArrayCached($subpartVotreCompte,$markerArray,array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpartVotreCompte, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadCreditPoints(){
-		$content="";
+	function doLoadCreditPoints() {
+		$content = "";
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###CREDIT_POINT###");
 		$markerArray = null;
-		if($this->personne["findPersonneByLoginReturn"]["nombrePoint"]=="" || $this->personne["findPersonneByLoginReturn"]["nombrePoint"]=="0")
-			$markerArray["###INFO_POINTS###"] ='vous n\'avez pas de cr&eacute;dit de points';
+		if ($this->personne->nombrePoint == "" || $this->personne->nombrePoint == "0")
+			$markerArray["###INFO_POINTS###"] = 'vous n\'avez pas de cr&eacute;dit de points';
 		else
-			$markerArray["###INFO_POINTS###"]= ">votre cr&eacute;dit de points s\'&eacute:l&egrave;ve &agrave;: <strong>".(($this->personne["findPersonneByLoginReturn"]["nombrePoint"]=="")?0:$this->personne["findPersonneByLoginReturn"]["nombrePoint"])." pts</strong>.</p>";
+			$markerArray["###INFO_POINTS###"] = "votre cr&eacute;dit de points s'&eacute:l&egrave;ve &agrave;: <strong>" . (($this->personne->nombrePoint == "") ? 0 : $this->personne->nombrePoint) . " pts</strong>.</p>";
 
-		$markerArray["URL_ACHAT_POINT"]=$this->urlAchatPoint;
+		$markerArray["###URL_ACHAT_POINT###"] = $this->urlAchatPoint;
 
-		$content .= $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadPrefPortail(){
-		$content="";
+	function doLoadPrefPortail() {
+		$content = "";
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###PREF_PORTAIL###");
 		$markerArray = null;
 
-		if(!isset($this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"]) || $this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"] ==""){
-			$markerArray["###CONTENT###"] ='Vous n\'avez pas sp&eacute;cifi&eacute; de mail, veuillez modifier votre compte en cons&eacute;quence afin d\'utiliser ce service.';
+		if (!isset ($this->personne->coordonnees->email) || $this->personne->coordonnees->email == "") {
+			$markerArray["###CONTENT###"] = 'Vous n\'avez pas sp&eacute;cifi&eacute; de mail, veuillez modifier votre compte en cons&eacute;quence afin d\'utiliser ce service.';
 		} else {
-			$markerArray["###CONTENT###"] = '<form action="'.$this->pi_getPageLink("2627").'" name="tx_fabformmail_pi1fname" method="POST">';
-			$markerArray["###CONTENT###"] .='<input type="hidden" name="tx_fabformmail_pi1[DATA][email]" value="'.$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"].'">';
-			$markerArray["###CONTENT###"] .='</form>';
-			$markerArray["###CONTENT###"] .='<p><input type="checkbox" id="name" '.(($this->isAbonNews)?"checked":"").' disabled>Inscrit &agrave; la news letter</p>';
-			$markerArray["###CONTENT###"] .='<p><input type="checkbox" id="name" '.(($this->isAbonAlert)?"checked":"").' disabled>Abonnement aux alertes mails</p>';
-			if($this->personne["findPersonneByLoginReturn"]["profil"]["id"]==8){
-				$markerArray["###CONTENT###"] .='<p><input type="checkbox" id="name" '.(($this->isAbonMvi)?"checked":"").' disabled>Abonnement au groupe MVI</p>';
+			$markerArray["###CONTENT###"] = '<form action="' . $this->pi_getPageLink("2627") . '" name="tx_fabformmail_pi1fname" method="POST">';
+			$markerArray["###CONTENT###"] .= '<input type="hidden" name="tx_fabformmail_pi1[DATA][email]" value="' . $this->personne->coordonnees->email . '">';
+			$markerArray["###CONTENT###"] .= '</form>';
+			$markerArray["###CONTENT###"] .= '<p><input type="checkbox" id="name" ' . (($this->isAbonNews) ? "checked" : "") . ' disabled>Inscrit &agrave; la news letter</p>';
+			$markerArray["###CONTENT###"] .= '<p><input type="checkbox" id="name" ' . (($this->isAbonAlert) ? "checked" : "") . ' disabled>Abonnement aux alertes mails</p>';
+			if ($this->personne->profil->id == 8) {
+				$markerArray["###CONTENT###"] .= '<p><input type="checkbox" id="name" ' . (($this->isAbonMvi) ? "checked" : "") . ' disabled>Abonnement au groupe MVI</p>';
 			}
 
 		}
-		$content .= $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadFacture(){
-		$content="";
+	function doLoadFacture() {
+		$content = "";
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###FACTURES###");
 		$markerArray = null;
 
-		if($this->nbreFactures !="" || $this->nbreFactures >0){
-			$markerArray["###CONTENT###"] = 'Il reste <STRONG>'.(($this->nbreFactures =="")?0:$this->nbreFactures).'</STRONG> factures en attente de r&eacute;glement pour un montant total de <STRONG>'.(($this->montantFactures == "")?0:$this->montantFactures).'</STRONG> euros TTC.';
-		}
-		else{
-			$markerArray["###CONTENT###"] ='Aucune facture en attente.';
+		if ($this->nbreFactures != "" || $this->nbreFactures > 0) {
+			$markerArray["###CONTENT###"] = 'Il reste <STRONG>' . (($this->nbreFactures == "") ? 0 : $this->nbreFactures) . '</STRONG> factures en attente de r&eacute;glement pour un montant total de <STRONG>' . (($this->montantFactures == "") ? 0 : $this->montantFactures) . '</STRONG> euros TTC.';
+		} else {
+			$markerArray["###CONTENT###"] = 'Aucune facture en attente.';
 		}
 
-		$markerArray["###URL_GESTION_FACTURES###"]='http://www4.haras-nationaux.fr/compte/Gestion_Compte.php?idClient=1&coope=&client='.$this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"];
+		$markerArray["###URL_GESTION_FACTURES###"] = 'http://www4.haras-nationaux.fr/compte/Gestion_Compte.php?idClient=1&coope=&client=' . $this->personne->key->numeroPersonne;
 
-		$content .= $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content .= $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadNaissances(){
+	function doLoadNaissances() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###NAISSANCES###");
-		$markerArray = null;
-
-		if($this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]=="" || $this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]=="0"){
-			$markerArray["###CONTENT###"] ='Vous n\'avez pas d&eacute;clar&eacute; de naissance';
-		}
-		else{
-			$markerArray["###CONTENT###"] ='Vous avez d&eacute;clar&eacute; <strong>'.(($this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]=="")?0:$this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]).'</strong> naissances en 2006.';
+		//$markerArray = null;
+		if ($this->nbreNaissance == "" || $this->nbreNaissance == "0") {
+			$markerArray["###CONTENT###"] = 'Vous n\'avez pas d&eacute;clar&eacute; de naissance';
+		} else {
+			$markerArray["###CONTENT###"] = 'Vous avez d&eacute;clar&eacute; <strong>' . (($this->nbreNaissance == "") ? 0 : $this->nbreNaissance) . '</strong> naissances en 2006.';
 		}
 
-		$markerArray["###URL_DECLA_NOUVELLE_NAISSANCE###"]=$this->urlDeclaNovelleNaissance;
-		$markerArray["###URL_DECLA_RESULT_NEGATIF###"]=$this->urlDeclaResultNeg;
-		$markerArray["###URL_CONSULT_DOSSIER###"]="http://www.haras-nationaux.fr/portail/index.php?id=3573";
+		$markerArray["###URL_DECLA_NOUVELLE_NAISSANCE###"] = $this->urlDeclaNovelleNaissance;
+		$markerArray["###URL_DECLA_RESULT_NEGATIF###"] = $this->urlDeclaResultNeg;
+		$markerArray["###URL_CONSULT_DOSSIER###"] = "http://www.haras-nationaux.fr/portail/index.php?id=3573";
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
+		return $content;
+	}
+
+	function getEspacePerso_Old() {
+		if ($this->nbreNaissance == "" || $this->nbreNaissance == "0") {
+			$markerArray["###CONTENT###"] = 'Vous n\'avez pas d&eacute;clar&eacute; de naissance';
+		} else {
+			$markerArray["###CONTENT###"] = 'Vous avez d&eacute;clar&eacute; <strong>' . (($this->nbreNaissance == "") ? 0 : $this->nbreNaissance) . '</strong> naissances en 2006.';
+		}
+
+		$markerArray["###URL_DECLA_NOUVELLE_NAISSANCE###"] = $this->urlDeclaNovelleNaissance;
+		$markerArray["###URL_DECLA_RESULT_NEGATIF###"] = $this->urlDeclaResultNeg;
+		$markerArray["###URL_CONSULT_DOSSIER###"] = "http://www.haras-nationaux.fr/portail/index.php?id=3573";
+
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 
 	}
 
-	function doLoadSaillie(){
+	function doLoadSaillie() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###SAILLIES###");
 		$markerArray = null;
 
 		//$this->nbreLieudetention["getNbrLieuDetentionReturn"]
-		$markerArray["###CONTENT###"] ='Vous g&eacute;rez '.$this->nombreEtalonSaillie.' &eacute;talons sur internet dont '.$this->nombreEtalonSaillieIA.' en IA';
+		$markerArray["###CONTENT###"] = 'Vous g&eacute;rez ' . $this->nombreEtalonSaillie . ' &eacute;talons sur internet dont ' . $this->nombreEtalonSaillieIA . ' en IA';
 
+		$markerArray["###URL_GERER_SAILLIES###"] = $this->urlGererSaillies;
+		$markerArray["###URL_EDITER_ATTESTATIONS_CERTIFICATS###"] = $this->urlEditerAttestCertif;
+		$markerArray["###URL_SUIVI_SANITAIRE###"] = $this->urlSuiviSanitaire;
 
-		$markerArray["###URL_GERER_SAILLIES###"]=$this->urlGererSaillies;
-		$markerArray["###URL_EDITER_ATTESTATIONS_CERTIFICATS###"]=$this->urlEditerAttestCertif;
-		$markerArray["###URL_SUIVI_SANITAIRE###"]=$this->urlSuiviSanitaire;
-
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadLieuxDetention(){
+	function doLoadLieuxDetention() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###LIEUX_DETENTION###");
 		$markerArray = null;
-		if($this->nbreLieudetention["getNbrLieuDetentionReturn"]=="" || $this->nbreLieudetention["getNbrLieuDetentionReturn"]=="0"){
+		if ($this->nbreLieudetention == "" || $this->nbreLieudetention == "0") {
 			$content .= '<p>Vous n\'avez pas de lieu de d&eacute;tention en gestion</p>';
-		} else{
-			$content .= '<p>Vous g&eacute;rez <strong>'.(($this->nbreLieudetention["getNbrLieuDetentionReturn"]=="")?0:$this->nbreLieudetention["getNbrLieuDetentionReturn"]).'</strong> lieux de d&eacute;tention d\'&eacute;quid&eacute;s.</p>';
+		} else {
+			$content .= '<p>Vous g&eacute;rez <strong>' . (($this->nbreLieudetention == "") ? 0 : $this->nbreLieudetention) . '</strong> lieux de d&eacute;tention d\'&eacute;quid&eacute;s.</p>';
 		}
-		$markerArray["###CONTENT###"]=$content;
-		$markerArray["###URL_GESTION_LIEUX_DETENTION###"]=$this->urlGestionLieuxDetention;
+		$markerArray["###CONTENT###"] = $content;
+		$markerArray["###URL_GESTION_LIEUX_DETENTION###"] = $this->urlGestionLieuxDetention;
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 
 	}
 
-	function doLoadChevaux(){
+	function doLoadChevaux() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###CHEVAUX###");
 		$markerArray = null;
 
-		$markerArray["###NOMBRE_CHEVAUX###"] =(($this->nbreChevaux["getNbrChevauxReturn"]=="")?0:$this->nbreChevaux["getNbrChevauxReturn"]);
-		$markerArray["###CHEVAL_ACCORD###"] =(($this->nbreChevaux["getNbrChevauxReturn"]<2)?"cheval":"chevaux");
+		$markerArray["###NOMBRE_CHEVAUX###"] = (($this->nbreChevaux == "") ? 0 : $this->nbreChevaux);
+		$markerArray["###CHEVAL_ACCORD###"] = (($this->nbreChevaux < 2) ? "cheval" : "chevaux");
 
-		$markerArray["###URL_GERER_CONSULTER_CHEVAL###"]=$this->urlGererConsulterCheval;
-		$markerArray["###URL_DECLARER_CHEVAL###"]=$this->urlDeclarerCheval;
+		$markerArray["###URL_GERER_CONSULTER_CHEVAL###"] = $this->urlGererConsulterCheval;
+		$markerArray["###URL_DECLARER_CHEVAL###"] = $this->urlDeclarerCheval;
 		// pas d'autres modifs VM
-		$markerArray["###URL_AJOUT_SOS_POULAIN###"]=$this->urlAjoutSosPoulain;
-		$markerArray["###URL_MODIF_SOS_POULAIN###"]=$this->urlModifSosPoulain;
-		$markerArray["###URL_GERER_CHEVAUX_VENDRE###"]=$this->urlGererConsulterCheval;
-		$markerArray["###URL_DECLARER_CHEVAL_VENDRE###"]=$this->urlDeclarerCheval;
+		$markerArray["###URL_AJOUT_SOS_POULAIN###"] = $this->urlAjoutSosPoulain;
+		$markerArray["###URL_MODIF_SOS_POULAIN###"] = $this->urlModifSosPoulain;
+		$markerArray["###URL_GERER_CHEVAUX_VENDRE###"] = $this->urlGererConsulterCheval;
+		$markerArray["###URL_DECLARER_CHEVAL_VENDRE###"] = $this->urlDeclarerCheval;
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadCentreTechnique(){
+	function doLoadCentreTechnique() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###CENTRE_TECHNIQUE###");
 		$markerArray = null;
 
-		$markerArray["###NOM###"]=$this->ct["nom"];
-		$markerArray["###ADRESSE###"]=$this->ct["adresse1"];
-		$markerArray["###ADRESSE2###"]=$this->ct["adresse2"];
-		$markerArray["###CP###"]=$this->ct["codePostal"];
-		$markerArray["###VILLE###"]=$this->ct["libelleCommune"];
+		$markerArray["###NOM###"] = $this->ct["nom"];
+		$markerArray["###ADRESSE###"] = $this->ct["adresse1"];
+		$markerArray["###ADRESSE2###"] = $this->ct["adresse2"];
+		$markerArray["###CP###"] = $this->ct["codePostal"];
+		$markerArray["###VILLE###"] = $this->ct["libelleCommune"];
 
-		$txt=null;
-		if($this->ct["actCtmp"]=="O")
-			$txt =($txt == null)?"Centre de mise en place":$txt." et Centre de mise en place";
-		if($this->ct["actCtpr"]=="O")
-			$txt =($txt == null)?"Centre de production":$txt." et Centre de production";
-		if($this->ct["actCttre"]=="O")
-			$txt =($txt == null)?"Centre de transfert":$txt." et centre de transfert embryonnaire";
-		if($txt != null) $markerArray["###TEXT###"]=$txt."<br/>";
-		else $markerArray["###TEXT###"]="";
+		$txt = null;
+		if ($this->ct["actCtmp"] == "O")
+			$txt = ($txt == null) ? "Centre de mise en place" : $txt . " et Centre de mise en place";
+		if ($this->ct["actCtpr"] == "O")
+			$txt = ($txt == null) ? "Centre de production" : $txt . " et Centre de production";
+		if ($this->ct["actCttre"] == "O")
+			$txt = ($txt == null) ? "Centre de transfert" : $txt . " et centre de transfert embryonnaire";
+		if ($txt != null)
+			$markerArray["###TEXT###"] = $txt . "<br/>";
+		else
+			$markerArray["###TEXT###"] = "";
 
+		$markerArray["###TEL###"] = $this->ct["telephone"];
+		$markerArray["###FAX###"] = $this->ct["telecopie"];
+		$markerArray["###PORT###"] = $this->ct["telPortable"];
+		$markerArray["###MAIL###"] = $this->ct["mail"];
 
-		$markerArray["###TEL###"]=$this->ct["telephone"];
-		$markerArray["###FAX###"]=$this->ct["telecopie"];
-		$markerArray["###PORT###"]=$this->ct["telPortable"];
-		$markerArray["###MAIL###"]=$this->ct["mail"];
-
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadServicesInternetMinimum(){
+	function doLoadServicesInternetMinimum() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###SERVICES_INTERNET_MINIMUM###");
 		$markerArray = null;
-		$markerArray["###URL_CONTROLE###"]=$this->urlControle;
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$markerArray["###URL_CONTROLE###"] = $this->urlControle;
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadServicesInternet(){
+	function doLoadServicesInternet() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###SERVICES_VETO_IDENT###");
 		$markerArray = null;
 
-		$markerArray["###URL_TRANSPONDEUR###"]=$this->urlTranspondeur;
-		$markerArray["###URL_CONTROLE###"]=$this->urlControle;
-		$markerArray["###URL_COMMANDER###"]="#";
+		$markerArray["###URL_TRANSPONDEUR###"] = $this->urlTranspondeur;
+		$markerArray["###URL_CONTROLE###"] = $this->urlControle;
+		$markerArray["###URL_COMMANDER###"] = "#";
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadServicesInternetPersonnelHn(){
+	function doLoadServicesInternetPersonnelHn() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###SERVICES_PERSONNEL_HN###");
 		$markerArray = null;
 
-		$markerArray["###URL_COMMANDER###"]="#";
-		$markerArray["###URL_WEBMAIL###"]=$this->urlWebMail;
-		$markerArray["###URL_AGENDA###"]="#";
-		$markerArray["###URL_INFO_CHEVAL###"]=$this->pi_getPageLink("2649");
-		$markerArray["###URL_GDP###"]=$this->urlGDP2;
+		$markerArray["###URL_COMMANDER###"] = "#";
+		$markerArray["###URL_WEBMAIL###"] = $this->urlWebMail;
+		$markerArray["###URL_AGENDA###"] = "#";
+		$markerArray["###URL_INFO_CHEVAL###"] = $this->pi_getPageLink("2649");
+		$markerArray["###URL_GDP###"] = $this->urlGDP2;
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 
-	function doLoadServicesInternetPersonnelHnPlus(){
+	function doLoadServicesInternetPersonnelHnPlus() {
 		$subpart = $this->cObj->getSubpart($this->templateLambda, "###SERVICES_PERSONNEL_HN_PLUS###");
 		$markerArray = null;
 
-		$markerArray["###URL_TRANSPONDEUR###"]=$this->urlTranspondeur;
-		$markerArray["###URL_CONTROLE###"]=$this->urlControle;
-		$markerArray["###URL_COMMANDER###"]="#";
-		$markerArray["###URL_WEBMAIL###"]=$this->urlWebMail;
-		$markerArray["###URL_AGENDA###"]="#";
-		$markerArray["###URL_INFO_CHEVAL###"]=$this->urlInfoCheval;
-		$markerArray["###URL_GDP###"]=$this->urlGDP2;
+		$markerArray["###URL_TRANSPONDEUR###"] = $this->urlTranspondeur;
+		$markerArray["###URL_CONTROLE###"] = $this->urlControle;
+		$markerArray["###URL_COMMANDER###"] = "#";
+		$markerArray["###URL_WEBMAIL###"] = $this->urlWebMail;
+		$markerArray["###URL_AGENDA###"] = "#";
+		$markerArray["###URL_INFO_CHEVAL###"] = $this->urlInfoCheval;
+		$markerArray["###URL_GDP###"] = $this->urlGDP2;
 
-		$content = $this->cObj->substituteMarkerArrayCached($subpart,$markerArray,array(),array());
-		return $content;
-	}
-
-	function getEspacePerso_Old(){
-		$content='
-
-		<!-- le contenu de l\'espace prive -->
-		<div id="ligneA">
-			<div id="left">
-				<fieldset>
-					<legend>Votre compte</legend>
-					<div id="contenuBox">
-						<p>
-						'.$this->personne["findPersonneByLoginReturn"]["titre"].' '.$this->personne["findPersonneByLoginReturn"]["prenom"].' '.$this->personne["findPersonneByLoginReturn"]["nom"].'<br/>
-						'.$this->personne["findPersonneByLoginReturn"]["adresse"]["adresse"].'<br/>';
-						if($this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"] != ""){
-							$content .=$this->personne["findPersonneByLoginReturn"]["adresse"]["complementAdresse"].'<br/>';
-						}
-						$content .=
-						$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["codePostal"].' '.$this->personne["findPersonneByLoginReturn"]["adresse"]["commune"]["libelle"].'<br/>
-						'.$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"] .'<br/>
-						</p>
-					</div>
-					<div id="boutonBoitePosition">
-						<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlModifCompte.'">Modifier</a>
-					</div>
-				</fieldset>
-			</div>
-			<div id="right">
-				<fieldset>
-					<legend>Votre cr�dit de points</legend>
-					<div id="contenuBox">
-						<p>Actuellement, ';
-						if($this->personne["findPersonneByLoginReturn"]["nombrePoint"]=="" || $this->personne["findPersonneByLoginReturn"]["nombrePoint"]=="0"){
-							$content .='vous n\'avez pas de cr&eacute;dit de points';
-						}
-						else{
-						$content .='
-							<br/>votre cr�dit de points s\'�l�ve �: <strong>'.(($this->personne["findPersonneByLoginReturn"]["nombrePoint"]=="")?0:$this->personne["findPersonneByLoginReturn"]["nombrePoint"]).' pts</strong>.</p>';
-						}
-						$content.='
-					</div>
-					<div id="boutonBoitePosition">
-						<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlAchatPoint.'">Acheter</a>
-					</div>
-				</fieldset>
-			</div>
-		</div>
-		<div id="ligneB">
-			<div id="left">
-				<fieldset>
-					<legend>Vos pr�f�rences portail</legend>
-					<div id="contenuBox">
-					<p>
-					';
-					if(!isset($this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"]) || $this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"] ==""){
-						$content.='Vous n\'avez pas sp�cifi� de mail, veuillez modifier votre compte en cons�quence afin d\'utiliser ce service.';
-					} else {
-
-					$content.='
-					<form action="'.$this->pi_getPageLink("2627").'" name="tx_fabformmail_pi1fname" method="POST">
-					 	<input type="hidden" name="tx_fabformmail_pi1[DATA][email]" value="'.$this->personne["findPersonneByLoginReturn"]["coordonnees"]["email"].'">
-					</form>
-						<div style="float:left;width:330px">
-							<p><input type="checkbox" id="name" '.(($this->isAbonNews)?"checked":"").' disabled>Inscrit � la news letter</p>
-						</div>
-						<div style="float:left;width:330px">
-							<p><input type="checkbox" id="name" '.(($this->isAbonAlert)?"checked":"").' disabled>Abonnement aux alertes mails</p>
-						</div>
-					';
-					}
-					$content.='
-					</p>
-					</div>
-					<div id="boutonBoitePosition">
-						<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="javascript:document.tx_fabformmail_pi1fname.submit();">Modifier</a>
-					</div>
-				</fieldset>
-			</div>';
-		if($this->personne["findPersonneByLoginReturn"]["niveauIdentification"]=="FAIBLE"){
-			$content .='
-			<div id="right">
-				<fieldset>
-					<legend>Vos factures</legend>
-					<div id="contenuBox">&nbsp;</div>
-					<div id="boutonBoitePosition">
-						&nbsp;
-						<a id="lienFonctionPetit" style="color:white;text-decoration:none" target="_blank" href="http://www4.haras-nationaux.fr/compte/Gestion_Compte.php?idClient=0&coope='.$_SESSION["portalId"].'&client=">T�l�charger mes factures et avoir</a>
-					</div>
-				</fieldset>
-			</div>
-		</div>';
-		}
-
-			if($this->personne["findPersonneByLoginReturn"]["niveauIdentification"]=="FORT"){
-			$content .='
-			<!-- Affiche si fort -->
-			<div id="right">
-				<fieldset>
-					<legend>Vos factures</legend>
-					<div id="contenuBox">
-					<p>
-					';
-					if($this->nbreFactures !="" || $this->nbreFactures >0){
-						$content.='Il reste <STRONG>'.(($this->nbreFactures =="")?0:$this->nbreFactures).'</STRONG> factures en attente de r�glement pour un montant total de <STRONG>'.(($this->montantFactures == "")?0:$this->montantFactures).'</STRONG> euros TTC.';
-					}
-					else{
-						$content.='Aucune facture en attente.';
-					}
-					$content.='
-					</p>
-					</div>
-					<div id="boutonBoitePosition">
-						&nbsp;
-						<a id="lienFonctionPetit" style="color:white;text-decoration:none" target="_blank" href="http://www4.haras-nationaux.fr/compte/Gestion_Compte.php?idClient=1&coope=&client='.$this->personne["findPersonneByLoginReturn"]["key"]["numeroPersonne"].'">T�l�charger mes factures et avoir</a>
-					</div>
-				</fieldset>
-			</div>
-		</div>
-		<hr STYLE="margin-top:20px;margin-bottom:10px;width:685px;float:left;">
-		<div id="ligneC">
-			<div id="left">
-				<fieldset>
-					<legend>Vos naissances</legend>
-					<div id="contenuBox">
-					<p>';
-					if($this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]=="" || $this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]=="0"){
-						$content .='Vous n\'avez pas d&eacute;clar&eacute; de naissance';
-					}
-					else{
-						$content .='Vous avez d�clar� <strong>'.(($this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]=="")?0:$this->nbreNaissance["getNbrNaissanceAnneeEnCoursReturn"]).'</strong> naissances en 2006.';
-					}
-					$content .='
-					</p>
-					<div id="boutonBoitePosition">
-						<a id="lienFonctionPetit" style="float:right;color:white;text-decoration:none" href="'.$this->urlDeclaNovelleNaissance.'" target="_blank">Consulter - G�rer vos naissances</a>
-					</div>
-					<div id="boutonBoitePosition">
-					<a id="lienFonctionPetit" style="float:right;color:white;text-decoration:none" href="'.$this->urlDeclaResultNeg.'" target="_blank">D�clarer un r�sultat n�gatif</a>
-					</div>
-					<div id="boutonBoitePosition">
-					<a id="lienFonctionPetit" style="float:right;color:white;text-decoration:none" href="http://www.haras-nationaux.fr/portail/index.php?id=3573">Consulter un dossier d\'�levage</a>
-					</div>
-					</div>
-				</fieldset>
-			</div>
-			<!--
-			<div id="right">
-				<fieldset>
-					<legend>Vos lieux de d�tention</legend>
-					<div id="contenuBox">';
-					if($this->nbreLieudetention["getNbrLieuDetentionReturn"]=="" || $this->nbreLieudetention["getNbrLieuDetentionReturn"]=="0"){
-						$content .= '<p>Vous n\'avez pas de lieu de d�tention en gestion</p>';
-					} else{
-						$content .= '<p>Vous g�rez <strong>'.(($this->nbreLieudetention["getNbrLieuDetentionReturn"]=="")?0:$this->nbreLieudetention["getNbrLieuDetentionReturn"]).'</strong> lieux de d�tention d\'�quid�s.</p>';
-					}
-					$content .='
-					</div>
-					<div id="boutonBoitePosition"><a id="lienFonctionPetit" style="float:right;color:white;text-decoration:none" href="#">Consulter - G�rer</a></div>
-				</fieldset>
-			</div>
-			-->
-		</div>
-		<div id="ligneD">
-			<div id="large">
-				<fieldset>
-					<legend>Vos chevaux</legend>
-						<div style="float:left;width:330px">
-							<p>Vous �tes propri�taire de <strong>'.(($this->nbreChevaux["getNbrChevauxReturn"]=="")?0:$this->nbreChevaux["getNbrChevauxReturn"]).'</strong> '.(($this->nbreChevaux["getNbrChevauxReturn"]<2)?"cheval":"chevaux").'
-							<!--
-							<div style="float:right;margin:2px;">
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlGererConsulterCheval.'">Consulter - G�rer</a>
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlDeclarerCheval.'"">D�clarer un achat</a>
-							</div>
-							-->
-							</p>
-						</div>
-						<div style="float:right;width:330px">
-							<p><!-- Vous avez <strong>KO</strong> --> Annonces S.O.S poulain.
-							<div style="float:right;margin:2px;">
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlAjoutSosPoulain.'">Modifier</a>
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlModifSosPoulain.'">Ajouter</a>
-							</div>
-							</p>
-						</div>
-						<div style="float:left;width:330px;margin-top:10px">
-							&nbsp;
-						</div>
-						<div style="float:right;width:330px;margin-top:10px">
-							<!--<p>Vous avez <strong>PAS DE WEB SERVICE</strong> annonces chevaux � vendre.
-							<div style="float:right;margin:2px;">
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="#">Modifier</a>
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="#">Ajouter</a>
-							</div>-->
-							<p>Vos annonces chevaux � vendre.
-							<div style="float:right;margin:2px;">
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlGererConsulterCheval.'">Modifier</a>
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlDeclarerCheval.'"">Ajouter</a>
-							</div>
-							</p>
-						</div>
-				</fieldset>
-			</div>
-		</div>
-		<!-- END -->';
-		}
-		//////////////////////////////////////////////////////////////
-		else if($this->personne["findPersonneByLoginReturn"]["niveauIdentification"]=="FAIBLE"){
-			$content .='
-		<div id="ligneD">
-			<div id="large">
-				<fieldset>
-					<legend>Vos chevaux</legend>
-						<div style="float:left;width:330px;">
-							<p>Vos annonces chevaux � vendre.
-							<div style="float:right;margin:2px;">
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlGererConsulterCheval.'">Modifier</a>
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlDeclarerCheval.'"">Ajouter</a>
-							</div>
-							</p>
-						</div>
-						<div style="float:right;width:330px;">
-							<p>Vos annonces S.O.S poulain.
-							<div style="float:right;margin:2px;">
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlAjoutSosPoulain.'">Modifier</a>
-								<a id="lienFonctionPetit" style="color:white;text-decoration:none" href="'.$this->urlModifSosPoulain.'">Ajouter</a>
-							</div>
-							</p>
-						</div>
-				</fieldset>
-			</div>
-		</div>
-		<!-- END -->';
-		} else {
-			$content .='</div>';
-		}
-		$content .='
-		<hr STYLE="margin-top:20px;margin-bottom:10px;width:685px;float:left;">';
-		if($this->ct != null){
-		$content .='
-		<div id="ligneD">
-			<div id="large">
-				<fieldset>
-					<legend>Votre interlocuteur des Haras nationaux le plus proche</legend><p>
-					'.$this->ct["nom"].'<br/>';
-					//$this->pi_linkToPage($this->ct["nom"],2973,'',array("numPerso"=>$this->ct["numPerso"],"action"=>"liste","no_cache"=>1)).'<br/>';
-					$txt = null;
-					if($this->ct["actCtmp"]=="O")
-						$txt =($txt == null)?"Centre de mise en place":$txt." et Centre de mise en place";
-					if($this->ct["actCtpr"]=="O")
-						$txt =($txt == null)?"Centre de production":$txt." et Centre de production";
-					if($this->ct["actCttre"]=="O")
-						$txt =($txt == null)?"Centre de transfert":$txt." et centre de transfert embryonnaire";
-					if($txt != null) $content .=$txt."<br />";
-					$content .="<span id='adresseCT'>".$this->ct["adresse1"]."</span> <span id='adresseCT'>".$this->ct["adresse2"]."</span> <span id='codepostalCT'>".$this->ct["codePostal"]."</span> <span id='communeCT'>".$this->ct["libelleCommune"]."</span><br/>";
-					if($this->ct["telephone"] != "")
-					$content .=$this->pi_getLL("libelle_telephone")." : ".$this->ct["telephone"];
-					if($this->ct["telecopie"] != ""){
-						$content .=" ".$this->ct["telecopie"];
-					}
-					if($this->ct["telPortable"]){
-						$content .=" ".$this->pi_getLL("libelle_telport")." : ".$this->ct["telPortable"];
-					}
-					if($this->ct["mail"]){
-						$content .=" ".$this->pi_getLL("libelle_mail")." : ".$this->ct["mail"];
-					}
-					$content.='
-				</fieldset>
-			</div>
-		</div>
-		<hr STYLE="margin-top:20px;margin-bottom:10px;width:685px;float:left;">';
-		}
-		//$content .="</div>";*/
-
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube04_CAS/pi5/class.tx_dlcube04CAS_pi5.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube04_CAS/pi5/class.tx_dlcube04CAS_pi5.php"]);
+if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube04_CAS/pi5/class.tx_dlcube04CAS_pi5.php"]) {
+	include_once ($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube04_CAS/pi5/class.tx_dlcube04CAS_pi5.php"]);
 }
-
 ?>

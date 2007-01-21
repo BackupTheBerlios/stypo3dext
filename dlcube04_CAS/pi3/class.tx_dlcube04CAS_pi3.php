@@ -1,19 +1,19 @@
 <?php
 /***************************************************************
 *  Copyright notice
-*  
+*
 *  (c) 2004 Vincent (admin, celui à la pioche) (webtech@haras-nationaux.fr)
 *  All rights reserved
 *
-*  This script is part of the TYPO3 project. The TYPO3 project is 
+*  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
-* 
+*
 *  The GNU General Public License can be found at
 *  http://www.gnu.org/copyleft/gpl.html.
-* 
+*
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***********************************************         	****************/
-/** 
+/**
  * Plugin 'creation de compte' for the 'dlcube04_CAS' extension.
  * Plugin de creationde compte CAS
  *
@@ -36,7 +36,8 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 	var $prefixId = "tx_dlcube04CAS_pi3";		// Same as class name
 	var $scriptRelPath = "pi3/class.tx_dlcube04CAS_pi3.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube04_CAS";	// The extension key.
-	
+	var $typeExecution = "dev_ext"; /**dev|dev_ext|prod*/
+
 	/**
 	 * Plug-in pour création de comptes CAS
 	 */
@@ -46,7 +47,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_loadLL();
 		session_start();
-		
+
 		$content='';
 		if(!isset($this->piVars["action"])){
 			$content = $this->getFormulaireVide();
@@ -57,7 +58,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 				$content .=$this->getFormulaireVide();
 				return $this->pi_wrapInBaseClass($content);
 			}
-			
+
 			if($this->piVars["action"] == "" || $this->piVars["login"] == "" || $this->piVars["passwd1"] == "" || $this->piVars["passwd2"] == "" ){
 				$content='<h3>'.htmlspecialchars($this->pi_getLL("error_missing_field")).'<br/></h3>';
 				$content .=$this->getFormulaireVide();
@@ -75,25 +76,31 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 				$content .=$this->getFormulaireVide();
 			}
 			else{
-				$ws = new WebservicesCompte();
+				$ws = new WebservicesCompte($this->typeExecution);
 				if(!$ws->connectServices()){
 					$content="ERROR:".$ws->getErrorMessage();
 				}
 				else{
-					
+
 					$md5 = "{MD5}".base64_encode(mhash(MHASH_MD5,$this->piVars["passwd1"]));
-					$param[] = array(
-					"login"=> $this->piVars["login"],
-					"password"=> $md5,
-					"ctx"=> null);
-					$result = $ws->createCompte($param);
-					if($result["createCompteCasForPortailReturn"] == "0"){
+					//$md5 = $this->piVars["passwd1"];
+					$param = array(
+					"in0"=> $this->piVars["login"],
+					"in1"=> $md5,
+					"in2"=> "");
+					$result = $ws->createCompte($param)->out;
+
+					if($ws->getErrorMessage()!=""){
+						$content = '<font color="red">'.$ws->getErrorMessage.'</font><br/>';
+					}
+
+					if($result == "0" || $result ==""){
 						$content = $this->success();
 					}
-					else if($result["createCompteCasForPortailReturn"] == "1945"){
+					else if($result == "1945"){
 						$content = $this->errorLoginExiste();
 					}
-					else if($result["createCompteCasForPortailReturn"] == "1944"){
+					else if($result == "1944"){
 						$content = "ERREUR SERVEUR LOGIN ET OU MOT DE PASSE VIDENT<br/>";
 						/*$content.="--------TRACE-------<br/>";
 						$content.="login:".$this->piVars["login"]."<br/>";
@@ -102,7 +109,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 						$content.="resultat du WS:".$result["createCompteCasForPortailReturn"];*/
 					}
 					else{
-						$content = "ERREUR INCONNUE<br/>";
+						$content = "ERREUR INCONNUE".$result.":<br/>";
 						/*$content.="--------TRACE-------<br/>";
 						$content.="login:".$this->piVars["login"]."<br/>";
 						$content.="passwd:".$this->piVars["passwd1"]."<br/>";
@@ -116,9 +123,9 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 			$content = "<h1>error</h1>";
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
 	/**
-	 * Ecrit un message d'erreur	
+	 * Ecrit un message d'erreur
 	 * @return void
 	 */
 	function errorLoginExiste(){
@@ -127,7 +134,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 		$content .=$this->getFormulaireVide();
 		return $content;
 	}
-	
+
 	function checkLogin($login){
 		for($i=0; $i < strlen($login);$i++){
 			if(!ereg("[A-Za-z]|[0-9]|\.|\-|_]",$login[$i])){
@@ -136,9 +143,9 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * Inscrit un message de félicitation	
+	 * Inscrit un message de félicitation
 	 * @return void
 	 */
 	function success(){
@@ -146,9 +153,9 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 			<div><h3>'.$this->pi_getLL("txt_success_create").' <a href="'.$this->pi_getPageLink("3677").'">'.htmlspecialchars($this->pi_getLL("label_clic_ici")).'</a><br/></h3><hr/></div>';
 		return $content;
 	}
-	
+
 	/**
-	 * ecrit un nouveau formulaire	
+	 * ecrit un nouveau formulaire
 	 * @return void
 	 */
 	function getFormulaireVide(){
@@ -156,9 +163,9 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 			<script>
 				function check(){
 					var monLogin = document.formCrea["'.$this->prefixId.'[login]'.'"].value;
-					
+
 					var reg1 = /[A-Z]|[0-9]|-|_|\./;
-					
+
 					for(i=0;i < monLogin.length;i++){
 						alert(reg1.test(monLogin[i]));
 						if (!reg1.test(monLogin[i])){
@@ -166,10 +173,10 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 							return false;
 						}
 					}
-					
+
 					return true;
 				}
-				
+
 				function checkSub(){
 					document.formCrea.submit();
 				}
