@@ -52,6 +52,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 	var $urlPDF;
 	var $urlINRA;
 	var $error;
+	var $typeDev = "prod";
 	/**
 	 * [Put your description here]
 	 */
@@ -64,9 +65,11 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		$this->fiches_folder="uploads/tx_dlcubehn02/fichesen/";
 		$this->photos_folder="uploads/tx_dlcubehn02/fichesen/photos/";
 
-		$this->geoHelper = new GeoHelper();
-		$this->chevalHelper = new WebservicesAccess();
-		$this->critHelper = new WebservicesCriteres();
+		$this->typeDev="dev";
+
+		$this->geoHelper = new GeoHelper($this->typeDev);
+		$this->chevalHelper = new WebservicesAccess($this->typeDev);
+		$this->critHelper = new WebservicesCriteres($this->typeDev);
 		session_start();
 
 
@@ -97,7 +100,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		$objTransfert->setKey("codeCheval");
 		$objTransfert->setValue($_GET["codeCheval"]);
 		$param[count($param)] = $objTransfert;
-		$wsCt = new WebservicesAccess();
+		$wsCt = new WebservicesAccess($this->typeDev);
 		if($wsCt->connect()){
 			// return $ws->getErrorMessage();
 			$resultCT = $wsCt->getAllCT4Etalon($param);
@@ -196,11 +199,11 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 			$param[count($param)] = $objTransfert;
 		}
 
-		$wschcmp = new WebservicesAccess();
+		$wschcmp = new WebservicesAccess($this->typeDev);
 		if($wschcmp->connect()){
 			$resultCh = $wschcmp->getAllListEtalon2Cmp($param);
 			$content.='<table cellspacing="0" width="95%" cellpading="0">';
-			$content.='<TR><TH style="border-width:thin;border-color:red;border-style:solid;">Nom du cheval</TH><TH style="border-width:thin;border-color:red;border-style:solid;">race</TH><TH style="border-width:thin;border-color:red;border-style:solid;">robe</TH><TH style="border-width:thin;border-color:red;border-style:solid;">prix</TH><TH style="border-width:thin;border-color:red;border-style:solid;">points forts</TH><TH style="border-width:thin;border-color:red;border-style:solid;">Voir</TH></TR>';
+			$content.='<TR><TH style="border-width:thin;border-color:red;border-style:solid;">Nom de l\'étalon</TH><TH style="border-width:thin;border-color:red;border-style:solid;">race</TH><TH style="border-width:thin;border-color:red;border-style:solid;">robe</TH><TH style="border-width:thin;border-color:red;border-style:solid;">prix</TH><TH style="border-width:thin;border-color:red;border-style:solid;">points forts</TH><TH style="border-width:thin;border-color:red;border-style:solid;">Voir</TH></TR>';
 			foreach($resultCh as $cheval){
 				$content.='<TR><TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;">'.$cheval["nomCheval"].'</TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;">'.$cheval["raceLibelle"].'</TD>';
@@ -210,17 +213,14 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				$content.='Naissance:'.$cheval["prixNaissance"].'&euro;<br/></TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;">&nbsp;';
 				if($cheval["pointFort1"]!= "")
-					$content.=$cheval["pointFort1"].'<br/>';
+					$content.=utf8_decode($cheval["pointFort1"]).'<br/>';
 				if($cheval["pointFort2"]!= "")
-					$content.=$cheval["pointFort2"].'<br/>';
+					$content.=utf8_decode($cheval["pointFort2"]).'<br/>';
 				if($cheval["pointFort3"]!= "")
-					$content.=$cheval["pointFort3"].'<br/>';
+					$content.=utf8_decode($cheval["pointFort3"]).'<br/>';
 				$content.='</TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;">';
-				$content.=$this->pi_list_linkSingle("Fiche détaillée",$cheval["codeCheval"],1)."<br/>";
-				if(file_exists($this->photos_folder.$cheval["codeCheval"].".jpg")){
-					$content .='<a href="'.$this->photos_folder.$cheval["codeCheval"].'.jpg">Photo</a><br/>';
-				}
+				$content.=$this->pi_list_linkSingle("Fiche détaillée avec photo",$cheval["codeCheval"],1)."<br/>";
 				if($cheval["urlVideo"] != "" ){
 					$content .='<a href="'.$cheval["urlVideo"].'" target="_blank">Vidéo</a>';
 				}
@@ -228,6 +228,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 			}
 			$content.='</table>';
 			$content .='<br/><br/><a style="color:white;text-decoration:none" id="lienFonctionPetit" href="index.php?id='.$GLOBALS["TSFE"]->id.'">'.htmlspecialchars($this->pi_getLL("libelle_nouvelle_recherche")).'</a>';
+			$content .='  <a href="javascript:history.back()" id="lienFonctionPetit" style="color:white;text-decoration:none">'.htmlspecialchars($this->pi_getLL("libelle_retour_liste")).'</a>';
 		}
 		else {
 			echo "<div> Error:".$wsCt->getErrorMessage()."</div>";
@@ -253,23 +254,14 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				<input type="hidden" name="no_cache" value="1">
 				<input type="hidden" name="'.$this->prefixId.'[action]" value="newListe">
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_orientation_production")).'</strong></p>
-					<div style="float:right;width:50%;">
-						<select name="'.$this->prefixId.'[orientation_production]">
-							<option></option>';
-							$listOrientation = $this->critHelper->getAllTypeOrientationProduction();
-							if(!$listOrientation)
-								$content.="<option>".$this->critHelper->getErrorMessage()."</option>";
-							foreach($listOrientation as $orientation){
-								$content.="<option value='".$orientation['codeFinalite']."'>".$orientation['libelleLong']."</option>";
-							}
-			$content.='
-						</select>
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_cheval_nom")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
+						<input type="text" name="'.$this->prefixId.'[nomcheval]" value="">
 					</div>
 				</div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_type_equide")).'</strong></p>
-					<div style="float:right;width:50%;">
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_type_equide")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<select name="'.$this->prefixId.'[type_equide]'.'">
 							<option></option>
 							<option value="S">sang</option>
@@ -279,9 +271,13 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 						</select>
 					</div>
 				</div>
+				<div style="float:left;width:100%;"><hr></div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_cheval_race")).'</strong></p>
-					<div style="float:right;width:50%;">
+					<div style="float:left;width:100%;margin-bottom:2px;">
+						Seules les races d\'étalon dont la semence est disponible aux Haras nationaux sont proposées.
+					</div>
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_cheval_race")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<select name="'.$this->prefixId.'[groupe_race]">
 							<option></option>';
 							$listRaces = $this->chevalHelper->getAllRaces($filter);
@@ -295,14 +291,23 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					</div>
 				</div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_cheval_nom")).'</strong></p>
-					<div style="float:right;width:50%;">
-						<input type="text" name="'.$this->prefixId.'[nomcheval]" value="">
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_orientation_production")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
+						<select name="'.$this->prefixId.'[orientation_production]">
+							<option></option>';
+							$listOrientation = $this->critHelper->getAllTypeOrientationProduction();
+							if(!$listOrientation)
+								$content.="<option>".$this->critHelper->getErrorMessage()."</option>";
+							foreach($listOrientation as $orientation){
+								$content.="<option value='".$orientation['codeFinalite']."'>".$orientation['libelleLong']."</option>";
+							}
+			$content.='
+						</select>
 					</div>
 				</div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_code_gen")).'<br/>'.htmlspecialchars($this->pi_getLL("libelle_code_gen_plus")).'</strong></p></td>
-					<div style="float:right;width:50%;">
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_code_gen")).'<br/>'.htmlspecialchars($this->pi_getLL("libelle_code_gen_plus")).'</strong></p></td>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<select name="'.$this->prefixId.'[code_gen]">
 							<option></option>
 							<option value="ELI">Elite</option>
@@ -321,8 +326,8 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				</div>
 				-->
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_region")).'</strong></p>
-					<div style="float:right;width:50%;">
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_region")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<select name="'.$this->prefixId.'[region]">
 							<option></option>';
 							$listRegions = $this->geoHelper->getAllRegions();
@@ -335,8 +340,8 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					</div>
 				</div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_dispo_IAC")).'</strong></p>
-					<div style="float:right;width:50%;">
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_dispo_IAC")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<input type="checkbox" name="'.$this->prefixId.'[iac]" value="O">
 					</div>
 				</div>
@@ -346,42 +351,41 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				</div>
 				<div>
 					<div>
-						<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_prix_max")).'</strong></p>
-						<div style="float:right;width:50%;">
+						<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_prix_max")).'</strong></p>
+						<div style="float:right;width:50%;margin-bottom:2px;">
 							<input type="text" name="'.$this->prefixId.'[prix_max]">
 						</div>
 					</div>
 					<div>
-						<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_prix_min")).'</strong></p>
-						<div style="float:right;width:50%;">
+						<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_prix_min")).'</strong></p>
+						<div style="float:right;width:50%;margin-bottom:2px;">
 							<input type="text" name="'.$this->prefixId.'[prix_min]">
 						</div>
 					</div>
 					<div>
-						<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_paiement_naissance")).'</strong></p>
-						<div style="float:right;width:50%;">
-							<input type="checkbox" name="'.$this->prefixId.'[paiement_naissance]" value="O">
-						</div>
+						<p style="float:left;width:100%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_paiement_naissance")).' <input type="checkbox" name="'.$this->prefixId.'[paiement_naissance]" value="O"></strong></p>
 					</div>
 				</div>
 
 				<div style="float:left;width:100%;"><hr></div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_poitns_forts")).'</strong></p>
-					<div style="float:right;width:50%;">
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_poitns_forts")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<select name="'.$this->prefixId.'[point_fort]">
 							<option></option>';
 							$pointsForts = $this->critHelper->getAllPointsForts();
 							foreach($pointsForts as $pointFort){
-								$content.="<option value='".$pointFort['codePointFort']."'>".$pointFort['libelle']."</option>";
+								$content.="<option value='".$pointFort['codePointFort']."'>".utf8_decode($pointFort['libelle'])."</option>";
 							}
 						$content.='
 						</select>
 					</div>
 				</div>
+				<div style="float:left;width:100%;"><hr></div>
 				<div>
-					<p style="float:left;width:50%;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_robe")).'</strong></p>
-					<div style="float:right;width:50%;">
+					<div style="float:left;width:100%;margin-bottom:2px;">Seules les robes d\'étalon dont la semence est disponible aux Haras nationaux sont proposées.</div>
+					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_robe")).'</strong></p>
+					<div style="float:right;width:50%;margin-bottom:2px;">
 						<select name="'.$this->prefixId.'[robe]">
 							<option></option>';
 							$listRobes = $this->critHelper->getAllRobes("FRA");
@@ -408,7 +412,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 	 * @return String
 	 */
 	function getDetail(){
-		$ws = new WebservicesAccess();
+		$ws = new WebservicesAccess($this->typeDev);
 		$content= $this->getScript();
 		$content.='<div><h2>'.htmlspecialchars($this->pi_getLL("titre_fiche")).'</h2></div><BR>';
 		$objTransfert = new ObjectTransfertWS();
@@ -498,9 +502,9 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 			if($etalon["pointFort1"]!= "" || $etalon["pointFort2"] != "" || $etalon["pointFort3"]!=""){
 				$content .='<h4 style="font-size:12px">'. htmlspecialchars($this->pi_getLL("libelle_3points_fort")).':</h4>
 				<p>';
-				$content .=$etalon["pointFort1"];
-				if($etalon["pointFort2"] != "")$content .=", ".$etalon["pointFort2"];
-				if($etalon["pointFort2"] != "")$content .=", ".$etalon["pointFort3"];
+				$content .=utf8_decode($etalon["pointFort1"]);
+				if($etalon["pointFort2"] != "")$content .=", ".utf8_decode($etalon["pointFort2"]);
+				if($etalon["pointFort2"] != "")$content .=", ".utf8_decode($etalon["pointFort3"]);
 				$content .='</p>';
 			}
 			if($etalon["commentaire"] != ""){
@@ -552,7 +556,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				$content .=$etalon["libelleCentreTechnique"].'<br>';
 			}
 			$content .='<h4>Visible à cet endroit sur rendez-vous uniquement.</h4><br/>';
-			$content .='<p id="txt_cliquez_ici"><br/><br/><a href="javascript:divcache(\'txt_cliquez_ici\');makeRequest(\''.$this->pi_getPageLink($GLOBALS["TSFE"]->id,"",array("codeCheval"=>$etalon["codeCheval"],"no_cache"=>1,"action"=>"getListCT")).'\')">Cliquez ici</a> pour connaitre la liste des Centres techniques dans lesquels la semance est disponible<br><br>';
+			$content .='<p id="txt_cliquez_ici"><br/><br/><a href="javascript:divcache(\'txt_cliquez_ici\');makeRequest(\''.$this->pi_getPageLink($GLOBALS["TSFE"]->id,"",array("codeCheval"=>$etalon["codeCheval"],"no_cache"=>1,"action"=>"getListCT")).'\')">Cliquez ici</a> pour connaitre la liste des Centres techniques dans lesquels la semence est disponible<br><br>';
 			$content .='<div id="LISTE_CT" style="float:left;width:95%;visibility:hidden;display:none;border-style:solid;border-width:thin">
 					<h4 style="width:100%;float:left"><strong>'.htmlspecialchars($this->pi_getLL("libelle_liste_ct")).'</strong></h4><br/>
 
@@ -602,7 +606,8 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 	function getListeResult(){
 		$result = null;
 		$content = $this->getScript();
-		$content.='<div><h2>'.htmlspecialchars($this->pi_getLL("titre_list")).'</h2></div><BR>';
+		$content.='<div><h2>'.htmlspecialchars($this->pi_getLL("titre_list")).'</h2></div><br/>';
+		$content.='<div>Vous pouvez effectuer un comparatif entre 2 et 5 étalons. Il suffit pour cela de cocher les cases des étalons choisis, puis de cliquer sur "Comparer" en bas de la liste.</div>';
 		$param = array();
 
 		if( (isset($this->piVars["action"]) && $this->piVars["action"]=="newListe") || (isset($_GET["action"]) && $_GET["action"]=="liste"))
@@ -702,7 +707,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 			}
 
 
-			$ws = new WebservicesAccess();
+			$ws = new WebservicesAccess($this->typeDev);
 			if(!$ws->connect()) return "erreur a la connexion:".$ws->getErrorMessage();
 			$result = $ws->getEtalons($param);
 			if(!$result && $ws->getErrorMessage() != "" ) return "erreur dans resultat:".$ws->getErrorMessage();
@@ -726,7 +731,8 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 
 		$content .= "<h4>".count($result)." ".$this->pi_getLL("libelle_compteur")."</h4><br>";
 		if(count($result)==1){
-			Header('Location: '.$this->pi_getPageLink($GLOBALS["TSFE"]->id,"",array($this->prefixId."[showUid]"=>$result[0]["codeCheval"],"no_cache"=>1)));
+			$url = $this->pi_getPageLink($GLOBALS["TSFE"]->id,"toto",array("tx_dlcubehn02_pi2[showUid]"=>$result[0]["codeCheval"],"no_cache"=>"1"));
+            Header('Location: http://www.haras-nationaux.fr/portail_dev/'.$url);
 		}
 		if(count($result)>99){
 			$content .="<div id='message' style='color:red;font-size:15px;text-align:center'>";
@@ -760,15 +766,15 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 			$i++;
 		}
 		$content .='</form>';
-		$content .='<a href="javascript:checkMaxCmp();" style="color:white;text-decoration:none" id="lienFonctionPetit">comparer</a>  ';
 		if(!isset($_GET["action"])){
 			/*$content .='<span id="boutonLien">';
 			$content .=$this->pi_linkToPage(htmlspecialchars($this->pi_getLL("libelle_nouvelle_recherche")),$GLOBALS["TSFE"]->id);
 			$content .='</span>';*/
-			$content .='<a style="color:white;text-decoration:none" id="lienFonctionPetit" href="index.php?id='.$GLOBALS["TSFE"]->id.'">'.htmlspecialchars($this->pi_getLL("libelle_nouvelle_recherche")).'</a>';
+			$content .='<a style="color:white;text-decoration:none" id="lienFonctionPetit" href="index.php?id='.$GLOBALS["TSFE"]->id.'">'.htmlspecialchars($this->pi_getLL("libelle_nouvelle_recherche")).'</a>  ';
 		}
 		else
-			$content .='<a href="javascript:history.back()" style="color:white;text-decoration:none" id="lienFonctionPetit">'.htmlspecialchars($this->pi_getLL("libelle_retour_liste")).'</a>';
+			$content .='<a href="javascript:history.back()" style="color:white;text-decoration:none" id="lienFonctionPetit">'.htmlspecialchars($this->pi_getLL("libelle_retour_liste")).'</a>  ';
+		$content .='<a href="javascript:checkMaxCmp();" style="color:white;text-decoration:none" id="lienFonctionPetit">Comparer</a>  ';
 		$content .="</div>";
 		return $content;
 	}
