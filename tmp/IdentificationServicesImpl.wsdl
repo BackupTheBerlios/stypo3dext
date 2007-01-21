@@ -1,0 +1,1220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://services.aih.harasnationaux.fr" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://services.aih.harasnationaux.fr" xmlns:intf="http://services.aih.harasnationaux.fr" xmlns:tns1="http://soa.logicacmg.com" xmlns:tns2="http://util.java" xmlns:tns3="http://bo.common.harasnationaux.fr" xmlns:tns4="http://exception.cid.harasnationaux.fr" xmlns:tns5="http://exception.logicacmg.com" xmlns:tns6="http://core.springframework.org" xmlns:tns7="http://lang.java" xmlns:tns8="http://critere.common.harasnationaux.fr" xmlns:tns9="http://dao.aih.harasnationaux.fr" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://services.aih.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://critere.common.harasnationaux.fr"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <element name="findPersonneByLogin">
+    <complexType>
+     <sequence>
+      <element name="login" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByLoginResponse">
+    <complexType>
+     <sequence>
+      <element name="findPersonneByLoginReturn" type="tns3:PersonneIdentifie"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="fault" type="tns4:CIDBusinessException"/>
+   <element name="findPersonneByCle">
+    <complexType>
+     <sequence>
+      <element name="cleIdentification" type="xsd:string"/>
+      <element name="cle" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByCleResponse">
+    <complexType>
+     <sequence>
+      <element name="findPersonneByCleReturn" type="tns3:Personne"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByFacture">
+    <complexType>
+     <sequence>
+      <element name="numeroFacture" type="xsd:string"/>
+      <element name="montantFacture" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByFactureResponse">
+    <complexType>
+     <sequence>
+      <element name="findPersonneByFactureReturn" type="tns3:Personne"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByInfoCheval">
+    <complexType>
+     <sequence>
+      <element name="numeroSireCheval" type="xsd:string"/>
+      <element name="cle" type="xsd:string"/>
+      <element name="dateCI" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByInfoChevalResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="findPersonneByInfoChevalReturn" type="tns3:Personne"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="createPersonneIdentificationFaible">
+    <complexType>
+     <sequence>
+      <element name="personne" type="tns3:Personne"/>
+      <element name="critere" type="tns8:CritereIdentificationPersonne"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="createPersonneIdentificationFaibleResponse">
+    <complexType>
+     <sequence>
+      <element name="createPersonneIdentificationFaibleReturn" type="tns3:Personne"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updatePersonneIdentificationForte">
+    <complexType>
+     <sequence>
+      <element name="personne" type="tns3:Personne"/>
+      <element name="critere" type="tns8:CritereIdentificationPersonne"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updatePersonneIdentificationForteResponse">
+    <complexType>
+     <sequence>
+      <element name="updatePersonneIdentificationForteReturn" type="tns3:Personne"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateEtatPersonneIdentifie">
+    <complexType>
+     <sequence>
+      <element name="login" type="xsd:string"/>
+      <element name="etat" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateEtatPersonneIdentifieResponse">
+    <complexType/>
+   </element>
+   <element name="existeCompteForPersonne">
+    <complexType>
+     <sequence>
+      <element name="numeroPersonne" type="xsd:int"/>
+      <element name="numeroOrdreAdresse" type="xsd:int"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="existeCompteForPersonneResponse">
+    <complexType>
+     <sequence>
+      <element name="existeCompteForPersonneReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="createPersonne">
+    <complexType>
+     <sequence>
+      <element name="personneIdentifie" type="tns3:PersonneIdentifie"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="createPersonneResponse">
+    <complexType/>
+   </element>
+   <element name="findPersonneById">
+    <complexType>
+     <sequence>
+      <element name="numeroPersonne" type="xsd:string"/>
+      <element name="numeroAdresse" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByIdResponse">
+    <complexType>
+     <sequence>
+      <element name="findPersonneByIdReturn" type="tns3:PersonneIdentifie"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="searchPersonneARapprocher">
+    <complexType>
+     <sequence>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="searchPersonneARapprocherResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="searchPersonneARapprocherReturn" type="tns3:Personne"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updatePoint">
+    <complexType>
+     <sequence>
+      <element name="login" type="xsd:string"/>
+      <element name="nbPoints" type="xsd:int"/>
+      <element name="ajoute" type="xsd:boolean"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updatePointResponse">
+    <complexType>
+     <sequence>
+      <element name="updatePointReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getPersonneDAO">
+    <complexType/>
+   </element>
+   <element name="getPersonneDAOResponse">
+    <complexType>
+     <sequence>
+      <element name="getPersonneDAOReturn" type="xsd:anyType"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setPersonneDAO">
+    <complexType>
+     <sequence>
+      <element name="personneDAO" type="tns9:PersonneIdentifieDAO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setPersonneDAOResponse">
+    <complexType/>
+   </element>
+   <element name="getPersonneIdentifieDAO">
+    <complexType/>
+   </element>
+   <element name="getPersonneIdentifieDAOResponse">
+    <complexType>
+     <sequence>
+      <element name="getPersonneIdentifieDAOReturn" type="tns9:PersonneIdentifieDAO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setPersonneIdentifieDAO">
+    <complexType>
+     <sequence>
+      <element name="personneIdentifieDAO" type="tns9:PersonneIdentifieDAO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setPersonneIdentifieDAOResponse">
+    <complexType/>
+   </element>
+   <element name="getIdentificationDAO">
+    <complexType/>
+   </element>
+   <element name="getIdentificationDAOResponse">
+    <complexType>
+     <sequence>
+      <element name="getIdentificationDAOReturn" type="xsd:anyType"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setIdentificationDAO">
+    <complexType>
+     <sequence>
+      <element name="identificationDAO" type="tns9:IdentificationDAO"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setIdentificationDAOResponse">
+    <complexType/>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://soa.logicacmg.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://util.java"/>
+   <import namespace="http://critere.common.harasnationaux.fr"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="Context">
+    <sequence>
+     <element name="applicationID" nillable="true" type="xsd:string"/>
+     <element name="locale" nillable="true" type="xsd:anyType"/>
+     <element name="userID" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://bo.common.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://critere.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="Commune">
+    <sequence>
+     <element name="codeCirconscription" nillable="true" type="xsd:string"/>
+     <element name="codeDepartement" nillable="true" type="xsd:string"/>
+     <element name="codeINSEE" nillable="true" type="xsd:string"/>
+     <element name="codePostal" nillable="true" type="xsd:string"/>
+     <element name="codeRegion" nillable="true" type="xsd:string"/>
+     <element name="libelle" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Pays">
+    <sequence>
+     <element name="code" nillable="true" type="xsd:string"/>
+     <element name="libelleCourt" nillable="true" type="xsd:string"/>
+     <element name="libelleLong" nillable="true" type="xsd:string"/>
+     <element name="libelleLongLocation" nillable="true" type="xsd:string"/>
+     <element name="libelleLongNation" nillable="true" type="xsd:string"/>
+     <element name="libelleMoyen" nillable="true" type="xsd:string"/>
+     <element name="numero" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="Adresse">
+    <sequence>
+     <element name="adresse" nillable="true" type="xsd:string"/>
+     <element name="adresseFiable" nillable="true" type="xsd:string"/>
+     <element name="commune" nillable="true" type="tns3:Commune"/>
+     <element name="complementAdresse" nillable="true" type="xsd:string"/>
+     <element name="numeroOrdre" nillable="true" type="xsd:int"/>
+     <element name="pays" nillable="true" type="tns3:Pays"/>
+    </sequence>
+   </complexType>
+   <complexType name="CoordonneesTelephoniques">
+    <sequence>
+     <element name="email" nillable="true" type="xsd:string"/>
+     <element name="numeroFax" nillable="true" type="xsd:string"/>
+     <element name="numeroPortable" nillable="true" type="xsd:string"/>
+     <element name="numeroTelephone" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="PersonneKey">
+    <sequence>
+     <element name="numeroOrdreAdresse" nillable="true" type="xsd:int"/>
+     <element name="numeroPersonne" nillable="true" type="xsd:int"/>
+     <element name="numeroPersonneTemp" nillable="true" type="xsd:int"/>
+     <element name="typePersonne" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Personne">
+    <sequence>
+     <element name="adresse" nillable="true" type="tns3:Adresse"/>
+     <element name="codeProfil" nillable="true" type="xsd:int"/>
+     <element name="commentaire" nillable="true" type="xsd:string"/>
+     <element name="coordonnees" nillable="true" type="tns3:CoordonneesTelephoniques"/>
+     <element name="dateMAJ" nillable="true" type="xsd:dateTime"/>
+     <element name="dateObtentionInformation" nillable="true" type="xsd:dateTime"/>
+     <element name="inTemporaryTable" nillable="true" type="xsd:boolean"/>
+     <element name="key" nillable="true" type="tns3:PersonneKey"/>
+     <element name="nom" nillable="true" type="xsd:string"/>
+     <element name="nuordint" nillable="true" type="xsd:int"/>
+     <element name="pointch" nillable="true" type="xsd:int"/>
+     <element name="prenom" nillable="true" type="xsd:string"/>
+     <element name="titre" nillable="true" type="xsd:string"/>
+     <element name="userId" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Profil">
+    <sequence>
+     <element name="codeProfil" nillable="true" type="xsd:string"/>
+     <element name="id" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="PersonneIdentifie">
+    <complexContent>
+     <extension base="tns3:Personne">
+      <sequence>
+       <element name="codeEtat" nillable="true" type="xsd:string"/>
+       <element name="dateDeDerniereConnexion" nillable="true" type="xsd:dateTime"/>
+       <element name="gratuite" nillable="true" type="xsd:boolean"/>
+       <element name="informationComplementaire" nillable="true" type="xsd:string"/>
+       <element name="login" nillable="true" type="xsd:string"/>
+       <element name="niveauIdentification" nillable="true" type="xsd:string"/>
+       <element name="nombrePoint" nillable="true" type="xsd:string"/>
+       <element name="password" nillable="true" type="xsd:string"/>
+       <element name="profil" nillable="true" type="tns3:Profil"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://core.springframework.org" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://critere.common.harasnationaux.fr"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <complexType abstract="true" name="NestedCheckedException">
+    <sequence>
+     <element name="cause" nillable="true" type="xsd:anyType"/>
+     <element name="message" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://exception.logicacmg.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://critere.common.harasnationaux.fr"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <complexType abstract="true" name="BusinessException">
+    <complexContent>
+     <extension base="tns6:NestedCheckedException">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://exception.cid.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://critere.common.harasnationaux.fr"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="CIDBusinessException">
+    <complexContent>
+     <extension base="tns5:BusinessException">
+      <sequence>
+       <element name="code" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://critere.common.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://dao.aih.harasnationaux.fr"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="CritereIdentificationPersonne">
+    <sequence>
+     <element name="commentaire" nillable="true" type="xsd:string"/>
+     <element name="rapprochement" nillable="true" type="xsd:boolean"/>
+     <element name="typeModification" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="updateEtatPersonneIdentifieRequest">
+
+      <wsdl:part element="impl:updateEtatPersonneIdentifie" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setIdentificationDAOResponse">
+
+      <wsdl:part element="impl:setIdentificationDAOResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByLoginRequest">
+
+      <wsdl:part element="impl:findPersonneByLogin" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getIdentificationDAOResponse">
+
+      <wsdl:part element="impl:getIdentificationDAOResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPersonneIdentifieDAOResponse">
+
+      <wsdl:part element="impl:getPersonneIdentifieDAOResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByCleResponse">
+
+      <wsdl:part element="impl:findPersonneByCleResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="searchPersonneARapprocherRequest">
+
+      <wsdl:part element="impl:searchPersonneARapprocher" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setIdentificationDAORequest">
+
+      <wsdl:part element="impl:setIdentificationDAO" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updatePointRequest">
+
+      <wsdl:part element="impl:updatePoint" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByFactureRequest">
+
+      <wsdl:part element="impl:findPersonneByFacture" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByLoginResponse">
+
+      <wsdl:part element="impl:findPersonneByLoginResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setPersonneDAORequest">
+
+      <wsdl:part element="impl:setPersonneDAO" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPersonneDAOResponse">
+
+      <wsdl:part element="impl:getPersonneDAOResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createPersonneIdentificationFaibleResponse">
+
+      <wsdl:part element="impl:createPersonneIdentificationFaibleResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByFactureResponse">
+
+      <wsdl:part element="impl:findPersonneByFactureResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createPersonneRequest">
+
+      <wsdl:part element="impl:createPersonne" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updatePointResponse">
+
+      <wsdl:part element="impl:updatePointResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="searchPersonneARapprocherResponse">
+
+      <wsdl:part element="impl:searchPersonneARapprocherResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updatePersonneIdentificationForteResponse">
+
+      <wsdl:part element="impl:updatePersonneIdentificationForteResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByIdRequest">
+
+      <wsdl:part element="impl:findPersonneById" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getIdentificationDAORequest">
+
+      <wsdl:part element="impl:getIdentificationDAO" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setPersonneDAOResponse">
+
+      <wsdl:part element="impl:setPersonneDAOResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPersonneDAORequest">
+
+      <wsdl:part element="impl:getPersonneDAO" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByInfoChevalResponse">
+
+      <wsdl:part element="impl:findPersonneByInfoChevalResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateEtatPersonneIdentifieResponse">
+
+      <wsdl:part element="impl:updateEtatPersonneIdentifieResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByInfoChevalRequest">
+
+      <wsdl:part element="impl:findPersonneByInfoCheval" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setPersonneIdentifieDAORequest">
+
+      <wsdl:part element="impl:setPersonneIdentifieDAO" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updatePersonneIdentificationForteRequest">
+
+      <wsdl:part element="impl:updatePersonneIdentificationForte" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="existeCompteForPersonneResponse">
+
+      <wsdl:part element="impl:existeCompteForPersonneResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createPersonneIdentificationFaibleRequest">
+
+      <wsdl:part element="impl:createPersonneIdentificationFaible" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByCleRequest">
+
+      <wsdl:part element="impl:findPersonneByCle" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createPersonneResponse">
+
+      <wsdl:part element="impl:createPersonneResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPersonneIdentifieDAORequest">
+
+      <wsdl:part element="impl:getPersonneIdentifieDAO" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="CIDBusinessException">
+
+      <wsdl:part element="impl:fault" name="fault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="existeCompteForPersonneRequest">
+
+      <wsdl:part element="impl:existeCompteForPersonne" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByIdResponse">
+
+      <wsdl:part element="impl:findPersonneByIdResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setPersonneIdentifieDAOResponse">
+
+      <wsdl:part element="impl:setPersonneIdentifieDAOResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="IdentificationServicesImpl">
+
+      <wsdl:operation name="findPersonneByLogin">
+
+         <wsdl:input message="impl:findPersonneByLoginRequest" name="findPersonneByLoginRequest"/>
+
+         <wsdl:output message="impl:findPersonneByLoginResponse" name="findPersonneByLoginResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneByCle">
+
+         <wsdl:input message="impl:findPersonneByCleRequest" name="findPersonneByCleRequest"/>
+
+         <wsdl:output message="impl:findPersonneByCleResponse" name="findPersonneByCleResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneByFacture">
+
+         <wsdl:input message="impl:findPersonneByFactureRequest" name="findPersonneByFactureRequest"/>
+
+         <wsdl:output message="impl:findPersonneByFactureResponse" name="findPersonneByFactureResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneByInfoCheval">
+
+         <wsdl:input message="impl:findPersonneByInfoChevalRequest" name="findPersonneByInfoChevalRequest"/>
+
+         <wsdl:output message="impl:findPersonneByInfoChevalResponse" name="findPersonneByInfoChevalResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createPersonneIdentificationFaible">
+
+         <wsdl:input message="impl:createPersonneIdentificationFaibleRequest" name="createPersonneIdentificationFaibleRequest"/>
+
+         <wsdl:output message="impl:createPersonneIdentificationFaibleResponse" name="createPersonneIdentificationFaibleResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updatePersonneIdentificationForte">
+
+         <wsdl:input message="impl:updatePersonneIdentificationForteRequest" name="updatePersonneIdentificationForteRequest"/>
+
+         <wsdl:output message="impl:updatePersonneIdentificationForteResponse" name="updatePersonneIdentificationForteResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateEtatPersonneIdentifie">
+
+         <wsdl:input message="impl:updateEtatPersonneIdentifieRequest" name="updateEtatPersonneIdentifieRequest"/>
+
+         <wsdl:output message="impl:updateEtatPersonneIdentifieResponse" name="updateEtatPersonneIdentifieResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="existeCompteForPersonne">
+
+         <wsdl:input message="impl:existeCompteForPersonneRequest" name="existeCompteForPersonneRequest"/>
+
+         <wsdl:output message="impl:existeCompteForPersonneResponse" name="existeCompteForPersonneResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createPersonne">
+
+         <wsdl:input message="impl:createPersonneRequest" name="createPersonneRequest"/>
+
+         <wsdl:output message="impl:createPersonneResponse" name="createPersonneResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneById">
+
+         <wsdl:input message="impl:findPersonneByIdRequest" name="findPersonneByIdRequest"/>
+
+         <wsdl:output message="impl:findPersonneByIdResponse" name="findPersonneByIdResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="searchPersonneARapprocher">
+
+         <wsdl:input message="impl:searchPersonneARapprocherRequest" name="searchPersonneARapprocherRequest"/>
+
+         <wsdl:output message="impl:searchPersonneARapprocherResponse" name="searchPersonneARapprocherResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updatePoint">
+
+         <wsdl:input message="impl:updatePointRequest" name="updatePointRequest"/>
+
+         <wsdl:output message="impl:updatePointResponse" name="updatePointResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPersonneDAO">
+
+         <wsdl:input message="impl:getPersonneDAORequest" name="getPersonneDAORequest"/>
+
+         <wsdl:output message="impl:getPersonneDAOResponse" name="getPersonneDAOResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setPersonneDAO">
+
+         <wsdl:input message="impl:setPersonneDAORequest" name="setPersonneDAORequest"/>
+
+         <wsdl:output message="impl:setPersonneDAOResponse" name="setPersonneDAOResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPersonneIdentifieDAO">
+
+         <wsdl:input message="impl:getPersonneIdentifieDAORequest" name="getPersonneIdentifieDAORequest"/>
+
+         <wsdl:output message="impl:getPersonneIdentifieDAOResponse" name="getPersonneIdentifieDAOResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setPersonneIdentifieDAO">
+
+         <wsdl:input message="impl:setPersonneIdentifieDAORequest" name="setPersonneIdentifieDAORequest"/>
+
+         <wsdl:output message="impl:setPersonneIdentifieDAOResponse" name="setPersonneIdentifieDAOResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getIdentificationDAO">
+
+         <wsdl:input message="impl:getIdentificationDAORequest" name="getIdentificationDAORequest"/>
+
+         <wsdl:output message="impl:getIdentificationDAOResponse" name="getIdentificationDAOResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setIdentificationDAO">
+
+         <wsdl:input message="impl:setIdentificationDAORequest" name="setIdentificationDAORequest"/>
+
+         <wsdl:output message="impl:setIdentificationDAOResponse" name="setIdentificationDAOResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="IdentificationServicesImplSoapBinding" type="impl:IdentificationServicesImpl">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="findPersonneByLogin">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPersonneByLoginRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPersonneByLoginResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneByCle">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPersonneByCleRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPersonneByCleResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneByFacture">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPersonneByFactureRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPersonneByFactureResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneByInfoCheval">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPersonneByInfoChevalRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPersonneByInfoChevalResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createPersonneIdentificationFaible">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createPersonneIdentificationFaibleRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createPersonneIdentificationFaibleResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updatePersonneIdentificationForte">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updatePersonneIdentificationForteRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updatePersonneIdentificationForteResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateEtatPersonneIdentifie">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateEtatPersonneIdentifieRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateEtatPersonneIdentifieResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="existeCompteForPersonne">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="existeCompteForPersonneRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="existeCompteForPersonneResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createPersonne">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createPersonneRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createPersonneResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPersonneById">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPersonneByIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPersonneByIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="searchPersonneARapprocher">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="searchPersonneARapprocherRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="searchPersonneARapprocherResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updatePoint">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updatePointRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updatePointResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPersonneDAO">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getPersonneDAORequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getPersonneDAOResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setPersonneDAO">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setPersonneDAORequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setPersonneDAOResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPersonneIdentifieDAO">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getPersonneIdentifieDAORequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getPersonneIdentifieDAOResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setPersonneIdentifieDAO">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setPersonneIdentifieDAORequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setPersonneIdentifieDAOResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getIdentificationDAO">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getIdentificationDAORequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getIdentificationDAOResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setIdentificationDAO">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setIdentificationDAORequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setIdentificationDAOResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="IdentificationServicesImplService">
+
+      <wsdl:port binding="impl:IdentificationServicesImplSoapBinding" name="IdentificationServicesImpl">
+
+         <wsdlsoap:address location="http://localhost:8080/aih-services/services/IdentificationServicesImpl"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

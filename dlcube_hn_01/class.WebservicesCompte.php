@@ -1,6 +1,6 @@
 <?php
 include_once("typo3conf/ext/dlcube_hn_01/data/ObjectTransfertWS.php");
-include_once("typo3conf/ext/dlcube_hn_01/php_inc/nusoap/nusoap.php");
+include_once("typo3conf/ext/dlcube_hn_01/php_inc/nusoap/mynusoap.php");
 /**************************************************************
 *
 *  Copyright notice
@@ -58,6 +58,8 @@ class WebservicesCompte {
 			$url = "xinf-devlinux:8080";
 		else if($type=="dev_ext")
 			$url = "80.124.158.237:8080";
+		else if($type=="local")
+			$url = "127.0.0.1:8080";
 
 		$this->wsdlServices = "http://".$url."/aih-services/services/PortailServicesImpl?wsdl";
 		$this->wsdlIdent = "http://".$url."/aih-services/services/IdentificationServicesImpl?wsdl";
@@ -85,12 +87,25 @@ class WebservicesCompte {
 	}
 
 	function connectIdent(){
+		/*
 		$this->client = new soapclient_nusoap($this->wsdlIdent, 'wsdl');
 		if( !$this->client->getError())
 			return true;
 		$this->errorMessage = $this->client->getError();
 		$this->client = null;
-		return false;
+		return false;*/
+		try {
+		    // Nouvelle instance de la classe soapClient
+		    $client = new SoapClient($this->wsdlIdent, array('trace' => 1, 'soap_version'  => SOAP_1_1));
+		    // appel de la méthode getServerDate du service web
+		    //$O =  $client -> __call('getServerDate', array());
+		    // Affichage du résultat
+		    //echo $O->date ;
+		    return true;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage = $fault;
+		}
+		 return false;
 	}
 
 	function connectCid(){
@@ -122,13 +137,23 @@ class WebservicesCompte {
 	 * @return int|null
 	 */
 	function createCompte($parametres){
-		if($this->client != null){
+		/*if($this->client != null){
 			$result = $this->client->call('createCompteCasForPortail', $parametres);
 			if( !$this->client->getError() ){
 				return $result;
 			}
 		}
 		$this->errorMessage = $this->client->getError();
+		return false;*/
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		     $client = new SoapClient($this->wsdlServices, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->createCompteCasForPortail($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
+		}
 		return false;
 	}
 
@@ -143,13 +168,23 @@ class WebservicesCompte {
 	 * @return int|null
 	 */
 	function updateCompte($parametres){
-		if($this->client != null){
+		/*if($this->client != null){
 			$result = $this->client->call('updateCompteCasForPortail', $parametres);
 			if( !$this->client->getError() ){
 				return $result;
 			}
 		}
 		$this->errorMessage = $this->client->getError();
+		return false;*/
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		     $client = new SoapClient($this->wsdlServices, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->updateCompteCasForPortail($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
+		}
 		return false;
 	}
 
@@ -165,13 +200,15 @@ class WebservicesCompte {
 	 * @return Object[] resultat webservice si OK || false si KO
 	 */
 	function getPersonneByLogin($parametres){
-		if($this->client != null){
-			$result = $this->client->call('findPersonneByLogin', $parametres);
-			if( !$this->client->getError() ){
-				return $result;
-			}
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		     $client = new SoapClient($this->wsdlIdent, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->findPersonneByLogin($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
 		}
-		$this->errorMessage = $this->client->getError();
 		return false;
 	}
 
@@ -186,6 +223,7 @@ class WebservicesCompte {
 	 * @return int resultat webservice
 	 */
 	function getNbrChevaux4User($parametres){
+		/*$this->errorMessage=null;
 		if($this->client != null){
 			$result = $this->client->call('getNbrChevaux', $parametres);
 			if( !$this->client->getError() ){
@@ -193,6 +231,16 @@ class WebservicesCompte {
 			}
 		}
 		$this->errorMessage = $this->client->getError();
+		return false;*/
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		    $client = new SoapClient($this->wsdlCid, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->getNbrChevaux($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
+		}
 		return false;
 	}
 
@@ -207,6 +255,7 @@ class WebservicesCompte {
 	 * @return int resultat webservice
 	 */
 	function getNbrLieuDetention4User($parametres){
+		/*$this->errorMessage = null;
 		if($this->client != null){
 			$result = $this->client->call('getNbrLieuDetention', $parametres);
 			if( !$this->client->getError() ){
@@ -214,6 +263,16 @@ class WebservicesCompte {
 			}
 		}
 		$this->errorMessage = $this->client->getError();
+		return false;*/
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		    $client = new SoapClient($this->wsdlCid, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->getNbrLieuDetention($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
+		}
 		return false;
 	}
 
@@ -228,6 +287,18 @@ class WebservicesCompte {
 	 * @return int resultat webservice
 	 */
 	function getNbrNaissanceAnneeEnCours4User($parametres){
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		    $client = new SoapClient($this->wsdlCid, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->getNbrNaissanceAnneeEnCours($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
+		}
+		return false;
+/*
+		$this->errorMessage=null;
 		if($this->client != null){
 			$result = $this->client->call('getNbrNaissanceAnneeEnCours', $parametres);
 			if( !$this->client->getError() ){
@@ -235,7 +306,7 @@ class WebservicesCompte {
 			}
 		}
 		$this->errorMessage = $this->client->getError();
-		return false;
+		return false;*/
 	}
 
 	/**
@@ -318,8 +389,8 @@ class WebservicesCompte {
 
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube_hn_01/class.WebservicesCreationCompte.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube_hn_01/class.WebservicesCreationCompte.php"]);
+if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube_hn_01/class.WebservicesCompte.php"])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/dlcube_hn_01/class.WebservicesCompte.php"]);
 }
 ?>
 

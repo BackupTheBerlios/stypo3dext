@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://soa.logicacmg.com" xmlns:ns4="http://exception.logicacmg.com" xmlns:ns5="http://bo.common.harasnationaux.fr" xmlns:ns6="http://exception.cid.harasnationaux.fr" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://services.aih.harasnationaux.fr" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://services.aih.harasnationaux.fr">
+  <wsdl:types xmlns:ns1="http://util.java" xmlns:ns3="http://lang.java">
+    <xsd:schema targetNamespace="http://soa.logicacmg.com" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Context">
+        <xsd:sequence>
+          <xsd:element name="applicationID" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="locale" type="ns1:Locale" minOccurs="0" nillable="true" />
+          <xsd:element name="userID" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://util.java" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Locale">
+        <xsd:sequence>
+          <xsd:element name="ISO3Country" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ISO3Language" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="country" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayCountry" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayLanguage" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayName" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayVariant" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="language" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="variant" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://services.aih.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:element name="updateDateConnexion">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updateDateConnexionResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="TechnicalException" type="ns4:TechnicalException" />
+      <xsd:element name="searchServicesForPortail">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="searchServicesForPortailResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns5:ArrayOfService" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CIDBusinessException" type="ns6:CIDBusinessException" />
+      <xsd:element name="updateCompteCasForPortail">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updateCompteCasForPortailResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:int" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createCompteCasForPortail">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createCompteCasForPortailResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:int" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://exception.logicacmg.com" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="TechnicalException">
+        <xsd:sequence>
+          <xsd:element name="cause" type="ns3:Throwable" minOccurs="0" nillable="true" />
+          <xsd:element name="message" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://lang.java" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Throwable" />
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://bo.common.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="ArrayOfService">
+        <xsd:sequence>
+          <xsd:element name="Service" type="ns5:Service" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Service">
+        <xsd:sequence>
+          <xsd:element name="code" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="identifiant" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="url" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="urlInformatique" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://exception.cid.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="CIDBusinessException">
+        <xsd:sequence>
+          <xsd:element name="cause" type="ns3:Throwable" minOccurs="0" nillable="true" />
+          <xsd:element name="code" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="message" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="updateCompteCasForPortailRequest">
+    <wsdl:part element="tns:updateCompteCasForPortail" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updateDateConnexionRequest">
+    <wsdl:part element="tns:updateDateConnexion" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="searchServicesForPortailRequest">
+    <wsdl:part element="tns:searchServicesForPortail" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="TechnicalException">
+    <wsdl:part element="tns:TechnicalException" name="TechnicalException" />
+  </wsdl:message>
+  <wsdl:message name="updateDateConnexionResponse">
+    <wsdl:part element="tns:updateDateConnexionResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="CIDBusinessException">
+    <wsdl:part element="tns:CIDBusinessException" name="CIDBusinessException" />
+  </wsdl:message>
+  <wsdl:message name="createCompteCasForPortailRequest">
+    <wsdl:part element="tns:createCompteCasForPortail" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="createCompteCasForPortailResponse">
+    <wsdl:part element="tns:createCompteCasForPortailResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="searchServicesForPortailResponse">
+    <wsdl:part element="tns:searchServicesForPortailResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updateCompteCasForPortailResponse">
+    <wsdl:part element="tns:updateCompteCasForPortailResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:portType name="PortailServicesPortType">
+    <wsdl:operation name="updateDateConnexion">
+      <wsdl:input message="tns:updateDateConnexionRequest" name="updateDateConnexionRequest" />
+      <wsdl:output message="tns:updateDateConnexionResponse" name="updateDateConnexionResponse" />
+      <wsdl:fault message="tns:TechnicalException" name="TechnicalException" />
+    </wsdl:operation>
+    <wsdl:operation name="searchServicesForPortail">
+      <wsdl:input message="tns:searchServicesForPortailRequest" name="searchServicesForPortailRequest" />
+      <wsdl:output message="tns:searchServicesForPortailResponse" name="searchServicesForPortailResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="updateCompteCasForPortail">
+      <wsdl:input message="tns:updateCompteCasForPortailRequest" name="updateCompteCasForPortailRequest" />
+      <wsdl:output message="tns:updateCompteCasForPortailResponse" name="updateCompteCasForPortailResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="createCompteCasForPortail">
+      <wsdl:input message="tns:createCompteCasForPortailRequest" name="createCompteCasForPortailRequest" />
+      <wsdl:output message="tns:createCompteCasForPortailResponse" name="createCompteCasForPortailResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PortailServicesHttpBinding" type="tns:PortailServicesPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="updateDateConnexion">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateDateConnexionRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="updateDateConnexionResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="TechnicalException">
+        <wsdlsoap:fault name="TechnicalException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="searchServicesForPortail">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="searchServicesForPortailRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="searchServicesForPortailResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateCompteCasForPortail">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateCompteCasForPortailRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="updateCompteCasForPortailResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createCompteCasForPortail">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="createCompteCasForPortailRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createCompteCasForPortailResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PortailServices">
+    <wsdl:port binding="tns:PortailServicesHttpBinding" name="PortailServicesHttpPort">
+      <wsdlsoap:address location="http://80.124.158.237:8080/aih-services/services/PortailServicesImpl" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
+

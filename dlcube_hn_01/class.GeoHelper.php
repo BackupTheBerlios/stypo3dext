@@ -1,4 +1,6 @@
 <?php
+include_once("typo3conf/ext/dlcube_hn_01/data/ObjectTransfertWS.php");
+include_once("typo3conf/ext/dlcube_hn_01/php_inc/nusoap/mynusoap.php");
 /**************************************************************
 *
 *  Copyright notice
@@ -34,14 +36,22 @@ class GeoHelper {
 	var $client;
 	var $errorMessage;
 
-	function GeoHelper(){
-		$this->__construct();
+	function GeoHelper($type="prod"){
+		$this->__construct($type);
 	}
 
-	function __construct(){
+	function __construct($type="prod"){
+		if($type=="prod")
+			$url = "xinf-datastore2:8080";
+		else if($type=="dev")
+			$url = "xinf-devlinux:8080";
+		else if($type=="dev_ext")
+			$url = "80.124.158.237:8080";
+		else if($type=="local")
+			$url = "127.0.0.1:8080";
 		//$this->wsdl = "http://xinf-datastore2:8080/hndto/services/GEOServicesPortail?wsdl";
 		//$this->wsdl = "http://guitessier.dyndns.org:8080/hndto/services/GEOServicesPortail?wsdl";
-		$this->wsdl = "http://localhost:8080/hndto/services/GEOServicesPortail?wsdl";
+		$this->wsdl = "http://".$url."/hndto/services/GEOServicesPortail?wsdl";
 		$this->client = new soapclient_nusoap($this->wsdl, 'wsdl');
 	}
 

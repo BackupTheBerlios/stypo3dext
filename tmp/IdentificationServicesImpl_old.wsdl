@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://services.aih.harasnationaux.fr" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://services.aih.harasnationaux.fr" xmlns:intf="http://services.aih.harasnationaux.fr" xmlns:tns1="http://soa.logicacmg.com" xmlns:tns2="http://util.java" xmlns:tns3="http://bo.common.harasnationaux.fr" xmlns:tns4="http://exception.cid.harasnationaux.fr" xmlns:tns5="http://exception.logicacmg.com" xmlns:tns6="http://core.springframework.org" xmlns:tns7="http://lang.java" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.3
+Built on Oct 05, 2005 (05:23:37 EDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://services.aih.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://lang.java"/>
+   <element name="findPersonneByLogin">
+    <complexType>
+     <sequence>
+      <element name="login" type="xsd:string"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findPersonneByLoginResponse">
+    <complexType>
+     <sequence>
+      <element name="findPersonneByLoginReturn" type="tns3:PersonneIdentifie"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="fault" type="tns4:CIDBusinessException"/>
+   <element name="updatePoint">
+    <complexType>
+     <sequence>
+      <element name="login" type="xsd:string"/>
+      <element name="nbPoints" type="xsd:int"/>
+      <element name="ajoute" type="xsd:boolean"/>
+      <element name="ctx" type="tns1:Context"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updatePointResponse">
+    <complexType>
+     <sequence>
+      <element name="updatePointReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://soa.logicacmg.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://util.java"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="Context">
+    <sequence>
+     <element name="applicationID" nillable="true" type="xsd:string"/>
+     <element name="locale" nillable="true" type="xsd:anyType"/>
+     <element name="userID" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://bo.common.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="Commune">
+    <sequence>
+     <element name="codeCirconscription" nillable="true" type="xsd:string"/>
+     <element name="codeDepartement" nillable="true" type="xsd:string"/>
+     <element name="codeINSEE" nillable="true" type="xsd:string"/>
+     <element name="codePostal" nillable="true" type="xsd:string"/>
+     <element name="codeRegion" nillable="true" type="xsd:string"/>
+     <element name="libelle" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Pays">
+    <sequence>
+     <element name="code" nillable="true" type="xsd:string"/>
+     <element name="libelleCourt" nillable="true" type="xsd:string"/>
+     <element name="libelleLong" nillable="true" type="xsd:string"/>
+     <element name="libelleLongLocation" nillable="true" type="xsd:string"/>
+     <element name="libelleLongNation" nillable="true" type="xsd:string"/>
+     <element name="libelleMoyen" nillable="true" type="xsd:string"/>
+     <element name="numero" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="Adresse">
+    <sequence>
+     <element name="adresse" nillable="true" type="xsd:string"/>
+     <element name="adresseFiable" nillable="true" type="xsd:string"/>
+     <element name="commune" nillable="true" type="tns3:Commune"/>
+     <element name="complementAdresse" nillable="true" type="xsd:string"/>
+     <element name="numeroOrdre" nillable="true" type="xsd:int"/>
+     <element name="pays" nillable="true" type="tns3:Pays"/>
+    </sequence>
+   </complexType>
+   <complexType name="CoordonneesTelephoniques">
+    <sequence>
+     <element name="email" nillable="true" type="xsd:string"/>
+     <element name="numeroFax" nillable="true" type="xsd:string"/>
+     <element name="numeroPortable" nillable="true" type="xsd:string"/>
+     <element name="numeroTelephone" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="PersonneKey">
+    <sequence>
+     <element name="numeroOrdreAdresse" nillable="true" type="xsd:int"/>
+     <element name="numeroPersonne" nillable="true" type="xsd:int"/>
+     <element name="numeroPersonneTemp" nillable="true" type="xsd:int"/>
+     <element name="typePersonne" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Personne">
+    <sequence>
+     <element name="adresse" nillable="true" type="tns3:Adresse"/>
+     <element name="commentaire" nillable="true" type="xsd:string"/>
+     <element name="coordonnees" nillable="true" type="tns3:CoordonneesTelephoniques"/>
+     <element name="inTemporaryTable" nillable="true" type="xsd:boolean"/>
+     <element name="key" nillable="true" type="tns3:PersonneKey"/>
+     <element name="nom" nillable="true" type="xsd:string"/>
+     <element name="prenom" nillable="true" type="xsd:string"/>
+     <element name="titre" nillable="true" type="xsd:string"/>
+     <element name="userId" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="Profil">
+    <sequence>
+     <element name="codeProfil" nillable="true" type="xsd:string"/>
+     <element name="id" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="PersonneIdentifie">
+    <complexContent>
+     <extension base="tns3:Personne">
+      <sequence>
+       <element name="codeEtat" nillable="true" type="xsd:string"/>
+       <element name="dateDeDerniereConnexion" nillable="true" type="xsd:dateTime"/>
+       <element name="gratuite" nillable="true" type="xsd:boolean"/>
+       <element name="informationComplementaire" nillable="true" type="xsd:string"/>
+       <element name="login" nillable="true" type="xsd:string"/>
+       <element name="niveauIdentification" nillable="true" type="xsd:string"/>
+       <element name="nombrePoint" nillable="true" type="xsd:string"/>
+       <element name="password" nillable="true" type="xsd:string"/>
+       <element name="profil" nillable="true" type="tns3:Profil"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://core.springframework.org" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://lang.java"/>
+   <complexType abstract="true" name="NestedCheckedException">
+    <sequence>
+     <element name="cause" nillable="true" type="xsd:anyType"/>
+     <element name="message" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://exception.logicacmg.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://exception.cid.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://lang.java"/>
+   <complexType abstract="true" name="BusinessException">
+    <complexContent>
+     <extension base="tns6:NestedCheckedException">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://exception.cid.harasnationaux.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://soa.logicacmg.com"/>
+   <import namespace="http://util.java"/>
+   <import namespace="http://bo.common.harasnationaux.fr"/>
+   <import namespace="http://core.springframework.org"/>
+   <import namespace="http://exception.logicacmg.com"/>
+   <import namespace="http://lang.java"/>
+   <complexType name="CIDBusinessException">
+    <complexContent>
+     <extension base="tns5:BusinessException">
+      <sequence>
+       <element name="code" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="updatePointRequest">
+
+      <wsdl:part element="impl:updatePoint" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByLoginRequest">
+
+      <wsdl:part element="impl:findPersonneByLogin" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPersonneByLoginResponse">
+
+      <wsdl:part element="impl:findPersonneByLoginResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="CIDBusinessException">
+
+      <wsdl:part element="impl:fault" name="fault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="updatePointResponse">
+
+      <wsdl:part element="impl:updatePointResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="IdentificationServicesImpl">
+
+      <wsdl:operation name="findPersonneByLogin">
+
+         <wsdl:input message="impl:findPersonneByLoginRequest" name="findPersonneByLoginRequest"/>
+
+         <wsdl:output message="impl:findPersonneByLoginResponse" name="findPersonneByLoginResponse"/>
+
+         <wsdl:fault message="impl:CIDBusinessException" name="CIDBusinessException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updatePoint">
+
+         <wsdl:input message="impl:updatePointRequest" name="updatePointRequest"/>
+
+         <wsdl:output message="impl:updatePointResponse" name="updatePointResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="IdentificationServicesImplSoapBinding" type="impl:IdentificationServicesImpl">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="findPersonneByLogin">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPersonneByLoginRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPersonneByLoginResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="CIDBusinessException">
+
+            <wsdlsoap:fault name="CIDBusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updatePoint">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updatePointRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updatePointResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="IdentificationServicesImplService">
+
+      <wsdl:port binding="impl:IdentificationServicesImplSoapBinding" name="IdentificationServicesImpl">
+
+         <wsdlsoap:address location="http://www4.haras-nationaux.fr:8080/aih-services/services/IdentificationServicesImpl"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

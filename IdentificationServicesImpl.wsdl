@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://soa.logicacmg.com" xmlns:ns3="http://bo.common.harasnationaux.fr" xmlns:ns5="http://exception.cid.harasnationaux.fr" xmlns:ns6="http://critere.common.harasnationaux.fr" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://services.aih.harasnationaux.fr" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://services.aih.harasnationaux.fr">
+  <wsdl:types xmlns:ns1="http://util.java" xmlns:ns4="http://lang.java">
+    <xsd:schema targetNamespace="http://soa.logicacmg.com" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Context">
+        <xsd:sequence>
+          <xsd:element name="applicationID" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="locale" type="ns1:Locale" minOccurs="0" nillable="true" />
+          <xsd:element name="userID" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://util.java" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Locale">
+        <xsd:sequence>
+          <xsd:element name="ISO3Country" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ISO3Language" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="country" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayCountry" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayLanguage" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayName" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="displayVariant" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="language" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="variant" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://services.aih.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:element name="findPersonneByCle">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneByCleResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:Personne" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CIDBusinessException" type="ns5:CIDBusinessException" />
+      <xsd:element name="findPersonneByInfoCheval">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in3" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneByInfoChevalResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:ArrayOfPersonne" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneByFacture">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneByFactureResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:Personne" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updatePoint">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:int" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in3" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updatePointResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:boolean" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createPersonne">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="ns3:PersonneIdentifie" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createPersonneResponse">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="updateEtatPersonneIdentifie">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updateEtatPersonneIdentifieResponse">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="findPersonneByLogin">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneByLoginResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:PersonneIdentifie" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="searchPersonneARapprocher">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="searchPersonneARapprocherResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:ArrayOfPersonne" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneById">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:string" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="findPersonneByIdResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:PersonneIdentifie" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createPersonneIdentificationFaible">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="ns3:Personne" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="ns6:CritereIdentificationPersonne" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createPersonneIdentificationFaibleResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:Personne" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="existeCompteForPersonne">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="xsd:int" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="xsd:int" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="existeCompteForPersonneResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updatePersonneIdentificationForte">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in0" type="ns3:Personne" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in1" type="ns6:CritereIdentificationPersonne" nillable="true" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="in2" type="ns2:Context" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updatePersonneIdentificationForteResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="ns3:Personne" nillable="true" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://bo.common.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Personne">
+        <xsd:sequence>
+          <xsd:element name="adresse" type="ns3:Adresse" minOccurs="0" nillable="true" />
+          <xsd:element name="codeProfil" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="commentaire" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="coordonnees" type="ns3:CoordonneesTelephoniques" minOccurs="0" nillable="true" />
+          <xsd:element name="dateMAJ" type="xsd:dateTime" minOccurs="0" />
+          <xsd:element name="dateObtentionInformation" type="xsd:dateTime" minOccurs="0" />
+          <xsd:element name="key" type="ns3:PersonneKey" minOccurs="0" nillable="true" />
+          <xsd:element name="nom" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="nuordint" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="pointch" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="prenom" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="titre" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="userId" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Adresse">
+        <xsd:sequence>
+          <xsd:element name="adresse" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="adresseFiable" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="commune" type="ns3:Commune" minOccurs="0" nillable="true" />
+          <xsd:element name="complementAdresse" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="numeroOrdre" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="pays" type="ns3:Pays" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Commune">
+        <xsd:sequence>
+          <xsd:element name="codeCirconscription" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="codeDepartement" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="codeINSEE" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="codePostal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="codeRegion" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="libelle" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Pays">
+        <xsd:sequence>
+          <xsd:element name="code" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="libelleCourt" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="libelleLong" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="libelleLongLocation" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="libelleLongNation" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="libelleMoyen" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="numero" type="xsd:int" minOccurs="0" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PersonneKey">
+        <xsd:sequence>
+          <xsd:element name="numeroOrdreAdresse" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="numeroPersonne" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="numeroPersonneTemp" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="typePersonne" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CoordonneesTelephoniques">
+        <xsd:sequence>
+          <xsd:element name="email" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="numeroFax" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="numeroPortable" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="numeroTelephone" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfPersonne">
+        <xsd:sequence>
+          <xsd:element name="Personne" type="ns3:Personne" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PersonneIdentifie">
+        <xsd:sequence>
+          <xsd:element name="adresse" type="ns3:Adresse" minOccurs="0" nillable="true" />
+          <xsd:element name="codeEtat" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="codeProfil" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="commentaire" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="coordonnees" type="ns3:CoordonneesTelephoniques" minOccurs="0" nillable="true" />
+          <xsd:element name="dateDeDerniereConnexion" type="xsd:dateTime" minOccurs="0" />
+          <xsd:element name="dateMAJ" type="xsd:dateTime" minOccurs="0" />
+          <xsd:element name="dateObtentionInformation" type="xsd:dateTime" minOccurs="0" />
+          <xsd:element name="gratuite" type="xsd:boolean" minOccurs="0" nillable="true" />
+          <xsd:element name="informationComplementaire" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="key" type="ns3:PersonneKey" minOccurs="0" nillable="true" />
+          <xsd:element name="login" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="niveauIdentification" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="nom" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="nombrePoint" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="nuordint" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="password" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="pointch" type="xsd:int" minOccurs="0" nillable="true" />
+          <xsd:element name="prenom" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="profil" type="ns3:Profil" minOccurs="0" nillable="true" />
+          <xsd:element name="titre" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="userId" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Profil">
+        <xsd:sequence>
+          <xsd:element name="codeProfil" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="id" type="xsd:int" minOccurs="0" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://exception.cid.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="CIDBusinessException">
+        <xsd:sequence>
+          <xsd:element name="cause" type="ns4:Throwable" minOccurs="0" nillable="true" />
+          <xsd:element name="code" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="message" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://lang.java" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="Throwable" />
+    </xsd:schema>
+    <xsd:schema targetNamespace="http://critere.common.harasnationaux.fr" elementFormDefault="qualified" attributeFormDefault="qualified">
+      <xsd:complexType name="CritereIdentificationPersonne">
+        <xsd:sequence>
+          <xsd:element name="commentaire" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="rapprochement" type="xsd:boolean" minOccurs="0" nillable="true" />
+          <xsd:element name="typeModification" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="updateEtatPersonneIdentifieRequest">
+    <wsdl:part element="tns:updateEtatPersonneIdentifie" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByLoginRequest">
+    <wsdl:part element="tns:findPersonneByLogin" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByCleResponse">
+    <wsdl:part element="tns:findPersonneByCleResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="searchPersonneARapprocherRequest">
+    <wsdl:part element="tns:searchPersonneARapprocher" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updatePointRequest">
+    <wsdl:part element="tns:updatePoint" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByFactureRequest">
+    <wsdl:part element="tns:findPersonneByFacture" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByLoginResponse">
+    <wsdl:part element="tns:findPersonneByLoginResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByFactureResponse">
+    <wsdl:part element="tns:findPersonneByFactureResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="createPersonneIdentificationFaibleResponse">
+    <wsdl:part element="tns:createPersonneIdentificationFaibleResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="createPersonneRequest">
+    <wsdl:part element="tns:createPersonne" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updatePointResponse">
+    <wsdl:part element="tns:updatePointResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="searchPersonneARapprocherResponse">
+    <wsdl:part element="tns:searchPersonneARapprocherResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByIdRequest">
+    <wsdl:part element="tns:findPersonneById" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updatePersonneIdentificationForteResponse">
+    <wsdl:part element="tns:updatePersonneIdentificationForteResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByInfoChevalResponse">
+    <wsdl:part element="tns:findPersonneByInfoChevalResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updateEtatPersonneIdentifieResponse">
+    <wsdl:part element="tns:updateEtatPersonneIdentifieResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByInfoChevalRequest">
+    <wsdl:part element="tns:findPersonneByInfoCheval" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="updatePersonneIdentificationForteRequest">
+    <wsdl:part element="tns:updatePersonneIdentificationForte" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="existeCompteForPersonneResponse">
+    <wsdl:part element="tns:existeCompteForPersonneResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="createPersonneIdentificationFaibleRequest">
+    <wsdl:part element="tns:createPersonneIdentificationFaible" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByCleRequest">
+    <wsdl:part element="tns:findPersonneByCle" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="createPersonneResponse">
+    <wsdl:part element="tns:createPersonneResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="CIDBusinessException">
+    <wsdl:part element="tns:CIDBusinessException" name="CIDBusinessException" />
+  </wsdl:message>
+  <wsdl:message name="existeCompteForPersonneRequest">
+    <wsdl:part element="tns:existeCompteForPersonne" name="parameters" />
+  </wsdl:message>
+  <wsdl:message name="findPersonneByIdResponse">
+    <wsdl:part element="tns:findPersonneByIdResponse" name="parameters" />
+  </wsdl:message>
+  <wsdl:portType name="IdentificationServicesPortType">
+    <wsdl:operation name="findPersonneByCle">
+      <wsdl:input message="tns:findPersonneByCleRequest" name="findPersonneByCleRequest" />
+      <wsdl:output message="tns:findPersonneByCleResponse" name="findPersonneByCleResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneByInfoCheval">
+      <wsdl:input message="tns:findPersonneByInfoChevalRequest" name="findPersonneByInfoChevalRequest" />
+      <wsdl:output message="tns:findPersonneByInfoChevalResponse" name="findPersonneByInfoChevalResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneByFacture">
+      <wsdl:input message="tns:findPersonneByFactureRequest" name="findPersonneByFactureRequest" />
+      <wsdl:output message="tns:findPersonneByFactureResponse" name="findPersonneByFactureResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="updatePoint">
+      <wsdl:input message="tns:updatePointRequest" name="updatePointRequest" />
+      <wsdl:output message="tns:updatePointResponse" name="updatePointResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="createPersonne">
+      <wsdl:input message="tns:createPersonneRequest" name="createPersonneRequest" />
+      <wsdl:output message="tns:createPersonneResponse" name="createPersonneResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateEtatPersonneIdentifie">
+      <wsdl:input message="tns:updateEtatPersonneIdentifieRequest" name="updateEtatPersonneIdentifieRequest" />
+      <wsdl:output message="tns:updateEtatPersonneIdentifieResponse" name="updateEtatPersonneIdentifieResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneByLogin">
+      <wsdl:input message="tns:findPersonneByLoginRequest" name="findPersonneByLoginRequest" />
+      <wsdl:output message="tns:findPersonneByLoginResponse" name="findPersonneByLoginResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="searchPersonneARapprocher">
+      <wsdl:input message="tns:searchPersonneARapprocherRequest" name="searchPersonneARapprocherRequest" />
+      <wsdl:output message="tns:searchPersonneARapprocherResponse" name="searchPersonneARapprocherResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneById">
+      <wsdl:input message="tns:findPersonneByIdRequest" name="findPersonneByIdRequest" />
+      <wsdl:output message="tns:findPersonneByIdResponse" name="findPersonneByIdResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="createPersonneIdentificationFaible">
+      <wsdl:input message="tns:createPersonneIdentificationFaibleRequest" name="createPersonneIdentificationFaibleRequest" />
+      <wsdl:output message="tns:createPersonneIdentificationFaibleResponse" name="createPersonneIdentificationFaibleResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="existeCompteForPersonne">
+      <wsdl:input message="tns:existeCompteForPersonneRequest" name="existeCompteForPersonneRequest" />
+      <wsdl:output message="tns:existeCompteForPersonneResponse" name="existeCompteForPersonneResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+    <wsdl:operation name="updatePersonneIdentificationForte">
+      <wsdl:input message="tns:updatePersonneIdentificationForteRequest" name="updatePersonneIdentificationForteRequest" />
+      <wsdl:output message="tns:updatePersonneIdentificationForteResponse" name="updatePersonneIdentificationForteResponse" />
+      <wsdl:fault message="tns:CIDBusinessException" name="CIDBusinessException" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IdentificationServicesHttpBinding" type="tns:IdentificationServicesPortType">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="findPersonneByCle">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="findPersonneByCleRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="findPersonneByCleResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneByInfoCheval">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="findPersonneByInfoChevalRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="findPersonneByInfoChevalResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneByFacture">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="findPersonneByFactureRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="findPersonneByFactureResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updatePoint">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updatePointRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="updatePointResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createPersonne">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="createPersonneRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createPersonneResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateEtatPersonneIdentifie">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateEtatPersonneIdentifieRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="updateEtatPersonneIdentifieResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneByLogin">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="findPersonneByLoginRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="findPersonneByLoginResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="searchPersonneARapprocher">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="searchPersonneARapprocherRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="searchPersonneARapprocherResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findPersonneById">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="findPersonneByIdRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="findPersonneByIdResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createPersonneIdentificationFaible">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="createPersonneIdentificationFaibleRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createPersonneIdentificationFaibleResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="existeCompteForPersonne">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="existeCompteForPersonneRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="existeCompteForPersonneResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updatePersonneIdentificationForte">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updatePersonneIdentificationForteRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="updatePersonneIdentificationForteResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="CIDBusinessException">
+        <wsdlsoap:fault name="CIDBusinessException" use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IdentificationServices">
+    <wsdl:port binding="tns:IdentificationServicesHttpBinding" name="IdentificationServicesHttpPort">
+      <wsdlsoap:address location="http://80.124.158.237:8080/aih-services/services/IdentificationServicesImpl" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
+
