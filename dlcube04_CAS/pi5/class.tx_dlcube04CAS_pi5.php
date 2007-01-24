@@ -93,11 +93,8 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 			}
 		}
 
-		//$this->userId = $_SESSION["portalId"];
-		//$userId ="faible";//pignol";//"etalonnier";//"faible";
 		$this->userId = (isset ($_GET["userid"]))?$_GET["userid"]:$_SESSION["portalId"];
 
-		//$type="dev_ext";//dev";//dev_ext";
 		$this->typeExecution = "dev_ext";
 		$this->doLoadUrls($this->typeExecution);
 		$this->dolLaodServices();
@@ -359,7 +356,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$content .= $this->doLoadCreditPoints();
 		$content .= $this->doLoadPrefPortail();
 		$content .= $this->doLoadFacture();
-		$content .= $this->doLoadChevaux();
+		$content .= $this->doLoadChevauxFaible();
 		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadCentreTechnique();
 		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
@@ -661,6 +658,19 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 
+	}
+
+	function doLoadChevauxFaible() {
+		$subpart = $this->cObj->getSubpart($this->templateLambda, "###CHEVAUXFAIBLE###");
+		$markerArray = null;
+
+		$markerArray["###URL_AJOUT_SOS_POULAIN###"] = $this->urlAjoutSosPoulain;
+		$markerArray["###URL_MODIF_SOS_POULAIN###"] = $this->urlModifSosPoulain;
+		$markerArray["###URL_GERER_CHEVAUX_VENDRE###"] = $this->urlGererConsulterCheval;
+		$markerArray["###URL_DECLARER_CHEVAL_VENDRE###"] = $this->urlDeclarerCheval;
+
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
+		return $content;
 	}
 
 	function doLoadChevaux() {
