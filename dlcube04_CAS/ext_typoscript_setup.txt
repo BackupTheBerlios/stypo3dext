@@ -74,12 +74,9 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
 
 .tx-dlcube04CAS-pi5 div#chevauxfaible{
  	position:relative;
- 	margin-top:5px;
- 	margin-bottom:5px;
- 	top:15px;
+ 	margin-bottom:10px;
     width:347px;
-    left:1px;
-    height:120px;
+    height:115px;
     float: left;
   }
   .tx-dlcube04CAS-pi5 div#centre_technique{
@@ -117,6 +114,13 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
     margin-right:10px;
   }
 
+  .tx-dlcube04CAS-pi5 div#services_identifications{
+	margin-bottom:10px;
+	float:right;
+    width:347px;
+    height:115px;
+  }
+
   .tx-dlcube04CAS-pi5 div fieldset {
     width: 99%;
     height:100%;
@@ -151,56 +155,8 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
     font-size: 10px;
   }
 
-/* Position des boutons
-  .tx-dlcube04CAS-pi5 div#boutonBoitePosition {
-    float:right;
-    display:block;
-    margin:2px;
-    padding:0px;
-  }
-
-
-
-  .tx-dlcube04CAS-pi5 #lienFonctionPetit:hover {
-    color: #3C3C3C;
-    background-color: #F18C13;
-  }
-
-
-
-
-  .tx-dlcube04CAS-pi5 fieldset div#contenuBox {
-    display:block;
-    height:80px;
-    margin:0px;
-    padding:0px;
-  }
-
-
-  .tx-dlcube04CAS-pi5 div#ligneA {
-    display:block;
-  }
-
-  .tx-dlcube04CAS-pi5 div#ligneA fieldset div#contenuBox {
-    height:80px;
-  }
-
-  .tx-dlcube04CAS-pi5 div#ligneB {
-    display:block;
-  }
-
-  .tx-dlcube04CAS-pi5 div#ligneB fieldset div#contenuBox {
-    height:50px;
-  }
-
-  .tx-dlcube04CAS-pi5 div#ligneC {
-    display:block;
-  }
-
-  .tx-dlcube04CAS-pi5 div#ligneC fieldset div#contenuBox {
-    height:40px;
-  }*/
-
+  #titleHover a span { display:none;position:absolute;width:200px;border: 1px solid black;background:#ECB8BB;padding:2px;z-index:10;visibility: hidden;margin-top:30px;margin-left:30px;}
+  #titleHover:hover a span { display:block;visibility: visible;z-index:10; }
 )
 
 

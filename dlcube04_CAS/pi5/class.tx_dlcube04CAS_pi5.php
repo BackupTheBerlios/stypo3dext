@@ -69,7 +69,8 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	var $urlWebMail = null;
 	var $urlInfoCheval = null;
 	var $urlGDP2 = null;
-
+	var $urlConsulterFacturesAvoirs=null;
+	var $urlGestionFacture=null;
 	var $nombreEtalonSaillie = 0;
 	var $nombreEtalonSaillieIA = 0;
 
@@ -95,9 +96,9 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 
 		$this->userId = (isset ($_GET["userid"]))?$_GET["userid"]:$_SESSION["portalId"];
 
-		$this->typeExecution = "dev_ext";
-		$this->doLoadUrls($this->typeExecution);
+		$this->typeExecution = "dev";
 		$this->dolLaodServices();
+		$this->doLoadUrls($this->typeExecution);
 
 		$espaceTypeA = array (
 			"1"
@@ -114,10 +115,6 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$espaceTypeD = array (
 			"7"
 		);
-
-		//$this->personne->profil->id=(isset($_GET["idProfil"]))?$_GET["idProfil"]:1;
-		//$this->personne->key->numeroPersonne="12333";
-		//print_r($this->personne);
 
 		if (in_array($this->personne->profil->id, $espaceTypeA))
 			$content = $this->getEspacePersoTypeA();
@@ -289,18 +286,22 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	 */
 	function doLoadUrls($type) {
 		$urlStandard = null;
-
+		$urlStandardPhp = null;
+		$urlSir = null;
 		if ($type == "prod") {
 			$urlStandard = "www4.haras-nationaux.fr:8080";
-			$urlSir = "www4.haras_nationaux.fr:8080";
+			$urlSir = "www4.haras-nationaux.fr:8080";
+			$urlStandardPhp = "www4.haras-nationaux.fr";
 		}
 		elseif ($type == "dev") {
 			$urlStandard = "xinf-devlinux:8080";
-			$urlSir = "cookie2.haras_nationaux.fr:8080";
+			$urlStandardPhp = "xinf-devlinux";
+			$urlSir = "cookie2.haras-nationaux.fr:8080";
 		}
 		elseif ($type == "dev_ext") {
 			$urlStandard = "80.124.158.237:8080";
-			$urlSir = "cookie2.haras_nationaux.fr:8080";
+			$urlStandardPhp = "80.124.158.237";
+			$urlSir = "cookie2.haras-nationaux.fr:8080";
 		}
 
 		/**
@@ -308,10 +309,10 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		 */
 		$this->urlPassageIdentFort = $this->pi_getPageLink("3684");
 		$this->urlAchatPoint = $this->pi_getPageLink("3675");
-		$this->urlGererConsulterCheval = $this->pi_getPageLink("3674");
-		$this->urlDeclarerCheval = $this->pi_getPageLink("3673");
-		$this->urlModifSosPoulain = $this->pi_getPageLink("3672");
-		$this->urlAjoutSosPoulain = $this->pi_getPageLink("3671");
+		$this->urlGererConsulterCheval = $this->pi_getPageLink("3673");
+		$this->urlDeclarerCheval = $this->pi_getPageLink("3674");
+		$this->urlModifSosPoulain = $this->pi_getPageLink("3671");
+		$this->urlAjoutSosPoulain = $this->pi_getPageLink("3672");
 		$this->urlModifCompte = $this->pi_getPageLink("3670");
 
 		/**
@@ -319,12 +320,13 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		 */
 		$this->urlDeclaNovelleNaissance = "http://" . $urlStandard . "/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=POS";
 		$this->urlDeclaResultNeg = "http://" . $urlStandard . "/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=NEG";
-		$this->urlTranspondeur;
-		"http://" . $urlStandard . "/cid-internet-mobile-AV-CI/signalTranspondeur/RechercheEquideAction.do?dispatch=initDataBeforeLoad";
-		$this->urlControle;
-		"http://" . $urlStandard . "/cid-internet-mobile-AV-CI/controleIdentite/RechercheControleIdentiteAction.do?dispatch=initDataBeforeLoad";
+		$this->urlTranspondeur="http://" . $urlStandard . "/cid-internet-mobile-AV-CI/signalTranspondeur/RechercheEquideAction.do?dispatch=initDataBeforeLoad";
+		$this->urlControle="http://" . $urlStandard . "/cid-internet-mobile-AV-CI/controleIdentite/RechercheControleIdentiteAction.do?dispatch=initDataBeforeLoad";
 		$this->urlGererConsulterCheval = "http://" . $urlStandard . "/cid-internet-mobile-AV-CI/achatvente/ListeChevauxAction.do?dispatch=initDataBeforeLoad";
 		$this->urlDeclarerCheval = "http://" . $urlStandard . "/cid-internet-mobile-AV-CI/achatvente/AchatChevalAction.do?dispatch=initDataBeforeLoad";
+
+		$this->urlConsulterFacturesAvoirs="http://".$urlStandardPhp."/compte/Gestion_Compte.php?idClient=0&coope=".$this->userId."&client=";
+		$this->urlGestionFacture="http://".$urlStandardPhp."/compte/Gestion_Compte.php?idClient=1&coope=&client=". $this->personne->key->numeroPersonne;
 
 		$this->urlGererSaillies = "http://" . $urlSir . "/DPS_PRIVEES/Etalonnier/Index.jsp?serv=DPS";
 		$this->urlEditerAttestCertif = "http://" . $urlSir . "/DPS_PRIVEES/Etalonnier/Index.jsp?serv=EDT";
@@ -357,6 +359,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$content .= $this->doLoadPrefPortail();
 		$content .= $this->doLoadFacture();
 		$content .= $this->doLoadChevauxFaible();
+		//$content .= $this->doLoadSaillieFaible();
 		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		$content .= $this->doLoadCentreTechnique();
 		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
@@ -416,10 +419,10 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$content .= $this->doLoadVotreComptePersonnelHn();
 		$content .= $this->doLoadPrefPortail();
 		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
-		if ($this->personne->profil->id == 7)
-			$content .= $this->doLoadServicesInternetPersonnelHnPlus();
-		else
-			$content .= $this->doLoadServicesInternetPersonnelHn();
+		//if ($this->personne->profil->id == 7)
+		$content .= $this->doLoadServicesInternetPersonnelHnPlus();
+		/*else
+			$content .= $this->doLoadServicesInternetPersonnelHn();*/
 		$content .= $this->cObj->substituteMarkerArrayCached($subpartSeparateur, array (), array (), array ());
 		return $content;
 	}
@@ -549,7 +552,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		if ($this->personne->nombrePoint == "" || $this->personne->nombrePoint == "0")
 			$markerArray["###INFO_POINTS###"] = 'vous n\'avez pas de cr&eacute;dit de points';
 		else
-			$markerArray["###INFO_POINTS###"] = "votre cr&eacute;dit de points s'&eacute:l&egrave;ve &agrave;: <strong>" . (($this->personne->nombrePoint == "") ? 0 : $this->personne->nombrePoint) . " pts</strong>.</p>";
+			$markerArray["###INFO_POINTS###"] = "votre cr&eacute;dit de points s'&eacute;l&egrave;ve &agrave;: <strong>" . (($this->personne->nombrePoint == "") ? 0 : $this->personne->nombrePoint) . " pts</strong>.</p>";
 
 		$markerArray["###URL_ACHAT_POINT###"] = $this->urlAchatPoint;
 
@@ -585,13 +588,13 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$markerArray = null;
 
 		if ($this->nbreFactures != "" || $this->nbreFactures > 0) {
-			$markerArray["###CONTENT###"] = 'Il reste <STRONG>' . (($this->nbreFactures == "") ? 0 : $this->nbreFactures) . '</STRONG> factures en attente de r&eacute;glement pour un montant total de <STRONG>' . (($this->montantFactures == "") ? 0 : $this->montantFactures) . '</STRONG> euros TTC.';
+			$markerArray["###CONTENT###"] = 'Il reste <STRONG>' . (($this->nbreFactures == "") ? 0 : $this->nbreFactures) . '</STRONG> factures en attente de r&egrave;glement pour un montant total de <STRONG>' . (($this->montantFactures == "") ? 0 : $this->montantFactures) . '</STRONG> euros TTC.';
 		} else {
-			$markerArray["###CONTENT###"] = 'Aucune facture en attente.';
+			$markerArray["###CONTENT###"] = '';
 		}
 
-		$markerArray["###URL_GESTION_FACTURES###"] = 'http://www4.haras-nationaux.fr/compte/Gestion_Compte.php?idClient=1&coope=&client=' . $this->personne->key->numeroPersonne;
-
+		$markerArray["###URL_GESTION_FACTURES###"] = $this->urlGestionFacture;
+		$markerArray["###URL_CONULTER_FACTURES_AVOIRS###"] = $this->urlConsulterFacturesAvoirs;
 		$content .= $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
 		return $content;
 	}
@@ -602,7 +605,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		if ($this->nbreNaissance == "" || $this->nbreNaissance == "0") {
 			$markerArray["###CONTENT###"] = 'Vous n\'avez pas d&eacute;clar&eacute; de naissance';
 		} else {
-			$markerArray["###CONTENT###"] = 'Vous avez d&eacute;clar&eacute; <strong>' . (($this->nbreNaissance == "") ? 0 : $this->nbreNaissance) . '</strong> naissances en 2006.';
+			$markerArray["###CONTENT###"] = 'Vous avez d&eacute;clar&eacute; <strong>' . (($this->nbreNaissance == "") ? 0 : $this->nbreNaissance) . '</strong> naissances en '.date("Y");
 		}
 
 		$markerArray["###URL_DECLA_NOUVELLE_NAISSANCE###"] = $this->urlDeclaNovelleNaissance;
@@ -617,7 +620,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		if ($this->nbreNaissance == "" || $this->nbreNaissance == "0") {
 			$markerArray["###CONTENT###"] = 'Vous n\'avez pas d&eacute;clar&eacute; de naissance';
 		} else {
-			$markerArray["###CONTENT###"] = 'Vous avez d&eacute;clar&eacute; <strong>' . (($this->nbreNaissance == "") ? 0 : $this->nbreNaissance) . '</strong> naissances en 2006.';
+			$markerArray["###CONTENT###"] = 'Vous avez d&eacute;clar&eacute; <strong>' . (($this->nbreNaissance == "") ? 0 : $this->nbreNaissance) . '</strong> naissances en '.date("Y");
 		}
 
 		$markerArray["###URL_DECLA_NOUVELLE_NAISSANCE###"] = $this->urlDeclaNovelleNaissance;
@@ -638,6 +641,16 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 
 		$markerArray["###URL_GERER_SAILLIES###"] = $this->urlGererSaillies;
 		$markerArray["###URL_EDITER_ATTESTATIONS_CERTIFICATS###"] = $this->urlEditerAttestCertif;
+		$markerArray["###URL_SUIVI_SANITAIRE###"] = $this->urlSuiviSanitaire;
+
+		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
+		return $content;
+	}
+
+	function doLoadSaillieFaible() {
+		$subpart = $this->cObj->getSubpart($this->templateLambda, "###SAILLIESFAIBLE###");
+		$markerArray = null;
+
 		$markerArray["###URL_SUIVI_SANITAIRE###"] = $this->urlSuiviSanitaire;
 
 		$content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array (), array ());
