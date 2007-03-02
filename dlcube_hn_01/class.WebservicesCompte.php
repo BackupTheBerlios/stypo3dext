@@ -1,6 +1,7 @@
 <?php
 include_once("typo3conf/ext/dlcube_hn_01/data/ObjectTransfertWS.php");
 include_once("typo3conf/ext/dlcube_hn_01/php_inc/nusoap/mynusoap.php");
+
 /**************************************************************
 *
 *  Copyright notice
@@ -44,6 +45,7 @@ class WebservicesCompte {
 	var $wsdlIdent;
 	var $wsdlCid;
 	var $wsdlPsi;
+	var $wsdlDPS;
 	var $client;
 	var $errorMessage;
 
@@ -57,7 +59,7 @@ class WebservicesCompte {
 		else if($type=="dev")
 			$url = "xinf-devlinux:8080";
 		else if($type=="dev_ext")
-			$url = "80.124.158.237:8080";
+			$url = "81.252.125.237:8080";
 		else if($type=="local")
 			$url = "127.0.0.1:8080";
 
@@ -102,7 +104,7 @@ class WebservicesCompte {
 		    // Affichage du r�sultat
 		    //echo $O->date ;
 		    return true;
-		} catch (SoapFault $fault) {
+		} catch (SoapFault $fault){
 		    $this->errorMessage = $fault;
 		}
 		 return false;
@@ -355,13 +357,15 @@ class WebservicesCompte {
 	 * Function qui retourne le nombre d'étalons d'un étalonnier sur place
 	 */
 	function getNbrSurPlace($parametres){
-		if($this->client != null){
-			$result = $this->client->call('getNbSurPlace', $parametres);
-			if( !$this->client->getError() ){
-				return $result;
-			}
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		     $client = new SoapClient($this->wsdlDPS, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->getNbSurPlace($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
 		}
-		$this->errorMessage = $this->client->getError();
 		return false;
 	}
 
@@ -369,6 +373,18 @@ class WebservicesCompte {
 	 * Function qui retourne le nombre d'étalons d'un étalonnier en IA
 	 */
 	function getNbrIA($parametres){
+		$this->errorMessage=null;
+		try {
+		    // Nouvelle instance de la classe soapClient
+		     $client = new SoapClient($this->wsdlDPS, array('trace' => 1, 'soap_version'=> SOAP_1_1));
+		    $result =  $client->getNbIA($parametres);
+		    return $result;
+		} catch (SoapFault $fault) {
+		    $this->errorMessage =$fault->faultstring;
+		}
+		return false;
+
+		/*
 		if($this->client != null){
 			$result = $this->client->call('getNbIA', $parametres);
 			if( !$this->client->getError() ){
@@ -377,6 +393,7 @@ class WebservicesCompte {
 		}
 		$this->errorMessage = $this->client->getError();
 		return false;
+		*/
 	}
 
 	/**

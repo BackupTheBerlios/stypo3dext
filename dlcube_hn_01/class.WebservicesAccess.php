@@ -54,7 +54,7 @@ class WebservicesAccess {
 		else if($type=="dev")
 			$url = "xinf-devlinux:8080";
 		else if($type=="dev_ext")
-			$url = "80.124.158.237:8080";
+			$url = "81.252.125.237:8080";
 		else if($type=="local")
 			$url = "127.0.0.1:8080";
 		//$this->wsdl = "http://xinf-datastore2:8080/hndto/services/CTServicesPortail?wsdl";
