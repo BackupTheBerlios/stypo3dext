@@ -35,6 +35,7 @@ class tx_dlcube04CAS_pi2 extends tslib_pibase {
 	var $prefixId = "tx_dlcube04CAS_pi2";		// Same as class name
 	var $scriptRelPath = "pi2/class.tx_dlcube04CAS_pi2.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube04_CAS";	// The extension key.
+	var $typeExecution = null; /**dev|dev_ext|prod*/
 
 	/**
 	 * [Put your description here]
@@ -45,6 +46,19 @@ class tx_dlcube04CAS_pi2 extends tslib_pibase {
 		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_loadLL();
 		session_start();
+
+		$this->typeExecution="prod";
+		$urlCas = "none";
+		$portCas = "none";
+		 if($this->typeExecution=="dev"){
+		 	$urlCas = "xinf-devlinux.intranet.haras-nationaux.fr";
+			$portCas = 7777;
+		 }
+		 else if($this->typeExecution=="prod"){
+		 	$urlCas = "cerbere.haras-nationaux.fr";
+			$portCas = 443;
+		 }
+
 		if(isset($_GET["userdebug"])){
 			include_once("typo3conf/ext/dlcube_hn_01/class.WebservicesCompte.php");
 			include_once("typo3conf/ext/dlcube_hn_01/class.WebservicesAccess.php");
@@ -63,17 +77,12 @@ class tx_dlcube04CAS_pi2 extends tslib_pibase {
 		}
 		if(isset($_GET["action"]) &&  $_GET["action"]=="auth" && !isset($_GET["ticket"])){
 			phpCAS::setDebug();
-			//phpCAS::client(CAS_VERSION_2_0,'cerbere.haras-nationaux.fr',443,'cas','true');
-			phpCAS::client(CAS_VERSION_2_0,'xinf-devlinux.intranet.haras-nationaux.fr',7777,'cas','true');
+			phpCAS::client(CAS_VERSION_2_0,$urlCas,$portCas,'cas','true');
 			$ur = phpCAS::getServerLoginURL(false);
-			//debug($ur);
-			//$content.='<ul><li>'.htmlspecialchars($this->pi_getLL("txt_creationcompte")) .' <a href="'.$this->pi_getPageLink("3694","",array("no_cache"=>"1")).'">'.htmlspecialchars($this->pi_getLL("txt_creationcompte_lien_label")).'</a></li></ul>';
-			//$content.='<ul><li>'.htmlspecialchars($this->pi_getLL("txt_compteperdu")) .' <a href="'.$this->pi_getPageLink("3695","",array("no_cache"=>"1")).'">'.htmlspecialchars($this->pi_getLL("txt_creationcompte_lien_label")).'</a></li></ul>';
 			$content.='<IFRAME src="'.$ur.'" frameborder="no" height="600" width="670"></IFRAME>';
 			return $this->pi_wrapInBaseClass($content);
 		}
-		//phpCAS::client(CAS_VERSION_2_0,'cerbere.haras-nationaux.fr',443,'cas','true');
-		phpCAS::client(CAS_VERSION_2_0,'xinf-devlinux.intranet.haras-nationaux.fr',7777,'cas','true');
+		phpCAS::client(CAS_VERSION_2_0,$urlCas,$portCas,'cas','true');
 		phpCAS::checkAuthentication();
 		$_SESSION["portalId"]= phpCAS::getUser();
 		echo '<html><body><script type="text/javascript">

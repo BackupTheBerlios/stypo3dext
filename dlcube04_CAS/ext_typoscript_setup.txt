@@ -2,6 +2,7 @@
 plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 {
   	height:600px;
+  	width:700px;
   }
 
   .tx-dlcube04CAS-pi5 fieldset {
@@ -10,7 +11,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   }
 
   .tx-dlcube04CAS-pi5 div#votre_compte{
-    width: 347px;
+    width: 340px;
     height:115px;
     float:left;
     margin-bottom:10px;
@@ -18,7 +19,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   }
 
   .tx-dlcube04CAS-pi5 div#credit_points{
-    width: 347px;
+    width: 340px;
     height:115px;
     float:right;
     margin-bottom:10px;
@@ -27,7 +28,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#pref_portail{
   	margin-bottom:10px;
 	float:left;
-    width:347px;
+    width:340px;
     height:115px;
     margin-right:10px;
   }
@@ -35,14 +36,14 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#factures{
   	margin-bottom:10px;
 	float:right;
-    width: 347px;
+    width: 340px;
     height:115px;
   }
 
   .tx-dlcube04CAS-pi5 div#naissances{
   	margin-bottom:10px;
 	float:left;
-    width: 347px;
+    width: 340px;
     height:115px;
     margin-right:10px;
   }
@@ -50,14 +51,14 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#saillies{
   	margin-bottom:10px;
 	float:right;
-    width: 347px;
+    width: 340px;
     height:115px;
   }
 
   .tx-dlcube04CAS-pi5 div#lieux_detention{
   	margin-bottom:10px;
 	float:right;
-    width: 347px;
+    width: 340px;
     height:115px;
   }
 
@@ -66,7 +67,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
  	margin-top:5px;
  	margin-bottom:5px;
  	top:15px;
-    width:707px;
+    width:700px;
     left:1px;
     height:120px;
     float: left;
@@ -75,7 +76,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
 .tx-dlcube04CAS-pi5 div#chevauxfaible{
  	position:relative;
  	margin-bottom:10px;
-    width:347px;
+    width:340px;
     height:115px;
     float: left;
   }
@@ -84,7 +85,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
  	margin-top:5px;
  	margin-bottom:5px;
  	top:15px;
-    width:707px;
+    width:700px;
     left:1px;
     height:120px;
     float: left;
@@ -93,7 +94,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#services_veto_ident{
 	margin-bottom:10px;
 	float:left;
-    width:347px;
+    width:340px;
     height:115px;
     margin-right:10px;
   }
@@ -101,7 +102,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#services_internet_mini{
 	margin-bottom:10px;
 	float:left;
-    width:347px;
+    width:340px;
     height:115px;
     margin-right:10px;
   }
@@ -109,7 +110,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#services_personnel_hn{
 	margin-bottom:10px;
 	float:left;
-    width:347px;
+    width:340px;
     height:115px;
     margin-right:10px;
   }
@@ -117,7 +118,7 @@ plugin.tx_dlcube04CAS_pi5._CSS_DEFAULT_STYLE (
   .tx-dlcube04CAS-pi5 div#services_identifications{
 	margin-bottom:10px;
 	float:right;
-    width:347px;
+    width:340px;
     height:115px;
   }
 

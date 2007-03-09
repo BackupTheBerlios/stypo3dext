@@ -35,6 +35,7 @@ class tx_dlcube04CAS_pi1 extends tslib_pibase {
 	var $prefixId = "tx_dlcube04CAS_pi1";		// Same as class name
 	var $scriptRelPath = "pi1/class.tx_dlcube04CAS_pi1.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube04_CAS";	// The extension key.
+	var $typeExecution = null; /**dev|dev_ext|prod*/
 
 	/**
 	 * Cette methode permet de verifier si l'utilisateur
@@ -47,10 +48,21 @@ class tx_dlcube04CAS_pi1 extends tslib_pibase {
 		session_start();
 		//$idPageAuth = '3434';
 		$idPageAuth = '3682';
+		$this->typeExecution="prod";
+		$urlCas = "none";
+		$portCas = "none";
+		 if($this->typeExecution=="dev"){
+		 	$urlCas = "xinf-devlinux.intranet.haras-nationaux.fr";
+			$portCas = 7777;
+		 }
+		 else if($this->typeExecution=="prod"){
+		 	$urlCas = "cerbere.haras-nationaux.fr";
+			$portCas = 443;
+		 }
+
 		//debug($_SESSION);
 		if($GLOBALS["TSFE"]->page["tx_dlcube04CAS_auth_cas_required"]==1){
-			//phpCAS::client(CAS_VERSION_2_0,'cerbere.haras-nationaux.fr',443,'cas','true');
-			phpCAS::client(CAS_VERSION_2_0,'xinf-devlinux.intranet.haras-nationaux.fr',7777,'cas','true');
+			phpCAS::client(CAS_VERSION_2_0,$urlCas,$portCas,'cas','true');
 			$auth = phpCAS::checkAuthentication();
 			if(!$auth){
 				$_SESSION["service_id_auth"]=$GLOBALS["TSFE"]->id;

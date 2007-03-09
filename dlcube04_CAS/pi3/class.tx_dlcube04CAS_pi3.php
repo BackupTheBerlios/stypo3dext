@@ -36,7 +36,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 	var $prefixId = "tx_dlcube04CAS_pi3";		// Same as class name
 	var $scriptRelPath = "pi3/class.tx_dlcube04CAS_pi3.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube04_CAS";	// The extension key.
-	var $typeExecution = "dev"; /**dev|dev_ext|prod*/
+	var $typeExecution = "prod"; /**dev|dev_ext|prod*/
 
 	/**
 	 * Plug-in pour création de comptes CAS

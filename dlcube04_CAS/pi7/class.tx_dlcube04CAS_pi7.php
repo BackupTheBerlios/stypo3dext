@@ -35,6 +35,7 @@ class tx_dlcube04CAS_pi7 extends tslib_pibase {
 	var $prefixId = "tx_dlcube04CAS_pi7";		// Same as class name
 	var $scriptRelPath = "pi7/class.tx_dlcube04CAS_pi7.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube04_CAS";	// The extension key.
+	var $typeExecution = null; /**dev|dev_ext|prod*/
 
 	/**
 	 * [Put your description here]
@@ -44,11 +45,23 @@ class tx_dlcube04CAS_pi7 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_loadLL();
+
+		$this->typeExecution="prod";
+		$urlCas = "none";
+		$portCas = "none";
+		 if($this->typeExecution=="dev"){
+		 	$urlCas = "xinf-devlinux.intranet.haras-nationaux.fr";
+			$portCas = 7777;
+		 }
+		 else if($this->typeExecution=="prod"){
+		 	$urlCas = "cerbere.haras-nationaux.fr";
+			$portCas = 443;
+		 }
+
 		session_start();
 		if(isset($_GET["action"]) &&  $_GET["action"]=="disconnect"){
 			phpCAS::setDebug();
-			//phpCAS::client(CAS_VERSION_2_0,'cerbere.haras-nationaux.fr',443,'cas','true');
-			phpCAS::client(CAS_VERSION_2_0,'xinf-devlinux.intranet.haras-nationaux.fr',7777,'cas','true');
+			phpCAS::client(CAS_VERSION_2_0,$urlCas,$portCas,'cas','true');
 			$ur = phpCAS::getServerLogoutURL();
 			phpCAS::killSession();
 			//Suppression de la sesssion de harasire
