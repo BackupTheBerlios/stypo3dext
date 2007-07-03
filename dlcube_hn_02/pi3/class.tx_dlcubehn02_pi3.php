@@ -1,19 +1,19 @@
 <?php
 /***************************************************************
 *  Copyright notice
-*  
+*
 *  (c) 2004 Vincent (admin, celui à la pioche) (webtech@haras-nationaux.fr)
 *  All rights reserved
 *
-*  This script is part of the TYPO3 project. The TYPO3 project is 
+*  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
-* 
+*
 *  The GNU General Public License can be found at
 *  http://www.gnu.org/copyleft/gpl.html.
-* 
+*
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/** 
+/**
  * Plugin 'etalons_nouveaux' for the 'dlcube_hn_02' extension.
  *
  * @author	Vincent (admin, celui à la pioche) <webtech@haras-nationaux.fr>
@@ -38,7 +38,7 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 	var $extKey = "dlcube_hn_02";	// The extension key.
 	var $urlPhoto;
 	var $urlFiches;
-	
+
 	/**
 	 * [Put your description here]
 	 */
@@ -48,12 +48,12 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 		$this->pi_loadLL();
 		$this->urlPhoto = "uploads/tx_dlcubehn02/fichesen/photos/";
 		$this->urlFiches = "uploads/tx_dlcubehn02/fichesen/";
-			
+
 		/*$content='
 			<strong>This is a few paragraphs:</strong><BR>
 			<p>This is line 1</p>
 			<p>This is line 2</p>
-	
+
 			<h3>This is a form:</h3>
 			<form action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'" method="POST">
 				<input type="hidden" name="no_cache" value="1">
@@ -66,11 +66,11 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 		$content = $this->getListeResult();
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
 	/**
 	 * Methode de recherche qui retourne une liste de réponses.
 	 * 1. Si la liste est dans la session alors le système retourne une plage de la liste
-	 * 2. Si la liste ne se trouve pas dans la session, le système fait appel au webservice et calcul la liste	
+	 * 2. Si la liste ne se trouve pas dans la session, le système fait appel au webservice et calcul la liste
 	 * @return String
 	 */
 	function getListeResult(){
@@ -78,7 +78,7 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 		$content='<div><h2>'.htmlspecialchars($this->pi_getLL("titre_list")).'</h2>';
 		$param = array();
 		if(!isset($_SESSION["RESULT_NEW"])){
-			$ws = new WebservicesAccess();
+			$ws = new WebservicesAccess("dev_ext");
 			if(!$ws->connect()) return "erreur a la connexion:".$ws->getErrorMessage();
 
 			$objTransfert = new ObjectTransfertWS();
@@ -101,7 +101,7 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 			$content .="<div style='color:red;font-size:9px;text-align:center'>".$this->pi_getLL("libelle_error_count")."</div>";
 			return $content;
 		}
-		
+
 		$content.='
 		<table border="0" cellpadding="0" cellspacing="0" border="0">';
 		foreach($result as $etalon){
@@ -110,13 +110,13 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 			}
 			$img = false;
 			if (file_exists($this->urlPhoto.$etalon["codeCheval"].'.jpg')) $img = true;
-			
+
 				$content.='<tr valign="top"><td valign="top" width="600px" style="border:solid 1px #C1131E;padding:15px;">
 					<table border="0" cellspacing="0" cellpadding="0" class="imgtext-nowrap">
 						<tr>
 							<td valign="top">';
 								if($img){
-								$content.='	
+								$content.='
 								<table width="111" border="0" cellspacing="0" cellpadding="0" class="imgtext-table">
 									<tr>
 										<td colspan="1">
@@ -135,7 +135,7 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 										</td>
 									</tr>
 								  </table>';
-								}	
+								}
 							$content.='
 							</td>
 							<td valign="top">';
@@ -165,7 +165,7 @@ class tx_dlcubehn02_pi3 extends tslib_pibase {
 				} else {
 					$content .='<p>'.htmlspecialchars($this->pi_getLL("libelle_station")).' : '.$etalon["libelleCentreTechnique"].'</p>';
 				}
-				
+
 				$content .='<p>'.htmlspecialchars($this->pi_getLL("libelle_prix_saut")).' : ';
 				$listPrix = $etalon["prix"];
 				if(is_array($listPrix) && count($listPrix)>0){
