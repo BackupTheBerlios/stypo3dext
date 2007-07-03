@@ -8,7 +8,7 @@ require_once('html2ps_v214/public_html/config.inc.php');
 require_once(HTML2PS_DIR.'pipeline.factory.class.php');
 
 $url = null;
-$typeDev="dev";
+$typeDev="prod";
 
 if($typeDev == "prod")
 	$url = "www.haras-nationaux.fr/portail/index.php";
@@ -157,7 +157,7 @@ switch ($g_config['method']) {
 };
 
 // Setup watermark
-$watermark_text = "DEVELOPPEMENT";
+$watermark_text = "";//DEVELOPPEMENT";
 $pipeline->output_driver->set_watermark($watermark_text);
 if ($g_config['debugbox']) {
   $pipeline->output_driver->set_debug_boxes(true);

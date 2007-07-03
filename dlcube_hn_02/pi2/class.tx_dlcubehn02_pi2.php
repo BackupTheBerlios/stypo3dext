@@ -25,9 +25,9 @@
  * Plugin 'etalons-Ã©talothÃ¨que' for the 'dlcube_hn_02' extension.
  * Cette extension contient les fonctionnalitÃ©s suivantes.
  * 1 - Formulaire de recherches des Ã©talons
- * 2 - Liste des étalons
- * 3 - Fiche étalon
- * 4 - comparatif d'étalons
+ * 2 - Liste des etalons
+ * 3 - Fiche etalon
+ * 4 - comparatif d'etalons
  *
  * @author Guillaume Tessier<gtessier@dlcube.com>
  */
@@ -66,7 +66,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 		$this->fiches_folder="uploads/tx_dlcubehn02/fichesen/";
 		$this->photos_folder="uploads/tx_dlcubehn02/fichesen/photos/";
 
-		$this->typeDev="dev";//dev_ext";
+		$this->typeDev="prod";//dev_ext";
 
 		if($this->typeDev =="prod"){
 			$this->baseUrl = "http://www.haras-nationaux.fr/portail/";
@@ -168,7 +168,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 						}
 
 						if(num > 3){
-							alert("Le nombre maximum de points forts ne peut être supérieur à 3");
+							alert("Le nombre maximum de points forts ne peut ï¿½tre supï¿½rieur ï¿½ 3");
 						}
 						if(num ==0){
 							document.getElementById("showPtsForts").innerHTML="AUCUN";
@@ -183,7 +183,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					            http_request = new XMLHttpRequest();
 					            if (http_request.overrideMimeType) {
 					                http_request.overrideMimeType(\'text/xml\');
-					                // Voir la note ci-dessous à propos de cette ligne
+					                // Voir la note ci-dessous ï¿½ propos de cette ligne
 					            }
 					        } else if (window.ActiveXObject) { // IE
 					            try {
@@ -196,7 +196,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					        }
 
 					        if (!http_request) {
-					            alert(\'Abandon :( Impossible de créer une instance XMLHTTP\');
+					            alert(\'Abandon :( Impossible de crï¿½er une instance XMLHTTP\');
 					            return false;
 					        }
 					        http_request.onreadystatechange = function() { viewContents(http_request); };
@@ -222,7 +222,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 								document.getElementById("LISTE_CT").style.visibility=\'visible\';
 				    			document.getElementById("LISTE_CT").style.display=\'block\';
 				            } else {
-				                document.getElementById("LISTE_DETAIL").innerHTML="Un problème est survenu avec la requête.";
+				                document.getElementById("LISTE_DETAIL").innerHTML="Un problï¿½me est survenu avec la requï¿½te.";
 				            }
 				        }
 				    }
@@ -235,8 +235,8 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 							if(document.formCmp[i]["name"]=="cmp[]")
 								if(document.formCmp[i]["checked"]) count++;
 						}
-						if(count < 2) alert("Vous devez sélectionner au minimum 2 étalons");
-						else if(count > 5) alert("Vous pouvez sélectionner au maximum 5 étalons");
+						if(count < 2) alert("Vous devez sï¿½lectionner au minimum 2 ï¿½talons");
+						else if(count > 5) alert("Vous pouvez sï¿½lectionner au maximum 5 ï¿½talons");
 						else document.formCmp.submit();
 					}
 			// -->
@@ -263,7 +263,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 			$resultCh = $wschcmp->getAllListEtalon2Cmp($param);
 			$content.='<table cellspacing="0" border="0" cellpading="0" style="border-collapse: collapse;width:690px;">';
 			$content.='<TR>
-				<TH style="border-width:thin;border-color:#C1131E;background-color:#ff7800;border-style:solid;font-size:medium;font-family: verdana, arial, sans-serif;color:white;font-weight:normal;width:130px;">nom de l\'étalon</TH>
+				<TH style="border-width:thin;border-color:#C1131E;background-color:#ff7800;border-style:solid;font-size:medium;font-family: verdana, arial, sans-serif;color:white;font-weight:normal;width:130px;">nom de l\'ï¿½talon</TH>
 				<TH style="border-width:thin;border-color:#C1131E;background-color:#ff7800;border-style:solid;font-size:medium;font-family: verdana, arial, sans-serif;color:white;font-weight:normal;width:110px;">race</TH>
 				<TH style="border-width:thin;border-color:#C1131E;background-color:#ff7800;border-style:solid;font-size:medium;color:white;font-weight:normal;font-family: verdana, arial, sans-serif;width:110px;">robe</TH>
 				<TH style="border-width:thin;border-color:#C1131E;background-color:#ff7800;border-style:solid;color:white;font-weight:normal;font-size:medium;font-family: verdana, arial, sans-serif;width:140px;">prix</TH>
@@ -275,7 +275,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;width:110px;">'.$cheval["raceLibelle"].'</TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;width:110px;">'.$cheval["robeLibelle"].'</TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;width:140px;">';
-				$content.='<span style="float:left">Réservation </span><span style="float:right">'.$cheval["prixReservation"].'&euro;</span><br/><br/>';
+				$content.='<span style="float:left">Rï¿½servation </span><span style="float:right">'.$cheval["prixReservation"].'&euro;</span><br/><br/>';
 				$content.='<span style="float:left">Saillie </span><span style="float:right">'.$cheval["prixSaillie"].'&euro;</span><br/><br/>';
 				$content.='<span style="float:left">Poulain vivant </span><span style="float:right">'.$cheval["prixNaissance"].'&euro;</span><br/><br/></TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;width:140px;">&nbsp;';
@@ -287,9 +287,9 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 					$content.=$cheval["pointFort3"].'<br/>';
 				$content.='</TD>';
 				$content.='<TD align="center" style="border-bottom-color:red;border-bottom-width:thin;border-bottom-style:dotted;width:60px;">';
-				$content.=$this->pi_list_linkSingle("Fiche détaillée avec photo",$cheval["codeCheval"],1)."<br/>";
+				$content.=$this->pi_list_linkSingle("Fiche dï¿½taillï¿½e avec photo",$cheval["codeCheval"],1)."<br/>";
 				if($cheval["urlVideo"] != "" ){
-					$content .='<a href="'.$cheval["urlVideo"].'" target="_blank">Vidéo</a>';
+					$content .='<a href="'.$cheval["urlVideo"].'" target="_blank">Vidï¿½o</a>';
 				}
 				$content.='</TD></TR>';
 			}
@@ -318,7 +318,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				<input type="hidden" name="'.$this->prefixId.'[action]" value="newListe">
 				<div>
 					<div style="float:left;width:100%;margin-bottom:2px;">
-						Seules les races d\'étalon disponibles aux Haras nationaux sont proposées.
+						Seules les races d\'ï¿½talon disponibles aux Haras nationaux sont proposï¿½es.
 					</div>
 					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_cheval_race")).'</strong></p>
 					<div style="float:right;width:50%;margin-bottom:2px;">
@@ -378,7 +378,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 							<option value="S" '.((isset($_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]) && $_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]=="S")?"selected":"").'>sang</option>
 							<option value="P" '.((isset($_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]) && $_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]=="P")?"selected":"").'>poney</option>
 							<option value="T" '.((isset($_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]) && $_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]=="T")?"selected":"").'>trait</option>
-							<option value="A" '.((isset($_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]) && $_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]=="A")?"selected":"").'>âne</option>
+							<option value="A" '.((isset($_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]) && $_SESSION["POST_FORM_HN"][$this->prefixId]["type_equide"]=="A")?"selected":"").'>ï¿½ne</option>
 						</select>
 					</div>
 				</div>
@@ -414,7 +414,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				<div style="float:left;width:100%;"><hr></div>
 				<div style="float:left;width:100%;">
 				<H3>'.htmlspecialchars($this->pi_getLL("titre_form_prix")).'</H3>
-				Ce tarif comprend le montant des fractions à la réservation, à la saillie et poulain vivant. Il n\'inclut pas les frais techniques de monte.<br/><br/>
+				Ce tarif comprend le montant des fractions &agrave; la r&eacute;servation, &agrave; la saillie et poulain vivant. Il n\'inclut pas les frais techniques de monte.<br/><br/>
 				</div>
 				<div>
 					<div style="float:left;width:50%;margin-bottom:2px;">
@@ -438,7 +438,7 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 				<div>
 					<p style="float:left;width:100%;margin-bottom:4px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_poitns_forts")).'</strong></p>
 					<div style="float:left;width:40%;margin-bottom:6px;">
-					Maintenez la touche Ctrl de votre clavier pour sélectionner jusqu\'à 3 points forts.
+					Maintenez la touche Ctrl de votre clavier pour s&eacute;lectionner jusqu\'&agrave; 3 points forts.
 					</div>
 					<div style="float:right;width:50%;margin-bottom:2px;">
 						&nbsp;<select onChange="selPointsForts()" multiple="true" size="10" name="'.$this->prefixId.'[point_fort][]">';
@@ -450,13 +450,13 @@ class tx_dlcubehn02_pi2 extends tslib_pibase {
 						</select>
 					</div>
 					<div style="float:left;border:solid 1px #fe7d19;">
-						<div><strong>Points forts sélectionnés</strong></div>
+						<div><strong>Points forts sï¿½lectionnï¿½s</strong></div>
 						<div style="width:auto;" id="showPtsForts"> AUCUN </div>
 					</div>
 				</div>
 				<div style="float:left;width:100%;"><hr></div>
 				<div>
-					<div style="float:left;width:100%;margin-bottom:2px;">Seules les robes d\'étalon disponibles aux Haras nationaux sont proposées.</div>
+					<div style="float:left;width:100%;margin-bottom:2px;">Seules les robes d\'ï¿½talon disponibles aux Haras nationaux sont proposï¿½es.</div>
 					<p style="float:left;width:40%;margin-bottom:2px;"><strong>'.htmlspecialchars($this->pi_getLL("libelle_robe")).'</strong></p>
 					<div style="float:right;width:50%;margin-bottom:2px;">
 						&nbsp;<select name="'.$this->prefixId.'[robe]">
@@ -644,15 +644,15 @@ p {margin: 0;color: #666666;padding-left: 20px;}
       </span></td>
 
     <td style="width:10,5cm" valign="top">
-      <h4>Localisation géographique</h4>
-      <p>Cet étalon qui fait la monte depuis '.$etalon["anneeReproduction"].', ';
+      <h4>Localisation gï¿½ographique</h4>
+      <p>Cet ï¿½talon qui fait la monte depuis '.$etalon["anneeReproduction"].', ';
 
 			if($etalon["libelleCentreTechnique"] == ""){
 				$content .=' est aujourd\'hui '.htmlspecialchars($this->pi_getLL("libelle_attente_affectation")).'<br>';
 			} else {
 				$content .=' est aujourd\'hui disponible au '.$etalon["libelleCentreTechnique"].'<br>';
 			}
-			$content .='Visible à cet endroit sur rendez-vous.</p>';
+			$content .='Visible ï¿½ cet endroit sur rendez-vous.</p>';
 
 		$param = array();
 		$objTransfert = new ObjectTransfertWS();
@@ -664,7 +664,7 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 			$resultCT = $wsCt->getAllCT4Etalon($param);
 			if(is_array($resultCT)){
 				$content .='<div id="LISTE_CT" style="float:left;width:95%;border-style:solid;border-width:thin">
-    			<h4 style="width:100%;float:left"><strong>Centre(s) où la semence est disponible</strong></h4><br />
+    			<h4 style="width:100%;float:left"><strong>Centre(s) o&ugrave; la semence est disponible</strong></h4><br />
          		<div id="LISTE_DETAIL">';
 				foreach($resultCT as $ct){
 					$content.="<p style='align:left;'>".$ct["nom"]." ".substr($ct["codePostal"],0,2)." ".$ct["telephone"]."</p>";
@@ -718,15 +718,15 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 	<td>
       <h4>Prix de la saillie</h4>
               <p>
-				'.$etalon["prixReservation"].' &euro; payables à la réservation<br/>
-				'.$etalon["prixSaillie"].' &euro; payables à la saillie<br/>
-				'.$etalon["prixNaissance"].' &euro; payables poulain vivant à 48 h<br/>
+				'.$etalon["prixReservation"].' &euro; payables &agrave; la r&eacute;servation<br/>
+				'.$etalon["prixSaillie"].' &euro; payables &agrave; la saillie<br/>
+				'.$etalon["prixNaissance"].' &euro; payables poulain vivant &agrave; 48 h<br/>
 				hors frais techniques de monte.<br/>
 			</p>
               <br />
-              <p> Pour être mis en relation avec un conseiller <br />
+              <p> Pour &ecirc;tre mis en relation avec un conseiller <br />
                 des Haras Nationaux, contactez l\'accueil au <br />
-                0811 90 21 31 de 9h à 17h ou par mail <br />
+                0811 90 21 31 de 9h &agrave; 17h ou par mail <br />
                 <a href="mailto:info@haras-nationaux.fr">info@haras-nationaux.fr</a>
               </p>
              </td>
@@ -761,9 +761,10 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 
 		if($etalon){
 			//Header
-			$content .='<div style="float:right;margin:5px"><a href="typo3conf/ext/dlcube_hn_02/pi2/cheval_pdf.php?id='.$GLOBALS["TSFE"]->id.'&nomcheval='.$etalon["nomCheval"].'&codecheval='.$codeCheval.'&action=pdf" id="lienFonctionPetit" style="color:white;text-decoration:none">version imprimable</a></div>';
+			$content .='<div style="text-align:right;float:left;margin:5px;width:100%;"><a href="typo3conf/ext/dlcube_hn_02/pi2/cheval_pdf.php?id='.$GLOBALS["TSFE"]->id.'&nomcheval='.$etalon["nomCheval"].'&codecheval='.$codeCheval.'&action=pdf" id="lienFonctionPetit" style="color:white;text-decoration:none">version imprimable</a></div>';
+
 			$content .='<div style="float: left;">';
-			$content .='<div style="float:left;width:330px;/*display:block;border:solid 1px #fe7d19;*/">
+			$content .='<div style="float:left;width:330px;">
 				<h2 style="text-align:center;"><strong>'. $etalon["nomCheval"].'</strong></h2>
 				<p>'. $etalon["raceLibelle"];
 				if($etalon["pourcentageSangArabe"]>0 && ($etalon["codeGroupeRace"]=="AA" || $etalon["codeGroupeRace"]=="PFS" || $etalon["codeGroupeRace"]=="AB")){
@@ -867,7 +868,7 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 			$content .='<div style="float: left;width:730px;"><hr><br/></div>';
 			$content .='<div style="float: left;width:730px;">';
 			$content .='<span style="float:left;width:330px;display:block;">';
-			//ICI commence le détail du cheval
+			//ICI commence le dï¿½tail du cheval
 
 			if($etalon["pointFort1"]!= "" || $etalon["pointFort2"] != "" || $etalon["pointFort3"]!=""){
 				$content .='<h4 style="font-size:12px">'. htmlspecialchars($this->pi_getLL("libelle_3points_fort")).'</h4>
@@ -908,7 +909,7 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 				<h4 style="font-size:12px"><strong>'. $this->pi_getLL("libelle_tests").'</strong></h4>';
 				foreach($tab_fiches as $fiche){
 					if(isset($fiche["key"])){
-						$content .='<a target=""_blank" href="'.$fiche["url"].'" title="('.$fiche["size"].', modifi&eacute; le '.$fiche["dateModif"].')">'.$this->pi_getLL("libelle_pdf_".$fiche["key"]).'</a><br>';
+						$content .='<a target="_blank" href="'.$fiche["url"].'" title="('.$fiche["size"].', modifi&eacute; le '.$fiche["dateModif"].')">'.$this->pi_getLL("libelle_pdf_".$fiche["key"]).'</a><br>';
 					}
 				}
 				$content .="<p><br>".$this->pi_getLL("phrase_compare_inra").'<a target="_blank" href="'.$this->urlINRA.'">'.$this->pi_getLL("labelle_cliquez_ici").'</a></p>';
@@ -917,14 +918,14 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 			$content .='</span>';
 			$content .='<span style="float:right;width:350px;display:block;">';
 			$content .='<h4 style="font-size:12px">'.$this->pi_getLL("libelle_repro").'</h4><p>
-			Cet étalon qui fait la monte depuis '.$etalon["anneeReproduction"].', ';
+			Cet &eacute;talon qui fait la monte depuis '.$etalon["anneeReproduction"].', ';
 
 			if($etalon["libelleCentreTechnique"] == ""){
 				$content .=' est aujourd\'hui '.htmlspecialchars($this->pi_getLL("libelle_attente_affectation")).'<br>';
 			} else {
 				$content .=' est aujourd\'hui disponible au '.$etalon["libelleCentreTechnique"].'<br>';
 			}
-			$content .='Visible à cet endroit sur rendez-vous.';
+			$content .='Visible &agrave; cet endroit sur rendez-vous.';
 			$content .='<p id="txt_cliquez_ici"><br/><br/><a href="javascript:divcache(\'txt_cliquez_ici\');makeRequest(\''.$this->baseUrl.$this->pi_getPageLink($GLOBALS["TSFE"]->id,"",array("codeCheval"=>$etalon["codeCheval"],"no_cache"=>1,"action"=>"getListCT")).'\')">Cliquez ici</a> pour connaitre la liste des Centres techniques dans lesquels la semence est disponible<br><br>';
 			$content .='<div id="LISTE_CT" style="float:left;width:95%;visibility:hidden;display:none;border-style:solid;border-width:thin">
 					<h4 style="width:100%;float:left"><strong>'.htmlspecialchars($this->pi_getLL("libelle_liste_ct")).'</strong></h4><br/>
@@ -933,13 +934,13 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 			if($etalon["codeDispoEnIac"]=="O")$content .='<br/><h4>Disponible en IAC</h4>';
 			$content .='</p><br/><h4 style="font-size:12px">Prix de la saillie</h4>
 			<p>
-				'.$etalon["prixReservation"].' &euro; payables à la réservation<br/>
-				'.$etalon["prixSaillie"].' &euro; payables à la saillie<br/>
-				'.$etalon["prixNaissance"].' &euro; payables poulain vivant à 48 h<br/>
+				'.$etalon["prixReservation"].' &euro; payables &agrave; la r&eacute;servation<br/>
+				'.$etalon["prixSaillie"].' &euro; payables &agrave; la saillie<br/>
+				'.$etalon["prixNaissance"].' &euro; payables poulain vivant &agrave; 48 h<br/>
 				hors frais techniques de monte.<br/>
 			</p>';
 			$content .='<br/><p>
-			Pour être mis en relation avec un conseiller <br/>des Haras Nationaux, contactez l\'accueil au <br/>0811 90 21 31 de 9h à 17h ou par mail <br/><a href="mailto:info@haras-nationaux.fr">info@haras-nationaux.fr</a>
+			Pour ï¿½tre mis en relation avec un conseiller <br/>des Haras Nationaux, contactez l\'accueil au <br/>0811 90 21 31 de 9h &agrave; 17h ou par mail <br/><a href="mailto:info@haras-nationaux.fr">info@haras-nationaux.fr</a>
 			</p>';
 			//$content .='<br><a target="_blank" href="http://www.haras-nationaux.fr/portail/uploads/tx_vm19docsbase/Bulletin_toute_race_01.doc">'.htmlspecialchars($this->pi_getLL("libelle_reservation_saillie")).'</a>';
 			$content .='</p>';
@@ -985,7 +986,7 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 			if(isset($this->piVars["nomcheval"]) && $this->piVars["nomcheval"] != ""){
 				$nomCheval = str_replace("%","",$this->piVars["nomcheval"]);
 				if(strlen($nomCheval)<2){
-					$this->error = "Le nombre de lettres composant le nom du cheval doit être supérieur ou égal à deux.";
+					$this->error = "Le nombre de lettres composant le nom du cheval doit ï¿½tre supï¿½rieur ou ï¿½gal ï¿½ deux.";
 					return $this->getFormulaireVide();
 				}
 
@@ -1041,7 +1042,6 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 				$objTransfert->setKey("iac");
 				$objTransfert->setValue("true");
 				$param[count($param)] = $objTransfert;
-
 			}
 			if(isset($this->piVars["prix_max"]) && $this->piVars["prix_max"] != ""){
 				$objTransfert = new ObjectTransfertWS();
@@ -1101,7 +1101,7 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 				$content .=$this->pi_linkToPage(htmlspecialchars($this->pi_getLL("libelle_nouvelle_recherche")),$GLOBALS["TSFE"]->id);
 			return $content;
 		}
-		$content.='<div>Vous pouvez effectuer un comparatif sur les principaux critères entre 2 et 5 étalons. Il suffit pour cela de cocher les cases des étalons choisis, puis de cliquer sur "Comparer" en bas de la liste.</div>';
+		$content.='<div>Vous pouvez effectuer un comparatif sur les principaux critï¿½res entre 2 et 5 ï¿½talons. Il suffit pour cela de cocher les cases des ï¿½talons choisis, puis de cliquer sur "Comparer" en bas de la liste.</div>';
 		$content .= "<h4>".count($result)." ".$this->pi_getLL("libelle_compteur")."</h4><br>";
 		if(count($result)==1){
 			$url = $this->pi_getPageLink($GLOBALS["TSFE"]->id,"toto",array("tx_dlcubehn02_pi2[showUid]"=>$result[0]["codeCheval"],"no_cache"=>"1"));
@@ -1109,7 +1109,7 @@ p {margin: 0;color: #666666;padding-left: 20px;}
 		}
 		if(count($result)>99){
 			$content .="<div id='message' style='color:red;font-size:15px;text-align:center'>";
-			$content .=count($result)." étalons correspondent à votre critères; cliquer sur OK pour afficher la liste des 100 premiers ou cliquer sur ANNULER pour affiner vos critères.<br/>";
+			$content .=count($result)." ï¿½talons correspondent ï¿½ votre critï¿½res; cliquer sur OK pour afficher la liste des 100 premiers ou cliquer sur ANNULER pour affiner vos critï¿½res.<br/>";
 			$content .='<a href="javascript:divcache(\'message\');divaffiche(\'result\')" style="color:white;text-decoration:none" id="lienFonctionPetit">OK</a>   ';
 			$content .='<a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'" style="color:white;text-decoration:none" id="lienFonctionPetit">ANNULER</a>';
 			$content .="</div>";
