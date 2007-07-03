@@ -70,6 +70,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 	var $urlInfoCheval = null;
 	var $urlGDP2 = null;
 	var $urlConsulterFacturesAvoirs=null;
+	var $urlLabogena=null;
 	var $urlGestionFacture=null;
 	var $nombreEtalonSaillie = 0;
 	var $nombreEtalonSaillieIA = 0;
@@ -110,12 +111,12 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 			"5"
 		);
 		//Bouchon
-		/*$espaceTypeC = array (
-			"8"
-		);*/
 		$espaceTypeC = array (
-			"-12"
+			"8"
 		);
+		/*$espaceTypeC = array (
+			"-12"
+		);*/
 		$espaceTypeD = array (
 			"7"
 		);
@@ -283,20 +284,24 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$urlStandard = null;
 		$urlStandardPhp = null;
 		$urlSir = null;
+
 		if ($type == "prod") {
 			$urlStandard = "www4.haras-nationaux.fr:8080";
 			$urlSir = "www4.haras-nationaux.fr:8080";
 			$urlStandardPhp = "www4.haras-nationaux.fr";
+			$this->urlLabogena = "http://www4.haras-nationaux.fr/cidPDA/M_CID_CritereLabogena.php?portailId=".$this->userId;
 		}
 		elseif ($type == "dev") {
 			$urlStandard = "xinf-devlinux:8080";
 			$urlStandardPhp = "xinf-devlinux";
 			$urlSir = "cookie2.haras-nationaux.fr:8080";
+			$this->urlLabogena = "http://xinf-devlinux/cidPDA/M_CID_CritereLabogena.php?portailId=".$this->userId;
 		}
 		elseif ($type == "dev_ext") {
 			$urlStandard = "80.124.158.237:8080";
 			$urlStandardPhp = "80.124.158.237";
 			$urlSir = "cookie2.haras-nationaux.fr:8080";
+			$this->urlLabogena = "http://xinf-devlinux/cidPDA/M_CID_CritereLabogena.php?portailId=".$this->userId;
 		}
 
 		/**
@@ -319,7 +324,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$this->urlDeclaNovelleNaissance = "http://" . $urlStandard . "/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=POS";
 		$this->urlDeclaResultNeg = "http://" . $urlStandard . "/cid-internet-web/declaration-naissance/ReferenceDeSaillieAction.do?dispatch=initDataBeforeLoad&typeDeclaration=NEG";
 		$this->urlTranspondeur="http://" . $urlStandard . "/cid-internet-mobile-AV-CI/signalTranspondeur/RechercheEquideAction.do?dispatch=initDataBeforeLoad";
-		$this->urlControle="http://" . $urlStandard . "/cid-internet-mobile-AV-CI/controleIdentite/RechercheControleIdentiteAction.do?dispatch=initDataBeforeLoad";
+		$this->urlControle="http://" . $urlStandard . "/cid-internet-mobile-AV-CI/controleIdentite_auth/PosePuceAction.do?dispatch=initDataBeforeLoad";
 		$this->urlGererConsulterCheval = "http://" . $urlStandard . "/cid-internet-mobile-AV-CI/achatvente/ListeChevauxAction.do?dispatch=initDataBeforeLoad";
 		$this->urlDeclarerCheval = "http://" . $urlStandard . "/cid-internet-mobile-AV-CI/achatvente/AchatChevalAction.do?dispatch=initDataBeforeLoad";
 
@@ -646,7 +651,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$markerArray = null;
 
 		//$this->nbreLieudetention["getNbrLieuDetentionReturn"]
-		$markerArray["###CONTENT###"] = 'Vous g&eacute;rez ' . $this->nombreEtalonSaillie . ' &eacute;talons sur internet dont ' . $this->nombreEtalonSaillieIA . ' en IA';
+		$markerArray["###CONTENT###"] = 'Vous g&eacute;rez ' . $this->nombreEtalonSaillie . ' &eacute;talons sur internet et ' . $this->nombreEtalonSaillieIA . ' en IA';
 
 		$markerArray["###URL_GERER_SAILLIES###"] = $this->urlGererSaillies;
 		$markerArray["###URL_EDITER_ATTESTATIONS_CERTIFICATS###"] = $this->urlEditerAttestCertif;
@@ -758,6 +763,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$markerArray = null;
 
 		$markerArray["###URL_TRANSPONDEUR###"] = $this->urlTranspondeur;
+		$markerArray["###URL_LABOGENA###"] = $this->urlLabogena;
 		$markerArray["###URL_CONTROLE###"] = $this->urlControle;
 		$markerArray["###URL_COMMANDER###"] = "#";
 
@@ -784,6 +790,7 @@ class tx_dlcube04CAS_pi5 extends tslib_pibase {
 		$markerArray = null;
 
 		$markerArray["###URL_TRANSPONDEUR###"] = $this->urlTranspondeur;
+		$markerArray["###URL_LABOGENA###"] = $this->urlLabogena;
 		$markerArray["###URL_CONTROLE###"] = $this->urlControle;
 		$markerArray["###URL_COMMANDER###"] = "#";
 		$markerArray["###URL_WEBMAIL###"] = $this->urlWebMail;
