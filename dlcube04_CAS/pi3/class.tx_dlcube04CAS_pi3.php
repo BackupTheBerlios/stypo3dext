@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2004 Vincent (admin, celui à la pioche) (webtech@haras-nationaux.fr)
+*  (c) 2004 Vincent (admin, celui ï¿½ la pioche) (webtech@haras-nationaux.fr)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,16 +36,24 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 	var $prefixId = "tx_dlcube04CAS_pi3";		// Same as class name
 	var $scriptRelPath = "pi3/class.tx_dlcube04CAS_pi3.php";	// Path to this script relative to the extension dir.
 	var $extKey = "dlcube04_CAS";	// The extension key.
-	var $typeExecution = "prod"; /**dev|dev_ext|prod*/
+	var $typeExecution = "dev"; /**dev|dev_ext|prod*/
+	var $ldapParam=array();
 
 	/**
-	 * Plug-in pour création de comptes CAS
+	 * Plug-in pour creation de comptes CAS
 	 */
 	function main($content,$conf)	{
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_loadLL();
+
+		$this->ldapParam = array(
+		'server'=>"10.211.162.20",
+		'port'=>"10389",
+		'basedn'=>"ou=utilisateurs,dc=haras-nationaux-dev,dc=fr"
+		);
+
 		session_start();
 
 		$content='';
@@ -80,8 +88,10 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 				if(!$ws->connectServices()){
 					$content="ERROR:".$ws->getErrorMessage();
 				}
+				else if($this->loginExistinLdap($this->piVars["login"])){
+					$content = $this->errorLoginExiste();
+				}
 				else{
-
 					$md5 = "{MD5}".base64_encode(mhash(MHASH_MD5,$this->piVars["passwd1"]));
 					//$md5 = $this->piVars["passwd1"];
 					$param = array(
@@ -123,6 +133,52 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 		return $this->pi_wrapInBaseClass($content);
 	}
 
+	 function loginExistInLdap($login){
+            $ds = ldap_connect($this->ldapParam['server'],$this->ldapParam['port']);
+
+            if($ds){
+                    ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION,3);
+                    $ldapbind = ldap_bind($ds);
+                    if($ldapbind){
+                            $sr=ldap_search($ds, $this->ldapParam['basedn'], "uid=".$login);
+                            $info = ldap_get_entries($ds, $sr);
+                            //echo $info["count"]." entrées trouvées.<br>";
+                            //print_r($info[0]);
+
+                            if( $info["count"] == 0){
+                                    //echo "user not exist";
+                                    //echo ldap_error($ds);
+                                    ldap_close($ds);
+                                    return false;
+                            }
+                            else{
+                                    //echo ldap_error($ds);
+                                    //echo "user exist";
+                                    ldap_close($ds);
+                                    return true;
+                            }
+                    }
+                    ldap_close($ds);
+                    return true;
+            }
+    }
+
+
+	/*function loginExistInLdap($login){
+		$ldapLink = ldap_connect($this->ldapParam['server'],$this->ldapParam['port']);
+		$ldapbind = ldap_bind($ldapLink, "uid=".$login.",".$this->ldapParam['dc']);
+		if(!$ldapbind){
+			echo "user not exist";
+			ldap_close($ldapLink);
+			return false;
+		}
+		else{
+			echo "user exist";
+			ldap_close($ldapLink);
+			return true;
+		}
+	}*/
+
 	/**
 	 * Ecrit un message d'erreur
 	 * @return void
@@ -136,7 +192,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 
 	function checkLogin($login){
 		for($i=0; $i < strlen($login);$i++){
-			if(!ereg("[A-Za-z]|[0-9]|\.|\-|_]",$login[$i])){
+			if(!ereg("[A-Za-z]|[0-9]|\.|-",$login[$i])){
 				return false;
 			}
 		}
@@ -144,7 +200,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 	}
 
 	/**
-	 * Inscrit un message de félicitation
+	 * Inscrit un message de fï¿½licitation
 	 * @return void
 	 */
 	function success(){
@@ -163,12 +219,12 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 				function check(){
 					var monLogin = document.formCrea["'.$this->prefixId.'[login]'.'"].value;
 
-					var reg1 = /[A-Z]|[0-9]|-|_|\./;
+					var reg1 = /[A-Z]|[0-9]|-|\./;
 
 					for(i=0;i < monLogin.length;i++){
 						alert(reg1.test(monLogin[i]));
 						if (!reg1.test(monLogin[i])){
-							alert("SEUL LES CARACTERES SUIVANTS SONT AUTORISES POUR LE CHAMP IDENTIFIANT:\n0 à 9\n A à Z\n . , _ , -");
+							alert("SEUL LES CARACTERES SUIVANTS SONT AUTORISES POUR LE CHAMP IDENTIFIANT:\n0 à 9\n A à Z\n .  , -");
 							return false;
 						}
 					}
@@ -182,7 +238,7 @@ class tx_dlcube04CAS_pi3 extends tslib_pibase {
 			</script>
 			<div>'.nl2br(htmlspecialchars($this->pi_getLL("desc_formulaire"))).'<br/></div>
 			<hr/>
-			<form action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',array("no_cache"=>1)).'" method="POST" name="formCrea">
+			<form action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',array("no_cache"=>1)).'&time='.time().'" method="POST" name="formCrea">
 				<input type="hidden" name="no_cache" value="1">
 				<input type="hidden" name="'.$this->prefixId.'[action]" value="insert">
 			<table width="400px">
