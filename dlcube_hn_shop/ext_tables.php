@@ -21,7 +21,7 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_dlcubehnshop_articles.gif",
 	),
 	"feInterface" => Array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, ref, ref2, title, auteur, editor, support, designation, descdetail, parut, price, tva, isbn, weight, nbpages, archive, technicaldegree, img1, img2, file",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, ref, ref2, title, auteur, editor, support, designation, descdetail, parut, price, tva,cotypresta,cosstypresta isbn, weight, nbpages, archive, technicaldegree, img1, img2, file",
 	)
 );
 
@@ -42,26 +42,6 @@ $TCA["tx_dlcubehnshop_editors"] = Array (
 	),
 	"feInterface" => Array (
 		"fe_admin_fieldList" => "hidden, name, infos",
-	)
-);
-
-$TCA["tx_dlcubehnshop_supports"] = Array (
-	"ctrl" => Array (
-		'title' => 'LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_supports',		
-		'label' => 'name',	
-		'tstamp' => 'tstamp',
-		'crdate' => 'crdate',
-		'cruser_id' => 'cruser_id',
-		"default_sortby" => "ORDER BY crdate",	
-		"delete" => "deleted",	
-		"enablecolumns" => Array (		
-			"disabled" => "hidden",
-		),
-		"dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
-		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_dlcubehnshop_supports.gif",
-	),
-	"feInterface" => Array (
-		"fe_admin_fieldList" => "hidden, name",
 	)
 );
 

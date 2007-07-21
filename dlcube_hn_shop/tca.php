@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA["tx_dlcubehnshop_articles"] = Array (
 	"ctrl" => $TCA["tx_dlcubehnshop_articles"]["ctrl"],
 	"interface" => Array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,ref,ref2,title,auteur,editor,support,designation,descdetail,parut,price,tva,isbn,weight,nbpages,archive,technicaldegree,img1,img2,file"
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,ref,ref2,title,auteur,editor,support,designation,descdetail,parut,price,tva,isbn,cotypresta,cosstypresta,weight,nbpages,archive,technicaldegree,img1,img2,file"
 	),
 	"feInterface" => $TCA["tx_dlcubehnshop_articles"]["feInterface"],
 	"columns" => Array (
@@ -116,8 +116,8 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 				"items" => Array (
 					Array("",0),
 				),
-				"foreign_table" => "tx_dlcubehnshop_supports",	
-				"foreign_table_where" => "ORDER BY tx_dlcubehnshop_supports.name",	
+				"foreign_table" => "tx_vm19docsbase_support",	
+				"foreign_table_where" => "ORDER BY tx_vm19docsbase_support.title",	
 				"size" => 3,	
 				"minitems" => 0,
 				"maxitems" => 1,	
@@ -166,7 +166,7 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",	
-				"eval" => "required,double2",
+				"eval" => "required",
 			)
 		),
 		"tva" => Array (		
@@ -176,7 +176,27 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 				"type" => "input",	
 				"size" => "5",	
 				"max" => "6",	
-				"eval" => "double2",
+// 				"eval" => "float",
+			)
+		),
+		"cotypresta" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_articles.cotypresta",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "3",	
+				"max" => "3",
+				"eval" => "required",
+			)
+		),
+		"cosstypresta" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_articles.cosstypresta",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "5",	
+				"max" => "5",
+				"eval" => "required",
 			)
 		),
 		"isbn" => Array (		
@@ -285,7 +305,7 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 		),
 	),
 	"types" => Array (
-		"0" => Array("showitem" => "hidden;;1;;1-1-1, ref, ref2, title;;;;2-2-2, auteur;;;;3-3-3, editor, support, designation;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts], descdetail;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts], parut, price, tva, isbn, weight, nbpages, archive, technicaldegree, img1, img2, file")
+		"0" => Array("showitem" => "hidden;;1;;1-1-1, ref, ref2, title;;;;2-2-2, auteur;;;;3-3-3, editor, support, designation;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts], descdetail;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts], parut, price, tva, isbn, cotypresta, cosstypresta, weight, nbpages, archive, technicaldegree, img1, img2, file")
 	),
 	"palettes" => Array (
 		"1" => Array("showitem" => "starttime, endtime, fe_group")
@@ -330,41 +350,6 @@ $TCA["tx_dlcubehnshop_editors"] = Array (
 	),
 	"types" => Array (
 		"0" => Array("showitem" => "hidden;;1;;1-1-1, name, infos")
-	),
-	"palettes" => Array (
-		"1" => Array("showitem" => "")
-	)
-);
-
-
-
-$TCA["tx_dlcubehnshop_supports"] = Array (
-	"ctrl" => $TCA["tx_dlcubehnshop_supports"]["ctrl"],
-	"interface" => Array (
-		"showRecordFieldList" => "hidden,name"
-	),
-	"feInterface" => $TCA["tx_dlcubehnshop_supports"]["feInterface"],
-	"columns" => Array (
-		"hidden" => Array (		
-			"exclude" => 1,
-			"label" => "LLL:EXT:lang/locallang_general.xml:LGL.hidden",
-			"config" => Array (
-				"type" => "check",
-				"default" => "0"
-			)
-		),
-		"name" => Array (		
-			"exclude" => 0,		
-			"label" => "LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_supports.name",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",	
-				"eval" => "required,trim",
-			)
-		),
-	),
-	"types" => Array (
-		"0" => Array("showitem" => "hidden;;1;;1-1-1, name")
 	),
 	"palettes" => Array (
 		"1" => Array("showitem" => "")

@@ -22,13 +22,15 @@ CREATE TABLE tx_dlcubehnshop_articles (
 	designation text NOT NULL,
 	descdetail text NOT NULL,
 	parut tinytext NOT NULL,
-	price double(11,2) DEFAULT '0.00' NOT NULL,
-	tva double(11,2) DEFAULT '0.00' NOT NULL,
+	price double(11,3) DEFAULT '0.00' NOT NULL,
+	tva double(11,3) DEFAULT '0.00' NOT NULL,
 	isbn tinytext NOT NULL,
 	weight int(11) DEFAULT '0' NOT NULL,
 	nbpages int(11) DEFAULT '0' NOT NULL,
 	archive tinyint(3) DEFAULT '0' NOT NULL,
 	technicaldegree int(11) DEFAULT '0' NOT NULL,
+	cotypresta varchar(3) DEFAULT '' NOT NULL,
+	cosstypresta varchar(5) DEFAULT '' NOT NULL,
 	img1 blob NOT NULL,
 	img2 blob NOT NULL,
 	file blob NOT NULL,
@@ -52,25 +54,6 @@ CREATE TABLE tx_dlcubehnshop_editors (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
 	infos text NOT NULL,
-	
-	PRIMARY KEY (uid),
-	KEY parent (pid)
-);
-
-
-
-#
-# Table structure for table 'tx_dlcubehnshop_supports'
-#
-CREATE TABLE tx_dlcubehnshop_supports (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	name varchar(255) DEFAULT '' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
