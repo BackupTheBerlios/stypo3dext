@@ -887,8 +887,11 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			break;
 			
 			case "editor":
+				return txRecupLib("tx_dlcubehnshop_editors","uid","name",$this->internal["currentRow"][$fN]);
+			break;
+			
 			case "support":
-				return txRecupLib("tx_dlcubehnshop_".$fN."s","uid","name",$this->internal["currentRow"][$fN]);
+				return txRecupLib("tx_vm19docsbase_support","uid","title",$this->internal["currentRow"][$fN]);
 			break;
 			
 			case "price":
