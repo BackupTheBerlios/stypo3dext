@@ -46,11 +46,13 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	var $urlpsi;
 	var $urlpsidev="http://xinf-devlinux.intranet.haras-nationaux.fr/psi/PsiVersementPayline.do";
 	var $urlpsiprod="http://www4.haras-nationaux.fr/psi/PsiVersementPayline.do";
-	var $mailcommprod="librairie@haras-nationaux.fr,pascal.collet@haras-nationaux.fr";
-	var $mailcommdev="artec.vm@nerim.net";
+	var $mailcommprod="librairie@haras-nationaux.fr";
+	var $mailcommdev="artec.vm@arnac.net";
 	var $mailcomm;
 	// frais de porc
-	var $tbfp= array( "1.5" => 0 , "5" => 1, "8" => 2, "15" => 3, "30" => 4, "50" => 5, "70" => 7, "100" => 10, "200" => 13, "1000000" => 16);
+	// ils sont en base desormais, caches dans la racine de la librairie avec la ref frais_port*
+	// 
+	// var $tbfp= array( "1.5" => 0 , "5" => 1, "8" => 2, "15" => 3, "30" => 4, "50" => 5, "70" => 7, "100" => 10, "200" => 13, "1000000" => 16);
 
 	//var $searchConfig="WSDatastore"; 
 	
@@ -78,10 +80,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		$this->uid = substr(strstr($GLOBALS[GLOBALS][TSFE]->currentRecord,":"),1);
 		$content.='<H2><img src="'.$this->conf["iconDir"].'librairie.gif" class="picto"> '.$this->pi_getLL("plugtitle")."</H2>";
 		
-		if ($GLOBALS["TSFE"]->id!=$_SESSION['hnkcid']) { // si chgt de page reset tout
+		if ($GLOBALS["TSFE"]->id != $_SESSION['hnkcid'] || $this->piVars["showUid"]) { // si chgt de page reset tout
 			$_SESSION["hnkart_mode"]=false;
 			$_SESSION["shop_archmode"]="false";
-			$_SESSION['hnkcid']=$GLOBALS["TSFE"]->id;
+			$_SESSION['hnkcid'] = $GLOBALS["TSFE"]->id;
 		}
 			
 		if ($_REQUEST["hnkart_mode"]=="false") {
@@ -113,7 +115,28 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			if ($_SESSION['hn_kart'][$_REQUEST["dec_art"]]==0) unset($_SESSION['hn_kart'][$_REQUEST["dec_art"]]);
 		}
 		
+		// test si qtes a 0: si oui, enleve article du caddie
+		foreach($_SESSION['hn_kart'] as $k=>$v) {
+			if ($v<=0) unset($_SESSION['hn_kart'][$k]);
+		}
+		
 		if ($_REQUEST["del_art"])  unset($_SESSION['hn_kart'][$_REQUEST["del_art"]]);
+		
+		// affiche tous les rayons de la boutique en haut
+/*		echo("<pre>");
+		print_r($GLOBALS["TSFE"]->page);
+		echo("</pre>");*/
+		
+		$content .= '<p><span class="actRubrique">'.$this->pi_getLL('rubrik').' : </span>';
+		$qfp = "select title,uid from pages where pid=".$GLOBALS["TSFE"]->page['pid']." AND deleted=0 AND hidden=0 ORDER BY sorting";
+		$resfp = mysql(TYPO3_db,$qfp);
+		while ($rwfp = mysql_fetch_array($resfp)) {
+		
+			$content .= ($rwfp['uid']==$GLOBALS["TSFE"]->id ? '<span class="actRubrique">'.$rwfp['title']. '</span>' : '<a href="'.$this->pi_getPageLink($rwfp['uid']).'">'.$rwfp['title']."</a>") ." | ";
+		}
+		$content .="</p><br/>\n";
+		
+
 		
 		if ($_SESSION["hnkart_mode"]=="true") { // vue contenu de la carriole ou bon de commande
 			return $this->pi_wrapInBaseClass($this->viewCart($content));
@@ -143,17 +166,19 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 /**
 	 * vue carriole de commande
 	 */
-	function viewCart($content,$recap=false) {
+	function viewCart($content,$recap=false,$echbform=true) {
 		 
-		 if (!$recap) $content.='<h3 style="padding:5px"><img src="'.$this->conf["iconDir"].'cariole_big.gif" class="picto"> '.$this->pi_getLL('kart_content').'</H3>';
+		 if (!$recap) $content.='<h3><img src="'.$this->conf["iconDir"].'cariole_big.gif" class="picto"> '.$this->pi_getLL('kart_content').'</H3>';
 		
 		
 		if (empty($_SESSION['hn_kart'])) {
 			$content.=$this->pi_getLL("empty_kart","[empty_kart]");
-			$content.='<p align="center"><A class="fxbutton" HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'&cHash='.$this->cHash.'&hnkart_mode=false">'.$this->pi_getLL("closek","[closek]").'</a>&nbsp;&nbsp;&nbsp;</p>';
+			$urlParameters['cHash'] = $this->cHash;
+			$urlParameters['hnkart_mode'] = "false";
+			$content.='<p align="center"><A class="fxButton" HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.$this->pi_getLL("closek","[closek]").'</a>&nbsp;&nbsp;&nbsp;</p>';
 
 		} else  {
-			$content.='<FORM action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'" id="'.$this->prefixId.'fname" name="'.$this->prefixId.'fname" method="POST">';
+			if ($echbform) $content.='<FORM action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'" id="'.$this->prefixId.'fname" name="'.$this->prefixId.'fname" method="POST">';
 			$content.='<table width="100%"><tr class="docTableHead">
 		 		<td align="left">Ref</td>
 				<td align="left">'.$this->pi_getLL('listFieldHeader_title').'</td>
@@ -183,35 +208,55 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				 <a HREF="#" onclick="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=true&dec_art='.$tbrep['uid'].'" title="'.$this->pi_getLL("kartdec","[kartdec]").'"><img src="'.$this->conf["iconDir"].'dec.gif" class="picto"  alt="'.$this->pi_getLL("kartdec","[kartdec]").'"></a>';
 				 */
 				
-				$content.='<td align="center">'.round($tbrep['price'],2).' &#8364;</td>';
+				$content.='<td align="right">'.number_format ( round($tbrep['price'],2),2,","," ").' &#8364;</td>';
 				$content.='
-				<td align="center">'.$totl.' &#8364;</td><td>';
-				 if (!$recap) $content.='<a HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'&cHash='.$this->cHash.'&hnkart_mode=true&del_art='.$tbrep['uid'].'" title="'.$this->pi_getLL("kartdel","[kartdel]").'"><img src="'.$this->conf["iconDir"].'trash.gif" class="picto"  alt="'.$this->pi_getLL("kartdel","[kartdel]").'"></a>';
+				<td align="right">'.number_format ( round($totl,2),2,","," ").' &#8364;</td><td>';
+				 if (!$recap) {
+	 				$urlParameters['cHash'] = $this->cHash;
+					$urlParameters['hnkart_mode'] = "true";
+					$urlParameters['del_art'] = $tbrep['uid'];
+					
+				 	$content.='<a HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'" title="'.$this->pi_getLL("kartdel","[kartdel]").'"><img src="'.$this->conf["iconDir"].'trash.gif" class="picto"  alt="'.$this->pi_getLL("kartdel","[kartdel]").'"></a>';
+				 	}
 				$content.='</td></tr>';
 				$c++;
 			}
+			$_SESSION['uidfp'] = $_SESSION["frais_port"] = false;
 			if ($totcfp > 0) { // s'il y a des frais de port, on va les calculer
-				foreach ($this->tbfp as $px=>$fp) {
+				// recupere le tableau des frais de port en base
+				// la somme "limite" est dans price, le prix dans weight
+				$qfp = "select * from tx_dlcubehnshop_articles where ref like 'frais_port_%' order by weight asc";
+				$resfp = mysql(TYPO3_db,$qfp);
+				while ($rwfp = mysql_fetch_array($resfp)) {
+					if ($totcfp <= $rwfp['weight']) {
+						$frais_port = $rwfp['price'];
+						$_SESSION['uidfp'] = $rwfp['uid']; 
+						break;
+					}
+				}
+				// ancienne methode...				
+/*				foreach ($this->tbfp as $px=>$fp) {
 					if ($totcfp < $px) {
 						$frais_port=$fp;
 						break;
 					}
-				}
-				$_SESSION["frais_port"]=$frais_port;
-				$content.='<tr class="docTableHead"><td colspan="4" align="right">'.$this->pi_getLL('frais_port').'</td><td align="center">'.($frais_port+0.00).' &#8364; </td></tr>';
+				}*/
+				$_SESSION["frais_port"] = $frais_port;
+				$totgen += $frais_port;
+				$content.='<tr class="docTableHead"><td colspan="4" align="right">'.$this->pi_getLL('frais_port').'</td><td align="right">'.number_format ( round($frais_port,2),2,","," ").' &#8364; </td></tr>';
 			}
-			$content.='<tr class="docTableHead"><td colspan="4" align="right">'.$this->pi_getLL('total_gen').'</td><td align="center">'.($totgen+0.00).' &#8364; </td></tr>';
+			$content.='<tr class="docTableHead"><td colspan="4" align="right">'.$this->pi_getLL('total_gen').'</td><td align="right">'.number_format ( round($totgen,2),2,","," ").' &#8364; </td></tr>';
 			$content.='</table>';
 			$_SESSION["totgen"]=$totgen;
 			$_SESSION["nbart"]=$nbart;
 			//print_r($_SESSION['hn_kart']);
 			if (!$recap) {
 				$content .= '<input type="hidden" name="hnkart_mode" id="hnkart_mode" value="true" />';
-				$content.='<p align="center"><a class="fxbutton" href="javascript:document.getElementById(\''.$this->prefixId.'fname'.'\').submit();" >'.$this->pi_getLL("actualiser","[actualiser]").'</a>&nbsp;&nbsp;&nbsp;
-				<A class="fxbutton" HREF="javascript:'.$this->outspid(array("hnkart_mode"=>"false")).'">'.$this->pi_getLL("closek","[closek]").'</a>&nbsp;&nbsp;&nbsp;';
-				$content.='<A class="fxbutton" HREF="#" onclick="'.$this->outspid(array("hnkart_mode"=>"bc1")).'">'.$this->pi_getLL("2command","[2command]").'</a></p>';
+				$content.='<br/><p align="center"><a class="fxButton" href="javascript:document.getElementById(\''.$this->prefixId.'fname'.'\').submit();" >'.$this->pi_getLL("actualiser","[actualiser]").'</a>&nbsp;&nbsp;&nbsp;
+				<A class="fxButton" HREF="javascript:'.$this->outspid(array("hnkart_mode"=>"false")).'">'.$this->pi_getLL("closek","[closek]").'</a>&nbsp;&nbsp;&nbsp;';
+				$content.='<A class="fxButton" HREF="javascript:'.$this->outspid(array("hnkart_mode"=>"bc1")).'">'.$this->pi_getLL("2command","[2command]").'</a></p>';
 			}
-			$content .= '</form>';
+			if ($echbform) $content .= '</form>';
 		}
 		
 		return ($content);
@@ -230,14 +275,17 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		
 		if (empty($_SESSION['hn_kart'])) {
 			$content.=$this->pi_getLL("empty_kart","[empty_kart]");
-			$content.='<p align="center"><A class="fxbutton" HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=false">'.$this->pi_getLL("closek","[closek]").'</a>&nbsp;&nbsp;&nbsp;</p>';
+			$urlParameters['cHash'] = $this->cHash;
+			$urlParameters['hnkart_mode'] = "false";
+
+			$content.='<p align="center"><A class="fxButton" HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.$this->pi_getLL("closek","[closek]").'</a>&nbsp;&nbsp;&nbsp;</p>';
 		} else  {
 	
-			$content.='<h3 style="padding:5px"><img src="'.$this->conf["iconDir"].'bcommand.gif" class="picto"> '.$this->pi_getLL('bc_etap_'.$_SESSION["hnkart_mode"]).'</H3>';
+			$content.='<h3><img src="'.$this->conf["iconDir"].'bcommand.gif" class="picto"> '.$this->pi_getLL('bc_etap_'.$_SESSION["hnkart_mode"]).'</H3>';
 			
 			if (!isset($_SESSION["portalId"]) || $_SESSION["portalId"]=="") {
 				$content.='<p>'.$this->pi_getLL('mustid4command').'</p>';
-				$content.='<p><A class="fxbutton" href="index.php?id='.$this->IdPid.'">'.$this->pi_getLL('clickhere').'</a> '.$this->pi_getLL('mustid4command2').'</p>';
+				$content.='<p><A href="index.php?id='.$this->IdPid.'">'.$this->pi_getLL('clickhere').'</a> '.$this->pi_getLL('mustid4command2').'</p>';
 			
 			} else {
 				if ($_SESSION["hnkart_mode"]=="bc3" && ($_REQUEST[$this->prefixId]['paymmod']=="cb" || $_SESSION[$this->prefixId]['paymmod']=="cb")) {
@@ -303,19 +351,21 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 							<span class="smallred">* '.$this->pi_getLL("obligchp","[obligchp]").'</span>
 							</td><td>&nbsp;</td></tr></table></ul></div></p>';
 							
+		 				$urlParameters['cHash'] = $this->cHash;
+						$urlParameters['hnkart_mode'] = "false";
 						$content.='<p>'.
 							$this->pi_getLL("commentcomm","[commentcomm]").'<br/><textarea name="'.$this->prefixId.'[comment]" cols="30" rows="5">'.$_REQUEST[$this->prefixId]['comment'].'</textarea></p>
 							<p>
-							<A class="fxbutton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=false">'.
+							<A class="fxButton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.
 							$this->pi_getLL("stopc","[stop]").'</a>&nbsp;&nbsp;&nbsp;&nbsp;'.
 							$this->vklink(false).
-							'<INPUT '.$this->pi_classParam("submit-button").' type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("continuer","continuer").'"></p>';
+							'<INPUT class="fxButton" type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("continuer","continuer").'"></p>';
 					break;
 					
 					case "bc2": // recap, choix du mode de paiement
 						$content.='<input type="hidden" name="hnkart_mode" size="30" value="bc3"/>';
 						$content.='<h4>'.$this->pi_getLL("recapcomm","[recapcomm]").'</h4>';
-						$content.=$this->viewCart("",true);
+						$content.=$this->viewCart("",true,false);
 						$content.='<p><h4>'.$this->pi_getLL('addfact').':</h4><UL>'.
 							$this->personne->prenom." ".
 							$this->personne->nom.'<BR/>'.
@@ -348,13 +398,15 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 						$content.='<p><h4>'.$this->pi_getLL('cgv').':</h4>';
 						$content.=$errcgv.' <INPUT type="checkbox" name="'.$this->prefixId.'[acccgv]" value="cgvok"> '.$this->pi_getLL('acccgv').'</p>';
 						
-	
+		 				$urlParameters['cHash'] = $this->cHash;
+						$urlParameters['hnkart_mode'] = "bc1";
+
 						$content.='<p>'.$this->vklink(false).
-						'&nbsp;&nbsp;&nbsp;&nbsp;<A class="fxbutton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=bc1">'.
+						'&nbsp;&nbsp;&nbsp;&nbsp;<A class="fxButton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.
 							$this->pi_getLL("ecprec","[ecprec]").'</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<A class="fxbutton" href="#" onclick="self.print()">'.
+							<A class="fxButton" href="javascript:self.print()">'.
 							$this->pi_getLL("imprim","[print]").'</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<INPUT '.$this->pi_classParam("submit-button").' type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("continuer","continuer").'"></p>';
+							<INPUT class="fxButton" type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("continuer","continuer").'"></p>';
 					break;
 	
 					case "bc3": // paiement
@@ -376,10 +428,13 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 								$content.=$this->pi_getLL("paiementcheck","[paiementcheck]");
 							break;
 						}
-	
+		 				
+		 				$urlParameters['cHash'] = $this->cHash;
+						$urlParameters['hnkart_mode'] = "bc2";
+
 						$content.='<p>'.$this->vklink(false).
-						'&nbsp;&nbsp;&nbsp;&nbsp;<A class="fxbutton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=bc2">'.
-							$this->pi_getLL("ecprec","[ecprec]").'</a>&nbsp;&nbsp;&nbsp;&nbsp;<INPUT '.$this->pi_classParam("submit-button").' type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("continuer","continuer").'"></p>';
+						'&nbsp;&nbsp;&nbsp;&nbsp;<A class="fxButton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.
+							$this->pi_getLL("ecprec","[ecprec]").'</a>&nbsp;&nbsp;&nbsp;&nbsp;<INPUT class="fxButton" type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("continuer","continuer").'"></p>';
 					break;
 					
 					case "bc4": // fin : remerciement.
@@ -390,7 +445,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 							$content.='<input type="hidden" name="hnkart_mode" size="30" value="false"/>';
 							$recap.='<h4>'.$this->pi_getLL("commandOK","[commandOK]").'</h4>';
 							$recap.='<h4>'.$this->pi_getLL("recapcomm","[recapcomm]").'</h4>';
-							$recap.=$this->viewCart("",true);
+							$recap.=$this->viewCart("",true,false);
 							$recap.='<p><h4>'.$this->pi_getLL('addfact').':</h4><UL>'.
 								$this->personne->prenom." ".
 								$this->personne->nom.'<BR/>'.
@@ -447,7 +502,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 							if ($_REQUEST['listePrestation_codeRetour']=="OK") {
 								$content.= $links2ft;
 							}
-							$content.='<p><A class="fxbutton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=false">'.
+			 				$urlParameters['cHash'] = $this->cHash;
+							$urlParameters['hnkart_mode'] = "false";
+
+							$content.='<p><A class="fxButton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.
 								$this->pi_getLL("terminate","[terminate]").'</a></p>';
 							
 							// envoi du mail au gestionnaire de commande
@@ -474,8 +532,12 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 						} else {
 							$content.='<h4>'.$this->pi_getLL("commandKO").'</h4>';
 							$content.='<p>'.$this->pi_getLL("commandKO2").'</p>';
+			 				
+			 				$urlParameters['cHash'] = $this->cHash;
+							$urlParameters['hnkart_mode'] = "false";
+
 							$content.='<p>'.$this->vklink(false).
-							'&nbsp;&nbsp;&nbsp;&nbsp;<A class="fxbutton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=false">'.
+							'&nbsp;&nbsp;&nbsp;&nbsp;<A class="fxButton" href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.
 								$this->pi_getLL("terminate","[terminate]").'</a></p>';
 							unset($_SESSION[$this->prefixId]); // vide la carriole et tutti quanti
 						}
@@ -514,7 +576,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		$ret.=rethidchp("listePrestation.codeAppliAppel","HSN");
 		$ret.=rethidchp("listePrestation.payeur",$this->personne->prenom." ".$this->personne->nom);
 		$ret.=rethidchp("listePrestation.langue","FR");
-		$ret.=rethidchp("listePrestation.urlRetour",$this->absurl.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=bc4');
+		$urlParameters['cHash'] = $this->cHash;
+		$urlParameters['hnkart_mode'] = "bc4";
+
+		$ret.=rethidchp("listePrestation.urlRetour",$this->absurl.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters));
 		$ret.=rethidchp("listePrestation.montantTotal",$_SESSION["totgen"]);
 		$ret.=rethidchp("listePrestation.portalID",$_SESSION["portalId"]);
 		
@@ -524,14 +589,14 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				$tbuid[]=$uid;
 			}
 		if ($_SESSION['frais_port']) {
-			$uidfp = RecupLib('tx_dlcubehnshop_articles','ref','uid','frais_port');
-			$tbuid[]= $uidfp;
+			$tbuid[]= $_SESSION['uidfp'];
 		}
 		$tbuid=implode(",",$tbuid);
 		$rep=db_qr_comprass("select uid,title,ref,price,tva,cotypresta,cosstypresta from tx_dlcubehnshop_articles where uid IN ($tbuid)");
 		$i=0;
 		foreach ($rep as $tbrep) {
-				$qte = ($tbrep['uid'] != $uidfp ? $_SESSION['hn_kart'][$tbrep['uid']] : $_SESSION['frais_port']);
+			if ($tbrep['price'] > 0) { // il y a des articles gratuits, dont le port, on appelle pas PSI dans ce cas
+				$qte = ($tbrep['uid'] != $_SESSION['uidfp'] ? $_SESSION['hn_kart'][$tbrep['uid']] : 1); // si frais port, tjrs qte=1
 				$totl = $tbrep['price']*$qte;
 				//$ret.=rethidchp("listePrestation.prestations[$i].nuPrestation",$tbrep['ref']);
 				$ret.=rethidchp("listePrestation.prestations[$i].coTyPrestation",$tbrep['cotypresta']);
@@ -548,7 +613,8 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				}
 //				$ret.=rethidchp("listePrestation.prestations[$i].",$tbrep['']);
 				$i++;
-		}
+			} // fin si pas article gratos
+		} // fin boucle sur articles
 		
 		
 		return($ret);
@@ -557,7 +623,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	 * vue mode fiche article
 	 */
 	function listView($content)	{
-		$content.="<H3>".$this->pi_getLL('rubrik')." : ".$GLOBALS[GLOBALS][TSFE]->page['title']."</H3>";
+		//$content.="<H3>".$this->pi_getLL('rubrik')." : ".$GLOBALS[GLOBALS][TSFE]->page['title']."</H3>";
 		
 		$this->uid = substr(strstr($GLOBALS[GLOBALS][TSFE]->currentRecord,":"),1);
 
@@ -599,20 +665,23 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			$this->internal["maxPages"]=t3lib_div::intInRange($lConf["maxPages"],0,1000,3);		// The maximum number of "pages" in the browse-box: "Page 1", "Page 2", etc.
 			$this->internal["orderByList"]="title,crdate";
 			
+			$urlParameters['cHash'] = $this->cHash;
+			$urlParameters['shop_archmode'] = "false";
+
 			$addwhere=($_SESSION["shop_archmode"]=="false" ? " AND archive=0" : " AND isbn='".$_SESSION["shop_archmode"]."' AND archive=1");
 			//function pi_list_query($table,$count=0,$addWhere='',$mm_cat='',$groupBy='',$orderBy='',$query='',$returnQueryArray=FALSE) 
-			if ($_SESSION["shop_archmode"]!="false") $fullTable.='<h4>'.$this->pi_getLL("modearch","[modearch]").'</h4><p><a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&shop_archmode=false">'.$this->pi_getLL("closearch","[closearch]").'</a></p>';
+			if ($_SESSION["shop_archmode"]!="false") $fullTable.='<h4>'.$this->pi_getLL("modearch","[modearch]").'</h4><p><a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.$this->pi_getLL("closearch","[closearch]").'</a></p>';
 			$query = $this->pi_list_query("tx_dlcubehnshop_articles",1,$addwhere);
 
 			$res = mysql(TYPO3_db,$query);
 			if (mysql_error())	debug(array(mysql_error(),$query));
-			
 			list($this->internal["res_count"]) = mysql_fetch_row($res);
 			if ($this->internal["res_count"]>0) {
 				$fullTable.='* <small>'.$this->pi_getLL("legdegtech1","[legdegtech1]").'<small><br/>';
 				// Make listing query, pass query to MySQL:
 				//$query = $this->pi_list_query("tx_dlcubehnshop_articles",0,"","","","ORDER BY crdate DESC, title ASC");
 				$query = $this->pi_list_query("tx_dlcubehnshop_articles",0,$addwhere,"","",$this->internal["orderBy"].$ASC);
+				//print_r($query);
 				//debug($query);
 				$res = mysql(TYPO3_db,$query);
 				if (mysql_error())	debug(array(mysql_error(),$query));
@@ -622,6 +691,17 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 				// Adds the result browser, seulement s'il y a assez de r?ultats
 				if ($this->internal["res_count"]>$this->internal["results_at_a_time"]) $fullTable.=$this->pi_list_browseresults();
+				
+				// tableau avec tous les enregistrements pour "fiche_suivante"
+				$rat= $this->internal['results_at_a_time'];
+				$this->internal['results_at_a_time'] = 1000;
+				$query = $this->pi_list_query("tx_dlcubehnshop_articles",0,$addwhere,"","",$this->internal["orderBy"].$ASC);
+				$res = mysql(TYPO3_db,$query);
+				while ($rw = mysql_fetch_array($res)) {
+					$_SESSION['art_table'][] = $rw['uid'];
+				}
+				$this->internal['results_at_a_time'] = $rat;
+				
 				
 			} // fin si il y a des r?ultats
 			else $fullTable.="<H4>".$this->pi_getLL("no_articles","[no_docs]")."</H4>";
@@ -641,7 +721,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		//print_r($_SESSION['art_table']);
 		if (is_array($_SESSION['art_table'])) {
 			foreach($_SESSION['art_table'] as $i=>$v) {
-				if ($v==$this->getFieldContent("uid")) $ci=$i;
+				if ($v==$this->getFieldContent("uid")) {
+					$ci=$i;
+					break;
+				}
 			}
 		}
 		//echo $ci;
@@ -651,9 +734,9 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		$content.='<DIV class="txvm19docs_single">';
 		$content.=$this->RetEntete($this->internal["currentRow"]["title"]);
 		//	<H2><img src="'.$this->conf["iconDir"].'picto_documents.gif" align="middle">&nbsp;&nbsp;'.$this->internal["currentRow"]["title"].'</H2>
-		$content.='<div>'.$this->getFieldLine("img2").
+		$content.='<p>'.$this->getFieldLine("img2").
 				$this->getFieldLine("descdetail").
-				'</div><p>&nbsp;</p><div style="align:center;border:1px solid; width:300px">'.
+				'</p><p>&nbsp;</p><div class="cartouche">'.
 				$this->getFieldLine("ref").
 				$this->getFieldLine("price").
 				$this->getFieldLine("auteur").
@@ -664,21 +747,26 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				$this->getFieldLine("nbpages").
 				$this->getFieldLine("file").
 				'</div>'.
-				'<br/><br/>';
-				if ($_SESSION['art_table'][$ci -1] !="") 
-					$content.=$this->pi_list_linkSingle($this->pi_getLL("art_prec","[art_prec]"),$_SESSION['art_table'][$ci -1]);	
-				$content.="&nbsp; &nbsp;";
-				if ($_SESSION['art_table'][$ci +1] !="") 
-					$content.=$this->pi_list_linkSingle($this->pi_getLL("art_suiv","[art_suiv]"),$_SESSION['art_table'][$ci +1]);
-
-				//<P'.$this->pi_classParam("singleViewField-document").'><strong>'.$this->getFieldHeader("document").':</strong> '.$this->getFieldContent("document").'</P>';
-
-		$content.='<p align="center"><span class="picto">'.str_replace('"><img',"#Anc".$this->getFieldContent("uid").'"><img',$this->pi_list_linkSingle($this->pi_getLL("go_back","[go_back]"),0)).'</span> &nbsp;&nbsp;&nbsp;&nbsp;';
+				'<br/>';
+		$content.='<p align="center">';
+		$content.='<span class="picto">'.str_replace('"><img',"#Anc".$this->getFieldContent("uid").'"><img',$this->pi_list_linkSingle($this->pi_getLL("go_back","[go_back]"),0)).'</span> &nbsp;&nbsp;&nbsp;&nbsp;';
+		if ($_SESSION['art_table'][$ci -1] !="") 
+			$content.=$this->pi_list_linkSingle($this->pi_getLL("art_prec","[art_prec]"),$_SESSION['art_table'][$ci -1]);	
+		$content.="&nbsp; &nbsp;";
+		if ($_SESSION['art_table'][$ci +1] !="") 
+			$content.=$this->pi_list_linkSingle($this->pi_getLL("art_suiv","[art_suiv]"),$_SESSION['art_table'][$ci +1]);
+		$content.='<br/>';
 		$content.=$this->vklink(); // lien vers cariole
-		$content.=' &nbsp;&nbsp;&nbsp;&nbsp;<A href="#sendaf" class="fxbutton"  onclick="document.getElementById(\'sendafriend\').style.display=\'block\'">'.$this->pi_getLL("recomm","[recomm]").'</a>';
+		
+		$urlParameters['cHash'] = $this->cHash;
+		$urlParameters['hnkart_mode'] = "true";
+		$urlParameters['add_art'] = $this->internal["currentRow"]["uid"];
+
+		$content.=' &nbsp;&nbsp;&nbsp;&nbsp;<A href="#sendaf" onclick="document.getElementById(\'sendafriend\').style.display=\'block\'">'.$this->pi_getLL("recomm","[recomm]").'</a>';
+		if ($this->internal["currentRow"]['price']>0) $content.= '&nbsp;&nbsp;&nbsp;&nbsp;<a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'" title="'.$this->pi_getLL("add2kart","[add2kart]").'"><img src="'.$this->conf["iconDir"].'cariole.gif"/></a>';
 		//print_r($_REQUEST[$this->prefixId]);
 		$content.='</p></DIV>'.$this->pi_getEditPanel();
-		$content.='<p><FORM action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'#sendaf" name="'.$this->prefixId.'fname" method="GET">';
+		$content.='<p><FORM action="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'#sendaf" name="'.$this->prefixId.'fname" method="GET">';
 		// calcul des valeurs des champs, et test validite
 		$error=false;
 		$yourname=($_REQUEST[$this->prefixId]['yourname']!= "" ? $_REQUEST[$this->prefixId]['yourname'] : $this->personne->prenom." ".$this->personne->nom);
@@ -707,7 +795,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			<tr><td>'.
 			$this->pi_getLL("comment","[comment]").'</td><td><textarea name="'.$this->prefixId.'[comment]" cols="30" rows="5">'.$_REQUEST[$this->prefixId]['comment'].'</textarea></td></tr><tr><td>
 			* <span class="smallred">'.$this->pi_getLL("obligchp","[obligchp]").'</span>
-			</td><td><INPUT '.$this->pi_classParam("submit-button").' type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("envoyer","Envoyer").'"></td></tr></table>';
+			</td><td><INPUT class="fxButton" type="submit" name="'.$this->prefixId.'[submit_button]" value="'.$this->pi_getLL("envoyer","Envoyer").'"></td></tr></table>';
 		} else {
 			// marche pas car trimballe TOUS les variables GET !!
 			//$mylink=$this->pi_list_linkSingle("produit suivant",$this->getFieldContent("uid"));
@@ -723,10 +811,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			if ($_REQUEST[$this->prefixId]['comment']!="") 
 				$mailcont.='
 				
-				<br/><br/>Il a ajout�ce commentaire : <br/>
+				<br/><br/>Il a ajoute ce commentaire : <br/>
 	'.$_REQUEST[$this->prefixId]['comment'];
 			
-			$content.='Le message suivant a ��envoy��'.$_REQUEST[$this->prefixId]['mail2send'].":<br/><i>";
+			$content.='Le message suivant a &eacute;t&eacute; envoy&eacute;'.$_REQUEST[$this->prefixId]['mail2send'].":<br/><i>";
 			$content.=$mailcont;
 			$content.='</i>';
 			mail_html($_REQUEST[$this->prefixId]['mail2send'], "Message de "
@@ -742,13 +830,13 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		// n'affiche que si le champ est non vide et <>0
 		$valret="";
 
-		if ($fN=="author" || ($this->internal["currentRow"][$fN]!="" && $this->internal["currentRow"][$fN]!="0") || $fN=="imagette") { //&& $this->getFieldContent($fN)!="0"
+		if ($fN=="author" || ($this->internal["currentRow"][$fN]!="" && $this->internal["currentRow"][$fN]!="0") || $fN=="imagette" || $fN=="img1" || $fN=="img2") { //&& $this->getFieldContent($fN)!="0"
 			switch ($fN) {
 				case "img1":
 				case "img2":
 					$imgsrc=$this->retImagette($this->getFieldContent($fN),$this->getFieldContent('file'),false);
 					
-					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent("file"))) {
+					if ($this->getFieldContent("file")!="" && file_exists($this->upload_doc_folder.'/'.$this->getFieldContent("file"))) {
 						$valret.='<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent("file").'" target="_blank">'.$imgsrc.'</a>';
 						}
 					else $valret.=$imgsrc;
@@ -765,8 +853,15 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 				case "file":
 					if (file_exists($this->upload_doc_folder.'/'.$this->getFieldContent($fN))) {
-						$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'&nbsp;<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" target="_blank"><img src="'.$this->conf["iconDir"].'telecharger.gif" class="picto"  title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($this->upload_doc_folder.'/'.$this->getFieldContent($fN)).'</P>';
+						$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.substr($this->getFieldContent($fN), 0, 25).'&nbsp;<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent($fN).'" target="_blank"><img src="'.$this->conf["iconDir"].'telecharger.gif" class="picto"  title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($this->upload_doc_folder.'/'.$this->getFieldContent($fN)).'</P>';
 					}
+				break;
+
+
+				case "isbn":
+				// l'isbn sert pour les archives, s'il est bidon, le faire commencerpar HN_
+					if (!strstr($this->getFieldContent($fN),"HN_"))
+						$valret= '<P><b>'.$this->getFieldHeader($fN).':</b> '.$this->getFieldContent($fN).'</P>';
 				break;
 				
 	
@@ -784,7 +879,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	function pi_list_row($c)	{
 		$editPanel = $this->pi_getEditPanel();
 		if ($editPanel)	$editPanel="<TD>".$editPanel."</TD>";
-		$_SESSION['art_table'][]=$this->internal["currentRow"]["uid"];
+		//$_SESSION['art_table'][]=$this->internal["currentRow"]["uid"];
 
 		$lConf = $this->conf["listView."];
 
@@ -829,6 +924,12 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			$telechlnk='<a href="'.$this->upload_doc_folder.'/'.$this->getFieldContent('file').'" target="_blank"><img src="'.$this->conf["iconDir"].'telecharger.gif" class="picto"  title="'.$this->pi_getLL("download","[download]").'"></a>&nbsp;'.DFSIL($this->upload_doc_folder.'/'.$this->getFieldContent('file'));
 		} else $telechlnk="";
 	// l'ancre sert a ce qu'au retour d'une loupe on puisse repointer au m�e endroit..
+		
+		$urlParameters['cHash'] = $this->cHash;
+		$urlParameters['hnkart_mode'] = "true";
+		$urlParameters['add_art'] = $this->internal["currentRow"]["uid"];
+		
+
 		return '<a name="Anc'.$this->getFieldContent("uid").'"></a><tr class="'.($c%2 ? 'doclist_rowodd' : 'doclist_roweven').'">
 				<td>'.$puce.'</td>
 				<td style="text-align:left">'.$this->getFieldContent("support").'<br/>'.$this->getFieldContent("nbpages").'</td>
@@ -836,9 +937,9 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 				<td style="text-align:left">'.$this->getFieldContent("designation")." (".str_replace("salut_blaireau",$this->pi_getLL("lire_suite","[lire_suite]"),$mylink).')</td>
 				<td style="text-align:center">'.$this->getFieldContent("technicaldegree").'</td>
 				<td style="text-align:center">'.$this->getFieldContent("parut").$this->dispArchLnk().'</td>
-				<td style="text-align:left">'.$this->getFieldContent("price").'<br/><br/>'.
+				<td style="text-align:right">'.$this->getFieldContent("price").'<br/><br/>'.
 				($this->internal["currentRow"]['price']>0 ? '
-				<a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=true&add_art='.$this->internal["currentRow"]["uid"].'" title="'.$this->pi_getLL("add2kart","[add2kart]").'"><img src="'.$this->conf["iconDir"].'cariole.gif"/></a>' : 
+				<a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'" title="'.$this->pi_getLL("add2kart","[add2kart]").'"><img src="'.$this->conf["iconDir"].'cariole.gif"/></a>' : 
 				$telechlnk
 				).'
 				</td>
@@ -856,7 +957,10 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			
 			list($count) = mysql_fetch_row($res);
 			if ($count>0) {
-				return('<br/><a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&shop_archmode='.$this->internal["currentRow"]["isbn"].'">'.$this->pi_getLL("showarch","[showarch]").'</a>');
+				$urlParameters['cHash'] = $this->cHash;
+				$urlParameters['shop_archmode'] = $this->internal["currentRow"]["isbn"];
+
+				return('<br/><a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'">'.$this->pi_getLL("showarch","[showarch]").'</a>');
 			}
 		}
 
@@ -895,8 +999,9 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			break;
 			
 			case "price":
+				// number_format ( float number [, int decimals [, string dec_point, string thousands_sep]] )
 				if ($this->internal["currentRow"][$fN]>0) {
-					return round($this->internal["currentRow"][$fN],2)."&nbsp;&#8364;";
+					return number_format ( round($this->internal["currentRow"][$fN],2),2,","," ")."&nbsp;&#8364;";
 				} else return($this->pi_getLL("gratos","[gratos]"));
 			break;
 			
@@ -966,7 +1071,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 
 /** affiche imagette ou apercu pdf ... ou rien/image predefinie **/
 
-    	function retImagette($imagette="",$doc="",$disp_imggen=false,$classImg="imgDoc") {
+    	function retImagette($imagette="",$doc="",$disp_imggen=false,$classImg="imgLib2") {
 		if ($imagette!="" && file_exists($this->upload_doc_folder.'/'.$imagette)) {
 			//$size=getimagesize($this->upload_doc_folder.'/'.$this->getFieldContent($fN));
 			$img = t3lib_div::makeInstance('t3lib_stdGraphic');
@@ -1048,7 +1153,12 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	 * gerene un lien vers la cariole s'il y a 
 	 */
 	function vklink($br=true) {
-		if (!empty($_SESSION['hn_kart'])) return (($br ? '<br/>': '').'<A HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id).'?cHash='.$this->cHash.'&hnkart_mode=true" title="'.$this->pi_getLL("view_kart","[view_cart]").count($_SESSION['hn_kart']).$this->pi_getLL("view_kart2","[view_cart2]").'"><img src="'.$this->conf["iconDir"].'cariole_big.gif" class="picto"></a>');
+		if (!empty($_SESSION['hn_kart'])) {
+			$urlParameters['cHash'] = $this->cHash;
+			$urlParameters['hnkart_mode'] = "true";
+
+			return (($br ? '<br/>': '').'<A HREF="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$urlParameters).'" title="'.$this->pi_getLL("view_kart","[view_cart]").count($_SESSION['hn_kart']).$this->pi_getLL("view_kart2","[view_cart2]").'"><img src="'.$this->conf["iconDir"].'cariole_big.gif" class="picto"></a>');
+		}
 	}
 	
 	/** recupere les infos de la personne par WS */

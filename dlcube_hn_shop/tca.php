@@ -236,7 +236,6 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 					"upper" => "1000",
 					"lower" => "10"
 				),
-				"default" => 0
 			)
 		),
 		"archive" => Array (		
@@ -296,7 +295,7 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 				"internal_type" => "file",
 				"allowed" => "",	
 				"disallowed" => "php,php3",	
-				"max_size" => 1000,	
+				"max_size" => 5000,	
 				"uploadfolder" => "uploads/tx_dlcubehnshop",
 				"size" => 1,	
 				"minitems" => 0,

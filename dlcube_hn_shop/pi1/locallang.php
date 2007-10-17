@@ -47,7 +47,7 @@ $LOCAL_LANG = Array (
 
 	"fr" => Array (
 		"plugtitle"=>"Librairie",
-		"rubrik"=>"Rubrique",
+		"rubrik"=>"Rubriques",
 		"listFieldHeader_tstamp" => "date de modification",
 		"listFieldHeader_crdate" => "date de création",
 		"listFieldHeader_endtime" => "Date de fin de parution",
@@ -76,7 +76,7 @@ $LOCAL_LANG = Array (
 		"gratos"=>"gratuit",
 		"no_articles"=>"Désolé, il n'y a aucun article dans ce rayon",		
 		"legdegtech1"=>"Degré technique de 1 à 3 fers à cheval, du plus simple au plus technique",
-		"recomm" => "Recommander cet ouvrage à un ami",
+		"recomm" => "Recommander à un ami",
 		"yourmail"=>'Votre adresse de courriel',
 		"errmail"=>"Votre adresse de courriel est non saisie ou incorrecte",
 		"errmail2send"=>"Adresse(s) de courriel destinataire(s) non saisie(s) ou incorrecte(s) ",
@@ -91,7 +91,7 @@ $LOCAL_LANG = Array (
 		"art_suiv" => "Fiche suivante >",
 		"go_back" => "<img class=\"picto\" src=\"".$ChemImg."preced.gif\" alt=\"Retour liste\"> Retour liste",
 		"empty_kart" => "Votre carriole de commande est vide",
-		"closek" => "fermer la carriole",
+		"closek" => "Fermer la carriole",
 		"kart_content" => "Contenu de la carriole",
 		"view_kart" => "Voir le contenu de la carriole (",
 		"view_kart2" => " article(s))",
