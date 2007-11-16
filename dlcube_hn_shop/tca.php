@@ -212,13 +212,13 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 			"label" => "LLL:EXT:dlcube_hn_shop/locallang_db.xml:tx_dlcubehnshop_articles.weight",		
 			"config" => Array (
 				"type" => "input",
-				"size" => "4",
-				"max" => "4",
+				"size" => "5",
+				"max" => "5",
 				"eval" => "int",
 				"checkbox" => "0",
 				"range" => Array (
-					"upper" => "1000",
-					"lower" => "10"
+					"upper" => "99000",
+					"lower" => "1"
 				),
 				"default" => 0
 			)
@@ -234,7 +234,7 @@ $TCA["tx_dlcubehnshop_articles"] = Array (
 				"checkbox" => "0",
 				"range" => Array (
 					"upper" => "1000",
-					"lower" => "10"
+					"lower" => "1"
 				),
 			)
 		),

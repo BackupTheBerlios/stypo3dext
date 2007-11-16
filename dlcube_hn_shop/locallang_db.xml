@@ -19,7 +19,7 @@
 			<label index="tx_dlcubehnshop_articles.price">price</label>
 			<label index="tx_dlcubehnshop_articles.tva">VAT rate</label>
 			<label index="tx_dlcubehnshop_articles.isbn">isbn</label>
-			<label index="tx_dlcubehnshop_articles.weight">Weight</label>
+			<label index="tx_dlcubehnshop_articles.weight">Weight (g)</label>
 			<label index="tx_dlcubehnshop_articles.nbpages">Pages number</label>
 			<label index="tx_dlcubehnshop_articles.archive">archive</label>
 			<label index="tx_dlcubehnshop_articles.technicaldegree.I.0">1</label>
@@ -49,7 +49,7 @@
 			<label index="tx_dlcubehnshop_articles.cosstypresta">Code sous-type prestation</label>
 			<label index="tx_dlcubehnshop_articles.tva">Taux de TVA</label>
 			<label index="tx_dlcubehnshop_articles.isbn">Isbn</label>
-			<label index="tx_dlcubehnshop_articles.weight">Poids</label>
+			<label index="tx_dlcubehnshop_articles.weight">Poids (g)</label>
 			<label index="tx_dlcubehnshop_articles.nbpages">Nbre de pages</label>
 			<label index="tx_dlcubehnshop_articles.archive">Archive</label>
 			<label index="tx_dlcubehnshop_articles.technicaldegree.I.0">1</label>

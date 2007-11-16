@@ -34,6 +34,10 @@ include_once("typo3conf/ext/dlcube_hn_01/class.WebservicesAccess.php");
 
 require_once("fonctions.php");
 
+// code des fichiers a telecharger
+
+define("cotypresta_telech","FIC");
+define("cosstypresta_telech","FIC");
 class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	var $prefixId = "tx_dlcubehnshop_pi1";		// Same as class name
 	var $scriptRelPath = "pi1/class.tx_dlcubehnshop_pi1.php"; // Path to this script relative to the extension dir.
@@ -45,7 +49,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 	var $typeExecution; // prod, dev
 	var $urlpsi;
 	var $urlpsidev="http://xinf-devlinux.intranet.haras-nationaux.fr/psi/PsiVersementPayline.do";
-	var $urlpsiprod="http://www4.haras-nationaux.fr/psi/PsiVersementPayline.do";
+	var $urlpsiprod="http://www1.haras-nationaux.fr/psi/PsiVersementPayline.do";
 	var $mailcommprod="librairie@haras-nationaux.fr";
 	var $mailcommdev="artec.vm@arnac.net";
 	var $mailcomm;
@@ -65,6 +69,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		if (strstr($_SERVER['SCRIPT_FILENAME'],'portail_dev')) {
+			$this->pidpauth = 2822;
 			$this->typeExecution="dev";
 			$this->urlpsi=$this->urlpsidev;
 			//$this->urlpsi=$this->urlpsiprod;
@@ -72,6 +77,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			$this->mailcomm=$this->mailcommdev;
 		} else {
 			$this->typeExecution="prod";
+			$this->pidpauth = 2822;
 			$this->urlpsi=$this->urlpsiprod;
 			$this->absurl="http://www.haras-nationaux.fr/portail/";
 			$this->mailcomm=$this->mailcommprod;
@@ -92,6 +98,9 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			$_SESSION["hnkart_mode"]=$_REQUEST["hnkart_mode"];
 			
 		if ($_REQUEST["hnkart_mode"]=="bc2" && $_REQUEST[$this->prefixId]['otheraddr']=="") $_SESSION[$this->prefixId]['otheraddr']="";
+		
+		if (isset($_REQUEST[$this->prefixId]['paymmod'])) $_SESSION[$this->prefixId]['paymmod'] = $_REQUEST[$this->prefixId]['paymmod']; 
+
 
 		if ($_REQUEST["shop_archmode"]) $_SESSION["shop_archmode"]=$_REQUEST["shop_archmode"];
 		if (!$_SESSION["shop_archmode"]) $_SESSION["shop_archmode"]="false";
@@ -285,7 +294,12 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 			
 			if (!isset($_SESSION["portalId"]) || $_SESSION["portalId"]=="") {
 				$content.='<p>'.$this->pi_getLL('mustid4command').'</p>';
-				$content.='<p><A href="index.php?id='.$this->IdPid.'">'.$this->pi_getLL('clickhere').'</a> '.$this->pi_getLL('mustid4command2').'</p>';
+				
+				$lnk2auth = $this->pi_getPageLink($this->pidpauth, "", array ("adress_ret" =>
+$this->pi_getPageLink($GLOBALS["TSFE"]->id),"libel_ret" => $this->pi_getLL('ret_lib')));
+				
+				$content.='<p><A href="'.$lnk2auth.'">'.$this->pi_getLL('clickhere').'</a>
+'.$this->pi_getLL('mustid4command2').'</p>';			
 			
 			} else {
 				if ($_SESSION["hnkart_mode"]=="bc3" && ($_REQUEST[$this->prefixId]['paymmod']=="cb" || $_SESSION[$this->prefixId]['paymmod']=="cb")) {
@@ -524,7 +538,7 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 							Vous avez pass&eacute; la commande suivante sur la boutique du site des Haras nationaux, www.haras-nationaux.fr<br/>
 							Vous la recevrez dans les meilleurs d&eacute;lais.<br/>'
 							.$recap.$links2ft;
-							mail_html($this->personne->coordonnees->email, "Commande effectu&eacute;e sur le site des Haras nationaux", $mailcont, "root@www.haras-nationaux.fr");
+							mail_html($this->personne->coordonnees->email, "Commande effectuee sur le site des Haras nationaux", $mailcont, "root@www.haras-nationaux.fr");
 							
 
 							unset($_SESSION[$this->prefixId]); // vide la carriole et tutti quanti
@@ -572,7 +586,6 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 // 			<%}%>
 		$ret.="\n";
 		$ret.=rethidchp("direction","");
-		$ret.=rethidchp("compteurPrest",$_SESSION["nbart"]);
 		$ret.=rethidchp("listePrestation.codeAppliAppel","HSN");
 		$ret.=rethidchp("listePrestation.payeur",$this->personne->prenom." ".$this->personne->nom);
 		$ret.=rethidchp("listePrestation.langue","FR");
@@ -588,23 +601,29 @@ class tx_dlcubehnshop_pi1 extends tslib_pibase {
 		foreach ($_SESSION['hn_kart'] as $uid=>$qte) {
 				$tbuid[]=$uid;
 			}
-		if ($_SESSION['frais_port']) {
+		if ($_SESSION['frais_port']) { // s'il y a des frais de port
 			$tbuid[]= $_SESSION['uidfp'];
+			$_SESSION["nbart"] ++;
 		}
+		$ret.=rethidchp("compteurPrest",$_SESSION["nbart"]);
 		$tbuid=implode(",",$tbuid);
+		
 		$rep=db_qr_comprass("select uid,title,ref,price,tva,cotypresta,cosstypresta from tx_dlcubehnshop_articles where uid IN ($tbuid)");
 		$i=0;
 		foreach ($rep as $tbrep) {
 			if ($tbrep['price'] > 0) { // il y a des articles gratuits, dont le port, on appelle pas PSI dans ce cas
 				$qte = ($tbrep['uid'] != $_SESSION['uidfp'] ? $_SESSION['hn_kart'][$tbrep['uid']] : 1); // si frais port, tjrs qte=1
 				$totl = $tbrep['price']*$qte;
+				if ($tbrep['cotypresta']==cotypresta_telech && $tbrep['cosstypresta']==cosstypresta_telech) {
+					$qte = $tbrep['price']*$qte; // dans la table des presta, le telechargement est a 1 euro
+				}
 				//$ret.=rethidchp("listePrestation.prestations[$i].nuPrestation",$tbrep['ref']);
 				$ret.=rethidchp("listePrestation.prestations[$i].coTyPrestation",$tbrep['cotypresta']);
 				$ret.=rethidchp("listePrestation.prestations[$i].coSTyPrestation",$tbrep['cosstypresta']);
 				$ret.=rethidchp("listePrestation.prestations[$i].nbQuantite",$qte);
 				//$ret.=rethidchp("listePrestation.prestations[$i].mtHtPrestation",$tbrep['price'] / (1 +$tbrep['tva']) );
 				//$ret.=rethidchp("listePrestation.prestations[$i].txTvaSTyPrestation",$tbrep['tva']);
-				//$ret.=rethidchp("listePrestation.prestations[$i].llObservation",$tbrep['title']);
+				$ret.=rethidchp("listePrestation.prestations[$i].llObservation",$tbrep['title']);
 				//$ret.=rethidchp("listePrestation.prestations[$i].montantTtc",$totl);
 				$ret.=rethidchp("listePrestation.prestations[$i].coCircoStat","SIR");
 				if ($this->personne->niveauIdentification=="FORT") {
